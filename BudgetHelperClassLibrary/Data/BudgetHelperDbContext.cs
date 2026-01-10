@@ -8,11 +8,20 @@ using System.Threading.Tasks;
 
 namespace BudgetHelperClassLibrary.Data
 {
-    internal class BudgetHelperDbContext: DbContext
+    public class BudgetHelperDbContext: DbContext
     {
-        public BudgetHelperDbContext() { }
-
-
+        public BudgetHelperDbContext(
+                    DbContextOptions<BudgetHelperDbContext> options) 
+                    : base(options)
+        {
+        }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=BudgetHelperMS;Integrated Security=True;");
+            }
+        }
 
         public DbSet<Income> Incomes { get; set; }
         public DbSet<IncomeSource> IncomeSources { get; set; }
