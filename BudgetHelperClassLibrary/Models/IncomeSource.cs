@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BudgetHelperClassLibrary
+namespace BudgetHelperClassLibrary.Models
 {
     public class IncomeSource
     {

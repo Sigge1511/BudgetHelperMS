@@ -9,9 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Data\" />
-    <Folder Include="Repositories\" />
-    <Folder Include="ViewModels\" />
+    <ProjectReference Include="..\BudgetHelperClassLibrary\BudgetHelperClassLibrary.csproj" />
   </ItemGroup>
 
 </Project>
