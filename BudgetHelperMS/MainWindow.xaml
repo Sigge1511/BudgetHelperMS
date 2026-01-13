@@ -7,6 +7,10 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid Style="{DynamicResource MainGridStyle}">
-        <Button Content="Click Me Test" HorizontalAlignment="Left" VerticalAlignment="Top" Height="94" Width="325" Margin="31,41,0,0"/>
+        <Button Style = "{StaticResource YesButton}" 
+                Content="Click Me Test" 
+                Height="50" Width="200" 
+                Margin="43,32,537,332">
+        </Button>
     </Grid>
 </Window>
