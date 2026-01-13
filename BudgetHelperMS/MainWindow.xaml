@@ -31,7 +31,23 @@
                 VerticalAlignment="Stretch"
                 Style="{StaticResource YesButton}" 
                 Grid.Row="0" Grid.Column="0"
-                Content="Click Me Test" 
+                Content="Click Me Test Yes" 
                 Margin="2,2,2,2" />
+        
+        <Button 
+            HorizontalAlignment="Stretch" 
+            VerticalAlignment="Stretch"
+            Style="{StaticResource NoButton}" 
+            Grid.Row="0" Grid.Column="1"
+            Content="Click Me Test No" 
+            Margin="2,2,2,2" />
+
+        <Button 
+            HorizontalAlignment="Stretch" 
+            VerticalAlignment="Stretch"
+            Style="{StaticResource NeutralButton}" 
+            Grid.Row="0" Grid.Column="2"
+            Content="Click Me Test Standard" 
+            Margin="2,2,2,2" />
     </Grid>
 </Window>

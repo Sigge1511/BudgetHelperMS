@@ -35,25 +35,23 @@
     </Style>
 
     
-    <!--För att styra tex knappar-->
-
+    <!--För att styra tex knappar
+    Template för alla knappar-->
     <ControlTemplate x:Key="RoundedButtonTemplate" TargetType="Button">
         <Border x:Name="BtnBorder"
                 Background="{TemplateBinding Background}"
                 BorderBrush="{TemplateBinding BorderBrush}"
                 BorderThickness="{TemplateBinding BorderThickness}"
                 CornerRadius="12">
-            
-            <Viewbox Stretch="Uniform" Margin="5">
-                <TextBlock Text="Click Me Test"
-                           VerticalAlignment="Center"
-                           HorizontalAlignment="Center"/>
-            </Viewbox>            
+
+            <Viewbox Stretch="Uniform">
+                <ContentPresenter HorizontalAlignment="Center" 
+                              VerticalAlignment="Center"/>
+            </Viewbox>
         </Border>        
     </ControlTemplate>
-    
 
-
+    <!--För att styra specifika knappar mha Style-->
     <Style x:Key="YesButton" TargetType="Button" >
         <Setter Property="Background" Value="DarkGray" />
         <Setter Property="BorderBrush" Value="Black" />
@@ -70,7 +68,7 @@
 
         <Setter Property="FontFamily" Value="Segoe UI"/>
         <Setter Property="FontWeight" Value="ExtraBold"/>
-        
+
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="LightGreen"/>
@@ -86,24 +84,72 @@
             </Trigger>
         </Style.Triggers>      
     </Style>
-    
-            
 
+    <Style x:Key="NoButton" TargetType="Button" >
+        <Setter Property="Background" Value="DarkGray" />
+        <Setter Property="BorderBrush" Value="Black" />
+        <Setter Property="Template" Value="{StaticResource RoundedButtonTemplate}"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="Padding" Value="10"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Margin" Value="5"/>
 
-    <!--<DataTemplate x:Key="YesButton">
-        <DataTemplate.Resources>
-            <Style TargetType="Button">
-                <Setter Property="Background" Value="Green"/>
-                <Setter Property="Foreground" Value="LightGray"/>
-                <Setter Property="FontFamily" Value="Segoe UI"/>
-                <Setter Property="FontSize" Value="24"/>
-                <Setter Property="FontWeight" Value="ExtraBold"/>
-                <Setter Property="Padding" Value="10"/>
-                <Setter Property="BorderThickness" Value="0"/>
-                <Setter Property="Margin" Value="5"/>
-            </Style>            
-        </DataTemplate.Resources>
-        <Button Content = "{Binding TaskName}"/>
+        <Setter Property="Height" Value="Auto"/>
+        <Setter Property="Width" Value="Auto"/>
+        <Setter Property="MaxWidth" Value="500"/>
+        <Setter Property="MaxHeight" Value="300"/>
 
-    </DataTemplate>-->
+        <Setter Property="FontFamily" Value="Segoe UI"/>
+        <Setter Property="FontWeight" Value="ExtraBold"/>
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="PaleVioletRed"/>
+            </Trigger>
+
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="Black"/>
+            </Trigger>
+
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Background" Value="LightBlue"/>
+                <Setter Property="Foreground" Value="Black"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="NeutralButton" TargetType="Button" >
+        <Setter Property="Background" Value="DarkGray" />
+        <Setter Property="BorderBrush" Value="Black" />
+        <Setter Property="Template" Value="{StaticResource RoundedButtonTemplate}"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="Padding" Value="10"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Margin" Value="5"/>
+
+        <Setter Property="Height" Value="Auto"/>
+        <Setter Property="Width" Value="Auto"/>
+        <Setter Property="MaxWidth" Value="500"/>
+        <Setter Property="MaxHeight" Value="300"/>
+
+        <Setter Property="FontFamily" Value="Segoe UI"/>
+        <Setter Property="FontWeight" Value="ExtraBold"/>
+
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="Black" />
+                <Setter Property="Opacity" Value="75"/>
+                <Setter Property="Foreground" Value="Black"/>
+            </Trigger>
+
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="Black"/>
+            </Trigger>
+
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Background" Value="BlanchedAlmond"/>
+                <Setter Property="Foreground" Value="Navy"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 </ResourceDictionary>
