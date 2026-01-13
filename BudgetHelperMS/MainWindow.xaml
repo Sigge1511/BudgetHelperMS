@@ -5,12 +5,33 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BudgetHelperMS"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid Style="{DynamicResource MainGridStyle}">
-        <Button Style = "{StaticResource YesButton}" 
+        Title="MainWindow" Height="450" Width="800" Background="Black">
+    
+    <Grid Style="{DynamicResource MainGridStyle}" Margin="5,5,5,5">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+
+        <Button 
+                HorizontalAlignment="Stretch" 
+                VerticalAlignment="Stretch"
+                Style="{StaticResource YesButton}" 
+                Grid.Row="0" Grid.Column="0"
                 Content="Click Me Test" 
-                Height="50" Width="200" 
-                Margin="43,32,537,332">
-        </Button>
+                Margin="2,2,2,2" />
     </Grid>
 </Window>

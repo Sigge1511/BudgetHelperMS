@@ -38,25 +38,55 @@
     <!--För att styra tex knappar-->
 
     <ControlTemplate x:Key="RoundedButtonTemplate" TargetType="Button">
-        <Border Background="{TemplateBinding Background}"
+        <Border x:Name="BtnBorder"
+                Background="{TemplateBinding Background}"
                 BorderBrush="{TemplateBinding BorderBrush}"
                 BorderThickness="{TemplateBinding BorderThickness}"
                 CornerRadius="12">
-            <ContentPresenter HorizontalAlignment="Center" 
-                              VerticalAlignment="Center"
-                              Margin="{TemplateBinding Padding}"/>
-        </Border>
+            
+            <Viewbox Stretch="Uniform" Margin="5">
+                <TextBlock Text="Click Me Test"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"/>
+            </Viewbox>            
+        </Border>        
     </ControlTemplate>
-    <Style TargetType="Button" x:Name="YesButton">
+    
+
+
+    <Style x:Key="YesButton" TargetType="Button" >
         <Setter Property="Background" Value="DarkGray" />
         <Setter Property="BorderBrush" Value="Black" />
-        <Setter Property="FontFamily" Value="Segoe UI"/>    
-        <Setter Property="FontSize" Value="24"/>
-        <Setter Property="FontWeight" Value="ExtraBold"/>
+        <Setter Property="Template" Value="{StaticResource RoundedButtonTemplate}"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="Padding" Value="10"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Margin" Value="5"/>
+
+        <Setter Property="Height" Value="Auto"/>
+        <Setter Property="Width" Value="Auto"/>
+        <Setter Property="MaxWidth" Value="500"/>
+        <Setter Property="MaxHeight" Value="300"/>
+
+        <Setter Property="FontFamily" Value="Segoe UI"/>
+        <Setter Property="FontWeight" Value="ExtraBold"/>
+        
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="LightGreen"/>
+            </Trigger>
+
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="Black"/>
+            </Trigger>
+
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Background" Value="LightBlue"/>
+                <Setter Property="Foreground" Value="Black"/>
+            </Trigger>
+        </Style.Triggers>      
     </Style>
+    
             
 
 
