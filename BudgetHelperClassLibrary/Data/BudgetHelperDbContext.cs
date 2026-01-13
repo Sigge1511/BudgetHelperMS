@@ -12,9 +12,7 @@ namespace BudgetHelperClassLibrary.Data
     {
         public BudgetHelperDbContext(
                     DbContextOptions<BudgetHelperDbContext> options) 
-                    : base(options)
-        {
-        }
+                    : base(options){}
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -26,7 +24,6 @@ namespace BudgetHelperClassLibrary.Data
         public DbSet<Income> Incomes { get; set; }
         public DbSet<IncomeSource> IncomeSources { get; set; }
         public DbSet<Expense> Expenses { get; set; }
-        public DbSet<RecurringExpense> RecurringExpenses { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<BudgetForPurchases> BudgetForPurchases { get; set; }
 

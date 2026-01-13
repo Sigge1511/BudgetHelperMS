@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BudgetHelperClassLibrary.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,12 @@ namespace BudgetHelperClassLibrary.Repositories
 {
     public interface IIncomeRepo
     {
-        //Fixa så alla crudmetoder finns
+        Task<List<Income>> GetAllIncomesAsync();
+        Task<Income?> GetIncomeByIdAsync(int id);
+        Task<List<Income>> GetIncomesByCategoryIdAsync(int categoryId);
+        Task<List<Income>> GetIncomesByMonthAsync(int month, int year);
+        Task AddIncomeAsync(Income income);
+        Task UpdateIncomeAsync(Income income);
+        Task DeleteIncomeAsync(Income income);
     }
 }

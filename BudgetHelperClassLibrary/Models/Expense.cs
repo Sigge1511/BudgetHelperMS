@@ -16,12 +16,13 @@ namespace BudgetHelperClassLibrary.Models
         [Required]
         public decimal Amount { get; set; }
         public DateTime ExpenseDate { get; set; }
+        [Required]
         public int CategoryId { get; set; }
         public bool IsRecurring { get; set; }
-        public int? RecurringExpenseId { get; set; }   
+        public int? FrequencyInMonths { get; set; }
 
         public virtual ObservableCollection<Category>? CategoryList { get; set; }
-        public virtual ObservableCollection<RecurringExpense>? RecurringExpenseList { get; set; }
+        //public virtual ObservableCollection<Expense>? RecurringExpenseList { get; set; }
         public Expense() { }
     }
 }

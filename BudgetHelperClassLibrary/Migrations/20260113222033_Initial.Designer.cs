@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BudgetHelperClassLibrary.Migrations
 {
     [DbContext(typeof(BudgetHelperDbContext))]
-    [Migration("20260110223552_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260113222033_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -85,15 +85,15 @@ namespace BudgetHelperClassLibrary.Migrations
                     b.Property<DateTime>("ExpenseDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("FrequencyInMonths")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsRecurring")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("RecurringExpenseId")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -142,25 +142,6 @@ namespace BudgetHelperClassLibrary.Migrations
                     b.ToTable("IncomeSources");
                 });
 
-            modelBuilder.Entity("BudgetHelperClassLibrary.Models.RecurringExpense", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("CategoryId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("FrequencyInMonths")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("RecurringExpenses");
-                });
-
             modelBuilder.Entity("CategoryExpense", b =>
                 {
                     b.Property<int>("CategoryListId")
@@ -189,21 +170,6 @@ namespace BudgetHelperClassLibrary.Migrations
                     b.HasIndex("IncomesListId");
 
                     b.ToTable("CategoryIncome");
-                });
-
-            modelBuilder.Entity("ExpenseRecurringExpense", b =>
-                {
-                    b.Property<int>("ExpenseListId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RecurringExpenseListId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ExpenseListId", "RecurringExpenseListId");
-
-                    b.HasIndex("RecurringExpenseListId");
-
-                    b.ToTable("ExpenseRecurringExpense");
                 });
 
             modelBuilder.Entity("IncomeIncomeSource", b =>
@@ -247,21 +213,6 @@ namespace BudgetHelperClassLibrary.Migrations
                     b.HasOne("BudgetHelperClassLibrary.Models.Income", null)
                         .WithMany()
                         .HasForeignKey("IncomesListId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("ExpenseRecurringExpense", b =>
-                {
-                    b.HasOne("BudgetHelperClassLibrary.Models.Expense", null)
-                        .WithMany()
-                        .HasForeignKey("ExpenseListId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BudgetHelperClassLibrary.Models.RecurringExpense", null)
-                        .WithMany()
-                        .HasForeignKey("RecurringExpenseListId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
