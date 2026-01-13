@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:BudgetHelperMS"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-
+    <Grid Style="{DynamicResource MainGridStyle}">
+        <Button Content="Click Me Test" HorizontalAlignment="Left" VerticalAlignment="Top" Height="94" Width="325" Margin="31,41,0,0"/>
     </Grid>
 </Window>

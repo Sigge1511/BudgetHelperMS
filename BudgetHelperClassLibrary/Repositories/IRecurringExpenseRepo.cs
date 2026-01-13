@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BudgetHelperClassLibrary.Repositories
 {
-    internal class IRecurringExpenseRepo
+    public interface IRecurringExpenseRepo
     {
     }
 }
