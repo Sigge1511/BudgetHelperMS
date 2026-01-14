@@ -23,6 +23,7 @@ namespace BudgetHelperMS
 
         public MainWindow(BudgetViewModel budgetViewModel)
         {
+            InitializeComponent();
             this.budgetViewModel = budgetViewModel;   
             DataContext = this.budgetViewModel;
             this.Loaded += MainWindow_Loaded;
