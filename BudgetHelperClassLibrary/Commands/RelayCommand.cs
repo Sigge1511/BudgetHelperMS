@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace BudgetHelperMS.Commands
+namespace BudgetHelperClassLibrary.Commands
 {
     public class RelayCommand : ICommand
     {
