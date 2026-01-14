@@ -1,4 +1,6 @@
 ﻿using BudgetHelperClassLibrary.Data;
+using BudgetHelperClassLibrary.Repositories;
+using BudgetHelperClassLibrary.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,8 +16,11 @@ namespace BudgetHelperMS
     /// </summary>
     public partial class App : Application
     {
-        // Skapa denna egenskap högst upp i klassen
+        // Root service provider accessible throughout the app
         public static IServiceProvider ServiceProvider { get; private set; }
+
+        // Keep the application scope alive so scoped services (DbContext, repos) remain valid
+        public static IServiceScope AppScope { get; private set; }
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -25,27 +30,33 @@ namespace BudgetHelperMS
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-
             IConfiguration configuration = builder.Build();
-
             var serviceCollection = new ServiceCollection();
 
             var connectionString = configuration.GetConnectionString("DefaultConnection");
 
-            // EF Core registrering
+            // EF Core & DbContext
             serviceCollection.AddDbContext<BudgetHelperDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
-            //// Repository registrering
-            //serviceCollection.AddScoped<IBudgetRepository, BudgetRepository>();
+            // Sätt repos
+            serviceCollection.AddScoped<IIncomeRepo, IncomeRepo>();
+            serviceCollection.AddScoped<IExpenseRepo, ExpenseRepo>();
+            serviceCollection.AddScoped<ICategoryRepo, CategoryRepo>();
+            serviceCollection.AddScoped<IBudgetRepo, BudgetRepo>();
 
-            // ViewModel registrering (viktigt för MVVM)
+            // Register views / viewmodels
             serviceCollection.AddTransient<MainWindow>();
+            serviceCollection.AddTransient<BudgetViewModel>();
 
+            // Build root provider
             ServiceProvider = serviceCollection.BuildServiceProvider();
 
-            // Starta fönstret via DI
-            var mainWindow = ServiceProvider.GetRequiredService<MainWindow>();
+            // Create and hold a scope for the lifetime of the application so scoped services remain valid
+            AppScope = ServiceProvider.CreateScope();
+
+            // Resolve main window from the scoped provider and start the app
+            var mainWindow = AppScope.ServiceProvider.GetRequiredService<MainWindow>();
             mainWindow.Show();
         }
     }
