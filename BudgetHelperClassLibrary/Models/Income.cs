@@ -17,9 +17,7 @@ namespace BudgetHelperClassLibrary.Models
         public decimal Amount { get; set; }
         [Required]
         public DateTime ReceivedDate { get; set; }
-        [Required]
-        public int CategoryId { get; set; }
-        
+        [Required]        
         public virtual ObservableCollection<IncomeSource>? IncomeSourceList { get; set; }
         public virtual ObservableCollection<Category>? CategoryList { get; set; }
 

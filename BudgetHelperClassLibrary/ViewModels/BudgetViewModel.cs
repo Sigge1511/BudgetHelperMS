@@ -41,8 +41,8 @@ namespace BudgetHelperClassLibrary.ViewModels
             get => _selectedExpense;
             set { _selectedExpense = value; OnPropertyChanged(); }
         }
-        private Expense? newExpenseAmount;
-        public Expense? NewExpenseAmount
+        private decimal? newExpenseAmount;
+        public decimal? NewExpenseAmount
         {
             get => newExpenseAmount;
             set { newExpenseAmount = value; OnPropertyChanged(); }
@@ -111,7 +111,6 @@ namespace BudgetHelperClassLibrary.ViewModels
             {
                 Amount = NewIncomeAmount!,
                 ReceivedDate = SelectedDate, 
-                CategoryId = SelectedCategory!.Id,
                 IncomeSourceId = SelectedSource!.Id
             };
 
@@ -131,7 +130,8 @@ namespace BudgetHelperClassLibrary.ViewModels
 
         private async Task AddExpense()
         {
-            throw new NotImplementedException();
+            var expense = new Expense { Amount = (decimal)NewExpenseAmount, CategoryId = SelectedCategory.Id };
+            await _expenseRepo.AddExpenseAsync(expense);
         }
 //*******************************************************************
         private bool CanDeleteIncome()

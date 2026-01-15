@@ -2,6 +2,13 @@
 
     
     <!--Färger och brushes KRÄVER namn för att sen kunna användas i tex MainWindow-->
+    <SolidColorBrush x:Key="BgBrush" Color="#080B0A" />
+    <SolidColorBrush x:Key="PanelBrush" Color="#0D1F18" />
+    <SolidColorBrush x:Key="MutedBrush" Color="#5E7068" />
+    <SolidColorBrush x:Key="NeonBrush" Color="#A2D149" />
+    <SolidColorBrush x:Key="TextBrush" Color="#D1D9D6" />
+    
+    
     <SolidColorBrush x:Key="PrimaryBackground" Color="Black"/>
     <SolidColorBrush x:Key="CardBackground" Color="DarkGray"/>
     <SolidColorBrush x:Key="AccentColor" Color="BlanchedAlmond"/>

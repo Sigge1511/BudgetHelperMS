@@ -12,7 +12,7 @@ namespace BudgetHelperClassLibrary.Repositories
         Task<List<Income>> GetAllIncomesAsync();
         Task<IncomeSource?> GetIncomeSourceAsync();
         Task<Income?> GetIncomeByIdAsync(int id);
-        Task<List<Income>> GetIncomesByCategoryIdAsync(int categoryId);
+        Task<List<Income>> GetIncomesBySourceIdAsync(int categoryId);
         Task<List<Income>> GetIncomesByMonthAsync(int month, int year);
         Task AddIncomeAsync(Income income);
         Task UpdateIncomeAsync(Income income);

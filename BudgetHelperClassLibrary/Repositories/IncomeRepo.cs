@@ -12,28 +12,23 @@ namespace BudgetHelperClassLibrary.Repositories
     public class IncomeRepo: IIncomeRepo
     {
         private readonly BudgetHelperDbContext _dbcntxt;
-
         public IncomeRepo(BudgetHelperDbContext dbcntxt) {_dbcntxt = dbcntxt;}
+
 
         public async Task<List<Income>> GetAllIncomesAsync()
         {
             return await _dbcntxt.Incomes.ToListAsync();
         }
+
+        //Denna behöver bli en lista över alla inkomstkällor senare
         public async Task<IncomeSource?> GetIncomeSourceAsync()
         { return await _dbcntxt.IncomeSources.FirstOrDefaultAsync(); }
-
 
         public async Task<Income?> GetIncomeByIdAsync(int id)
         {
             return await _dbcntxt.Incomes.FirstOrDefaultAsync(i => i.Id == id);
         }
 
-        public async Task<List<Income>> GetIncomesByCategoryIdAsync(int categoryId)
-        {
-            return await _dbcntxt.Incomes
-                .Where(i => i.CategoryId == categoryId)
-                .ToListAsync();
-        }
         public async Task<List<Income>> GetIncomesBySourceIdAsync(int sourceId)
         {
             return await _dbcntxt.Incomes

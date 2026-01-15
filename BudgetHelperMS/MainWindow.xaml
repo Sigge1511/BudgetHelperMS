@@ -5,49 +5,85 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BudgetHelperMS"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" Background="Black">
-    
-    <Grid Style="{DynamicResource MainGridStyle}" Margin="5,5,5,5">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+        Title="BudgetHelper" Height="1080" Width="1920" 
+        WindowStyle="SingleBorderWindow"
+        Background="{StaticResource BgBrush}"
+        Foreground="White"
+        FontWeight="Bold">
+
+    <Grid>
+        <!--HÄR BOR GRÖNATOPPLINJEN-->
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        <Rectangle Grid.Row="0" 
+                   Height="2" 
+                   Fill="{StaticResource NeonBrush}" 
+                   HorizontalAlignment="Stretch"
+                   VerticalAlignment="Top">
+            <Rectangle.Effect>
+                <DropShadowEffect Color="#A2D149" BlurRadius="10" ShadowDepth="0"/>
+            </Rectangle.Effect>
+        </Rectangle>
+        <!--HÄR BÖRJAR RESTEN AV FÖNSTRET-->
 
+        <Grid Grid.Row="1" Margin="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-        <Button 
-                HorizontalAlignment="Stretch" 
-                VerticalAlignment="Stretch"
-                Style="{StaticResource YesButton}" 
-                Grid.Row="0" Grid.Column="0"
-                Content="Click Me Test Yes" 
-                Margin="2,2,2,2" />
-        
-        <Button 
-            HorizontalAlignment="Stretch" 
-            VerticalAlignment="Stretch"
-            Style="{StaticResource NoButton}" 
-            Grid.Row="0" Grid.Column="1"
-            Content="Click Me Test No" 
-            Margin="2,2,2,2" />
-
-        <Button 
-            HorizontalAlignment="Stretch" 
-            VerticalAlignment="Stretch"
-            Style="{StaticResource NeutralButton}" 
-            Grid.Row="0" Grid.Column="2"
-            Content="Click Me Test Standard" 
-            Margin="2,2,2,2" />
+            <Border Grid.RowSpan="4" 
+                Grid.ColumnSpan="3"
+                Background="{StaticResource PanelBrush}"                    
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch">
+                    
+            </Border>
+            <Border Grid.Row="0" 
+                    Grid.RowSpan="4"
+                Grid.Column="3"
+                Grid.ColumnSpan="3"
+                Background="{StaticResource MutedBrush}"                    
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch">
+            </Border>
+            <Border Grid.Row="0" 
+                    Grid.RowSpan="4"
+                    Grid.Column="6"
+                    Grid.ColumnSpan="3"
+                    Background="{StaticResource PanelBrush}"                    
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch">            
+            </Border>
+            <Border Grid.Row="0" 
+                    Grid.RowSpan="4"
+                    Grid.Column="9"
+                    Grid.ColumnSpan="3"
+                    Background="{StaticResource MutedBrush}"                    
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch">        
+            </Border>
+        </Grid>
     </Grid>
+    
 </Window>
