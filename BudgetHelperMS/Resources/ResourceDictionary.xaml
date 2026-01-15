@@ -3,9 +3,10 @@
     
     <!--Färger och brushes KRÄVER namn för att sen kunna användas i tex MainWindow-->
     <SolidColorBrush x:Key="BgBrush" Color="#080B0A" />
-    <SolidColorBrush x:Key="PanelBrush" Color="#0D1F18" />
-    <SolidColorBrush x:Key="MutedBrush" Color="#5E7068" />
-    <SolidColorBrush x:Key="NeonBrush" Color="#A2D149" />
+    <SolidColorBrush x:Key="PanelJewelBrush1" Color="#0f130c" />
+    <SolidColorBrush x:Key="PanelJewelBrush3" Color="#042715" />
+    <SolidColorBrush x:Key="MutedBrush" Color="#709681" />
+    <SolidColorBrush x:Key="NeonBrush" Color="#5dc44f" />
     <SolidColorBrush x:Key="TextBrush" Color="#D1D9D6" />
     
     
@@ -34,13 +35,7 @@
         
     </Style>
     
-    <Style TargetType="TextBlock">
-            <Setter Property="FontFamily" Value="Segoe UI"/>
-            <Setter Property="FontSize" Value="24"/>
-        <Setter Property="FontWeight" Value="DemiBold"/>
-        <Setter Property="Foreground" Value="{StaticResource MainText}"/>
-    </Style>
-
+    
     
     <!--För att styra tex knappar
     Template för alla knappar-->
