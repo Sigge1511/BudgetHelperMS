@@ -13,7 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\IMFellEnglishSC-Regular.ttf" />
+    <Resource Include="Resources\IMFellEnglishSC-Regular.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
   <ItemGroup>
