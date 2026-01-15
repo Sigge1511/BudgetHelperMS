@@ -16,5 +16,6 @@ namespace BudgetHelperClassLibrary.Repositories
         Task AddExpenseAsync(Expense expense);
         Task DeleteExpenseAsync(Expense expense);
         Task UpdateExpenseAsync(Expense expense);
+        
     }
 }

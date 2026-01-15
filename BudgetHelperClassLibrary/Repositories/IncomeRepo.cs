@@ -19,6 +19,9 @@ namespace BudgetHelperClassLibrary.Repositories
         {
             return await _dbcntxt.Incomes.ToListAsync();
         }
+        public async Task<IncomeSource?> GetIncomeSourceAsync()
+        { return await _dbcntxt.IncomeSources.FirstOrDefaultAsync(); }
+
 
         public async Task<Income?> GetIncomeByIdAsync(int id)
         {
@@ -29,6 +32,12 @@ namespace BudgetHelperClassLibrary.Repositories
         {
             return await _dbcntxt.Incomes
                 .Where(i => i.CategoryId == categoryId)
+                .ToListAsync();
+        }
+        public async Task<List<Income>> GetIncomesBySourceIdAsync(int sourceId)
+        {
+            return await _dbcntxt.Incomes
+                .Where(i => i.IncomeSourceId == sourceId)
                 .ToListAsync();
         }
 

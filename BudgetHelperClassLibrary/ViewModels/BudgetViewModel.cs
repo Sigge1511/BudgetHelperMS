@@ -11,8 +11,9 @@ namespace BudgetHelperClassLibrary.ViewModels
         // --- 1. Listor för rullistorna (Hämtas från databasen) ---
         public ObservableCollection<Category> Categories { get; set; } = new();
         public ObservableCollection<IncomeSource> IncomeSources { get; set; } = new();
+        public ObservableCollection<Expense> Expenses { get; set; } = new();
 
-        // --- 2. Properties för valda objekt ---
+// --- 2. Properties för valda objekt ---
         private Category? _selectedCategory;
         public Category? SelectedCategory
         {
@@ -34,6 +35,19 @@ namespace BudgetHelperClassLibrary.ViewModels
             set { _newIncomeAmount = value; OnPropertyChanged(); AddIncomeComm.RaiseCanExecuteChanged(); }
         }
 
+        private Expense? _selectedExpense;
+        public Expense? SelectedExpense
+        {
+            get => _selectedExpense;
+            set { _selectedExpense = value; OnPropertyChanged(); }
+        }
+        private Expense? newExpenseAmount;
+        public Expense? NewExpenseAmount
+        {
+            get => newExpenseAmount;
+            set { newExpenseAmount = value; OnPropertyChanged(); }
+        }
+
         private DateTime _selectedDate = DateTime.Now; // Standardvärde som backup
         public DateTime SelectedDate
         {
@@ -41,7 +55,8 @@ namespace BudgetHelperClassLibrary.ViewModels
             set { _selectedDate = value; OnPropertyChanged(); }
         }
 
-        // Listan som visar alla inkomster i UI:t (Denna behöver uppdateras manuellt)
+
+// Listan som visar alla inkomster i UI:t (Denna behöver uppdateras manuellt)
         public ObservableCollection<Income> AllIncomes { get; set; } = new();
 
         public RelayCommand AddIncomeComm { get; }
@@ -54,10 +69,8 @@ namespace BudgetHelperClassLibrary.ViewModels
         private readonly ICategoryRepo _categoryRepo;
         private readonly IBudgetRepo _budgetRepo;
 
-        public BudgetViewModel(IIncomeRepo incomeRepo, 
-                               IExpenseRepo expenseRepo, 
-                               ICategoryRepo categoryRepo,
-                               IBudgetRepo budgetRepo)
+        public BudgetViewModel(IIncomeRepo incomeRepo, IExpenseRepo expenseRepo, 
+                               ICategoryRepo categoryRepo, IBudgetRepo budgetRepo)
         {
             AddIncomeComm = new RelayCommand(async () => await AddIncome(), CanAddIncome);
             AddExpenseComm = new RelayCommand(async () => await AddExpense(), CanAddExpense);
@@ -76,6 +89,8 @@ namespace BudgetHelperClassLibrary.ViewModels
             // Här hämtar vi kategorier från databasen via ditt repo
             var categoriesList = await _categoryRepo.GetAllCategoriesAsync();
             foreach (var c in categoriesList) Categories.Add(c);
+
+            var sourcesList = await _incomeRepo.GetIncomeSourceAsync();
 
             // Gör samma sak för IncomeSources (om du har ett sånt repo)
             // var sources = await _sourceRepo.GetAllSourcesAsync();
