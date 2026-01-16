@@ -16,11 +16,9 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-
         <Rectangle Grid.RowSpan="2" 
                Fill="{StaticResource BgImageBrush}" 
                IsHitTestVisible="False" />
-
         <Rectangle Grid.Row="0" 
                Height="2" 
                Fill="{StaticResource NeonBrush}" 
@@ -29,7 +27,7 @@
                 <DropShadowEffect Color="#A2D149" BlurRadius="10" ShadowDepth="0"/>
             </Rectangle.Effect>
         </Rectangle>
-        <!--HÄR BÖRJAR RESTEN AV FÖNSTRET-->
+        <!--****** HÄR BÖRJAR RESTEN AV FÖNSTRET-->
 
         <Grid Grid.Row="1" Margin="2">
             <Grid.ColumnDefinitions>
@@ -46,32 +44,30 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <!--**************HÄR ÄR TOPPKOLUMNERNA-->
-            <Border Grid.RowSpan="4" 
-                            Grid.ColumnSpan="3"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Stretch">
-                <TextBlock Text="Add incomes"
-                                   Style="{StaticResource SectionHeader}"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Top"
-                                   Margin="0,30,0,0"/>
+            <!--* **** HÄR ÄR TOPPKOLUMNERNA-->
+            <Border Grid.Row="0"  
+                    Grid.RowSpan="4" 
+                    Grid.ColumnSpan="3"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch">
+                <TextBlock  Text="Add incomes"
+                            Style="{StaticResource SectionHeader}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top"
+                            Margin="0,30,0,0"/>
 
             </Border>
             <Border Grid.Row="0" 
-                            Grid.RowSpan="4"
-                            Grid.Column="3"
-                            Grid.ColumnSpan="3"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Stretch">
+                    Grid.RowSpan="4"
+                    Grid.Column="3"
+                    Grid.ColumnSpan="3"       
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch">
+                <TextBlock Text="Add expenses"
+                   Style="{StaticResource SectionHeader}"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Top"
+                   Margin="0,30,0,0"/>
             </Border>
             <Border Grid.Row="0" 
                             Grid.RowSpan="4"
@@ -79,6 +75,12 @@
                             Grid.ColumnSpan="3"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch">
+                <TextBlock  Text=""
+                    Style="{StaticResource SectionHeader}"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Margin="0,30,0,0" TextAlignment="Center">                    
+                    Summary<LineBreak/>Last month</TextBlock>
             </Border>
             <Border Grid.Row="0" 
                             Grid.RowSpan="4"
@@ -86,31 +88,135 @@
                             Grid.ColumnSpan="3"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch">
+                <TextBlock  Text=""
+                    Style="{StaticResource SectionHeader}"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    Margin="0,30,0,0" TextAlignment="Center">                    
+                    Prognosis for<LineBreak/>Next month</TextBlock>
             </Border>
             <!--**************HÄR ÄR BOTTENKOLUMNERNA-->
 
-            <Border Grid.Row="4" 
-                            Grid.RowSpan="3"
-                            Grid.Column="0"
-                            Grid.ColumnSpan="4"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Stretch">
+            <Border
+                    Grid.Column="0"
+                    Grid.ColumnSpan="5" Margin="0,585,159,0">
+                <StackPanel Margin="20">
+                    <TextBlock Text="Latest Incomes" 
+                       Style="{StaticResource SectionHeader}" 
+                       FontSize="40" 
+                       TextAlignment="Center"
+                       HorizontalAlignment="Center" 
+                       Margin="0,0,0,20"/>
+
+                    <ItemsControl ItemsSource="{Binding LatestIncomes}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,5" HorizontalAlignment="Stretch">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Text="{Binding Name}" 
+                                   Foreground="{StaticResource TextBrush}" 
+                                   FontSize="18"/>
+
+                                    <TextBlock Grid.Column="1" 
+                                   Text="{Binding Amount, StringFormat={}{0:C}}" 
+                                   Foreground="{StaticResource NeonBrush}" 
+                                   FontWeight="Bold" FontSize="18"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
             </Border>
 
-            <Border Grid.Row="4" 
-                            Grid.RowSpan="3"
+            <Border
                             Grid.Column="4"
-                            Grid.ColumnSpan="4"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Stretch">
+                            Grid.ColumnSpan="4" Margin="0,585,0,0">
+                <StackPanel Margin="20">
+                    <TextBlock Text="Latest Expenses" 
+                   Style="{StaticResource SectionHeader}" 
+                   FontSize="40"
+                   TextAlignment="Center"
+                   HorizontalAlignment="Center" 
+                   Margin="0,0,0,20"/>
+
+                    <ItemsControl ItemsSource="{Binding LatestExpenses}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Margin="0,5" HorizontalAlignment="Stretch">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Text="{Binding Name}" 
+                                   Foreground="{StaticResource TextBrush}" 
+                                   FontSize="18"/>
+
+                                    <TextBlock Grid.Column="1" 
+                                   Text="{Binding Amount, StringFormat={}{0:C}}" 
+                                   Foreground="{StaticResource NeonBrush}" 
+                                   FontWeight="Bold" 
+                                   FontSize="18"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
             </Border>
 
-            <Border Grid.Row="4" 
-                            Grid.RowSpan="3"
-                            Grid.Column="8"
-                            Grid.ColumnSpan="4"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Stretch">
+            <Border
+                            Grid.Column="7"
+                            Grid.ColumnSpan="5" Margin="159,585,0,0">
+                <Grid Margin="20">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" 
+                   Style="{StaticResource SectionHeader}" 
+                   FontSize="40"
+                   TextAlignment="Center"
+                   HorizontalAlignment="Center" 
+                   VerticalAlignment="Top"
+                   Margin="0,0,0,15">
+                    Total incomes
+                    <LineBreak/>So far
+                    <LineBreak/>this year
+
+                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                            <ItemsControl ItemsSource="{Binding IncomesThisYear}">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="0,2,5,2">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <TextBlock Text="{Binding Date, StringFormat={}{0:MM/dd}}" 
+                                           Foreground="{StaticResource MutedBrush}" 
+                                           FontSize="14" Margin="0,0,10,0" VerticalAlignment="Center"/>
+
+                                            <TextBlock Grid.Column="1" Text="{Binding Name}" 
+                                           Foreground="{StaticResource TextBrush}" 
+                                           FontSize="16" VerticalAlignment="Center"/>
+
+                                            <TextBlock Grid.Column="2" Text="{Binding Amount, StringFormat={}{0:C}}" 
+                                           Foreground="{StaticResource NeonBrush}" 
+                                           FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </TextBlock>
+                </Grid>
             </Border>
         </Grid>
     </Grid>

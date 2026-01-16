@@ -12,8 +12,11 @@ namespace BudgetHelperClassLibrary.ViewModels
         public ObservableCollection<Category> Categories { get; set; } = new();
         public ObservableCollection<IncomeSource> IncomeSources { get; set; } = new();
         public ObservableCollection<Expense> Expenses { get; set; } = new();
+        public ObservableCollection<Expense> LatestExpenses { get; set; } = new();
+        public ObservableCollection<Income> LatestIncomes { get; set; } = new();
+        public ObservableCollection<Income> IncomesThisYear { get; set; } = new();
 
-// --- 2. Properties för valda objekt ---
+        // --- 2. Properties för valda objekt ---
         private Category? _selectedCategory;
         public Category? SelectedCategory
         {
@@ -56,7 +59,7 @@ namespace BudgetHelperClassLibrary.ViewModels
         }
 
 
-// Listan som visar alla inkomster i UI:t (Denna behöver uppdateras manuellt)
+        // Listan som visar alla inkomster i UI:t (Denna behöver uppdateras manuellt)
         public ObservableCollection<Income> AllIncomes { get; set; } = new();
 
         public RelayCommand AddIncomeComm { get; }
@@ -69,7 +72,7 @@ namespace BudgetHelperClassLibrary.ViewModels
         private readonly ICategoryRepo _categoryRepo;
         private readonly IBudgetRepo _budgetRepo;
 
-        public BudgetViewModel(IIncomeRepo incomeRepo, IExpenseRepo expenseRepo, 
+        public BudgetViewModel(IIncomeRepo incomeRepo, IExpenseRepo expenseRepo,
                                ICategoryRepo categoryRepo, IBudgetRepo budgetRepo)
         {
             AddIncomeComm = new RelayCommand(async () => await AddIncome(), CanAddIncome);
@@ -95,6 +98,21 @@ namespace BudgetHelperClassLibrary.ViewModels
             // Gör samma sak för IncomeSources (om du har ett sånt repo)
             // var sources = await _sourceRepo.GetAllSourcesAsync();
             // foreach (var s in sources) IncomeSources.Add(s);
+
+            // Hämta inkomster
+            var incomes = await _incomeRepo.GetAllIncomesAsync();
+            // Sortera (t.ex. på datum om du har det) och ta de 5 senaste
+            var latest = incomes.OrderByDescending(x => x.Id).Take(5);
+
+            LatestIncomes.Clear();
+            foreach (var item in latest) LatestIncomes.Add(item);
+
+            // Gör samma sak för Expenses...
+            var expenses = await _expenseRepo.GetAllExpensesAsync();
+            var latestEx = expenses.OrderByDescending(x => x.Id).Take(5);
+
+            LatestExpenses.Clear();
+            foreach (var item in latestEx) LatestExpenses.Add(item);
         }
 
 
@@ -105,12 +123,12 @@ namespace BudgetHelperClassLibrary.ViewModels
             return NewIncomeAmount > 0 && SelectedCategory != null && SelectedSource != null;
         }
 
-        private async Task  AddIncome()
+        private async Task AddIncome()
         {
             var newIncome = new Income
             {
                 Amount = NewIncomeAmount!,
-                ReceivedDate = SelectedDate, 
+                ReceivedDate = SelectedDate,
                 IncomeSourceId = SelectedSource!.Id
             };
 
@@ -122,7 +140,7 @@ namespace BudgetHelperClassLibrary.ViewModels
             SelectedSource = null;
             SelectedDate = DateTime.Now; // Återställ allt igen
         }
-//*******************************************************************
+        //*******************************************************************
         private bool CanAddExpense()
         {
             throw new NotImplementedException();
@@ -133,7 +151,7 @@ namespace BudgetHelperClassLibrary.ViewModels
             var expense = new Expense { Amount = (decimal)NewExpenseAmount, CategoryId = SelectedCategory.Id };
             await _expenseRepo.AddExpenseAsync(expense);
         }
-//*******************************************************************
+        //*******************************************************************
         private bool CanDeleteIncome()
         {
             throw new NotImplementedException();
@@ -143,14 +161,37 @@ namespace BudgetHelperClassLibrary.ViewModels
         {
             throw new NotImplementedException();
         }
-//*******************************************************************
+        //*******************************************************************
         private bool CanDeleteExpense()
         {
             throw new NotImplementedException();
-        }      
+        }
         private async Task DeleteExpense()
         {
             throw new NotImplementedException();
+        }
+
+        public async Task GetIncomesThisYearAsync()
+        {
+            var allIncomes = await _incomeRepo.GetAllIncomesAsync();
+            int currentYear = DateTime.Now.Year;
+
+            // Filtrera fram allt från i år
+            var filtered = allIncomes
+                .Where(x => x.ReceivedDate.Year == currentYear)
+                .OrderByDescending(x => x.ReceivedDate); // Nyast först är oftast bäst
+
+            IncomesThisYear.Clear();
+            foreach (var income in filtered)
+            {
+                IncomesThisYear.Add(income);
+            }
+        }
+
+        private async Task<ObservableCollection<Income>> GetLatestIncomesAsync()
+        {
+            var latestIncomes = await _incomeRepo.GetAllIncomesAsync();
+            return new ObservableCollection<Income>(latestIncomes);
         }
     }
 }

@@ -9,10 +9,11 @@
     <SolidColorBrush x:Key="NeonBrush" Color="#5dc44f" />
     <SolidColorBrush x:Key="TextBrush" Color="#D1D9D6" />
 
+    <!--RÖKEN-->
     <ImageBrush x:Key="BgImageBrush" 
                 ImageSource="pack://application:,,,/Resources/bgsmoke.png"                
                 Stretch="UniformToFill" 
-                Opacity="0.5"/>
+                Opacity="0.1"/>
 
 
     <SolidColorBrush x:Key="PrimaryBackground" Color="Black"/>
