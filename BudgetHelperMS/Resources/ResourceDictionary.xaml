@@ -8,8 +8,13 @@
     <SolidColorBrush x:Key="MutedBrush" Color="#709681" />
     <SolidColorBrush x:Key="NeonBrush" Color="#5dc44f" />
     <SolidColorBrush x:Key="TextBrush" Color="#D1D9D6" />
-    
-    
+
+    <ImageBrush x:Key="BgImageBrush" 
+                ImageSource="pack://application:,,,/Resources/bgsmoke.png"                
+                Stretch="UniformToFill" 
+                Opacity="0.5"/>
+
+
     <SolidColorBrush x:Key="PrimaryBackground" Color="Black"/>
     <SolidColorBrush x:Key="CardBackground" Color="DarkGray"/>
     <SolidColorBrush x:Key="AccentColor" Color="BlanchedAlmond"/>
@@ -26,11 +31,10 @@
         <Setter Property="Background" Value="{DynamicResource PrimaryBackground}"/>
     </Style>
     
-    <Style TargetType="Grid">
+    <!--<Style TargetType="Grid">
         <Setter Property="Background" Value="Black"/>
-    </Style>
+    </Style>-->
     <Style x:Key="MainGridStyle" TargetType="Grid">
-        <Setter Property="Background" Value="{DynamicResource PrimaryBackground}"/>
         <Setter Property="Margin" Value="10"/>
         
     </Style>

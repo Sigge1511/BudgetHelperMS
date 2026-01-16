@@ -7,21 +7,24 @@
         mc:Ignorable="d"
         Title="BudgetHelper" Height="1080" Width="1920" 
         WindowStyle="SingleBorderWindow"
-        Background="{StaticResource BgBrush}"
+        Background="Transparent"
         Foreground="White"
         FontWeight="Bold">
 
-    <Grid>
-        <!--HÄR BOR GRÖNATOPPLINJEN-->
+    <Grid Background="{StaticResource BgBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+
+        <Rectangle Grid.RowSpan="2" 
+               Fill="{StaticResource BgImageBrush}" 
+               IsHitTestVisible="False" />
+
         <Rectangle Grid.Row="0" 
-                   Height="2" 
-                   Fill="{StaticResource NeonBrush}" 
-                   HorizontalAlignment="Stretch"
-                   VerticalAlignment="Top">
+               Height="2" 
+               Fill="{StaticResource NeonBrush}" 
+               VerticalAlignment="Top">
             <Rectangle.Effect>
                 <DropShadowEffect Color="#A2D149" BlurRadius="10" ShadowDepth="0"/>
             </Rectangle.Effect>
@@ -53,70 +56,62 @@
             </Grid.RowDefinitions>
             <!--**************HÄR ÄR TOPPKOLUMNERNA-->
             <Border Grid.RowSpan="4" 
-                    Grid.ColumnSpan="3"
-                    Background="{StaticResource PanelJewelBrush3}"                    
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch">
+                            Grid.ColumnSpan="3"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch">
                 <TextBlock Text="Add incomes"
-                           Style="{StaticResource SectionHeader}"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Top"
-                           Margin="0,30,0,0"/>
+                                   Style="{StaticResource SectionHeader}"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Top"
+                                   Margin="0,30,0,0"/>
 
             </Border>
             <Border Grid.Row="0" 
-                    Grid.RowSpan="4"
-                    Grid.Column="3"
-                    Grid.ColumnSpan="3"
-                    Background="{StaticResource MutedBrush}"                    
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch">
+                            Grid.RowSpan="4"
+                            Grid.Column="3"
+                            Grid.ColumnSpan="3"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch">
             </Border>
             <Border Grid.Row="0" 
-                    Grid.RowSpan="4"
-                    Grid.Column="6"
-                    Grid.ColumnSpan="3"
-                    Background="{StaticResource PanelJewelBrush3}"                    
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch">
+                            Grid.RowSpan="4"
+                            Grid.Column="6"
+                            Grid.ColumnSpan="3"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch">
             </Border>
             <Border Grid.Row="0" 
-                    Grid.RowSpan="4"
-                    Grid.Column="9"
-                    Grid.ColumnSpan="3"
-                    Background="{StaticResource MutedBrush}"                    
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch">
+                            Grid.RowSpan="4"
+                            Grid.Column="9"
+                            Grid.ColumnSpan="3"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch">
             </Border>
             <!--**************HÄR ÄR BOTTENKOLUMNERNA-->
 
             <Border Grid.Row="4" 
-                    Grid.RowSpan="3"
-                    Grid.Column="0"
-                    Grid.ColumnSpan="4"
-                    Background="{StaticResource MutedBrush}"                    
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch">
+                            Grid.RowSpan="3"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="4"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch">
             </Border>
 
             <Border Grid.Row="4" 
-                    Grid.RowSpan="3"
-                    Grid.Column="4"
-                    Grid.ColumnSpan="4"
-                    Background="{StaticResource PanelJewelBrush1}"                    
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch">
+                            Grid.RowSpan="3"
+                            Grid.Column="4"
+                            Grid.ColumnSpan="4"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch">
             </Border>
 
             <Border Grid.Row="4" 
-                    Grid.RowSpan="3"
-                    Grid.Column="8"
-                    Grid.ColumnSpan="4"
-                    Background="{StaticResource MutedBrush}"                    
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch">
+                            Grid.RowSpan="3"
+                            Grid.Column="8"
+                            Grid.ColumnSpan="4"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch">
             </Border>
         </Grid>
     </Grid>
-
 </Window>

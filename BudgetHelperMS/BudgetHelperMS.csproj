@@ -9,10 +9,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\bgsmoke.png" />
     <None Remove="Resources\IMFellEnglishSC-Regular.ttf" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\bgsmoke.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\IMFellEnglishSC-Regular.ttf">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
