@@ -71,6 +71,40 @@
         </Setter>
     </Style>
 
+    <Style x:Key="DarkComboBoxItemStyle" TargetType="ComboBoxItem">
+        <Setter Property="Background" Value="{StaticResource BgBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
+        <Setter Property="Padding" Value="5,8"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource PanelJewelBrush3}"/>
+                <Setter Property="Foreground" Value="{StaticResource NeonBrush}"/>
+            </Trigger>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Background" Value="{StaticResource PanelJewelBrush1}"/>
+                <Setter Property="Foreground" Value="{StaticResource NeonBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="DarkComboBoxStyle" TargetType="ComboBox">
+        <Setter Property="SnapsToDevicePixels" Value="True"/>
+        <Setter Property="OverridesDefaultStyle" Value="False"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+        <Setter Property="Background" Value="{StaticResource PanelJewelBrush1}"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="BorderBrush" Value="{StaticResource NeonBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+
+        <Setter Property="ItemContainerStyle" Value="{StaticResource DarkComboBoxItemStyle}"/>
+
+        <Style.Resources>
+            <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#080B0A" />
+            <SolidColorBrush x:Key="{x:Static SystemColors.WindowTextBrushKey}" Color="White" />
+        </Style.Resources>
+    </Style>
+
     <!--För att styra tex knappar
     Template för alla knappar-->
     <ControlTemplate x:Key="RoundedButtonTemplate" TargetType="Button">
@@ -88,8 +122,54 @@
     </ControlTemplate>
 
     <!--För att styra specifika knappar mha Style-->
-    <Style x:Key="YesButton" TargetType="Button" >
+    <Style x:Key="YesButton" TargetType="Button">
         <Setter Property="Background" Value="{StaticResource PanelJewelBrush3}" />
+        <Setter Property="Foreground" Value="{StaticResource NeonBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource NeonBrush}" />
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="10"/>
+        <Setter Property="Height" Value="50"/>
+        <Setter Property="Width" Value="100"/>
+        <Setter Property="FontFamily" Value="pack://application:,,,/Resources/#IM FELL English SC"/>
+        <Setter Property="FontWeight" Value="ExtraBold"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="border"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center" 
+                                      VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="{StaticResource NeonBrush}" />
+                            <Setter Property="Foreground" Value="{StaticResource PanelJewelBrush3}" />
+                        </Trigger>
+
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="Background" Value="White" />
+                            <Setter Property="Foreground" Value="Black" />
+                        </Trigger>
+
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="border" Property="Background" Value="#1a1a1a" />
+                            <Setter Property="Foreground" Value="#444444" />
+                            <Setter Property="BorderBrush" Value="#222222" />
+                            <Setter Property="Opacity" Value="0.6" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--<Style x:Key="YesButton" TargetType="Button" >
+        <Setter Property="Background" Value="{StaticResource PanelJewelBrush3}" />
+        <Setter Property="Foreground" Value="{StaticResource NeonBrush}"/>
         <Setter Property="BorderBrush" Value="{StaticResource NeonBrush}" />
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="Padding" Value="10"/>
@@ -101,16 +181,16 @@
         <Setter Property="MaxWidth" Value="500"/>
         <Setter Property="MaxHeight" Value="300"/>
 
-        <Setter Property="FontFamily" Value="Segoe UI"/>
+        <Setter Property="FontFamily" Value="pack://application:,,,/Resources/#IM FELL English SC"/>
         <Setter Property="FontWeight" Value="ExtraBold"/>
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="LightGreen"/>
+                <Setter Property="Background" Value="Blue"/>
             </Trigger>
 
             <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Background" Value="Black"/>
+                <Setter Property="Background" Value="DarkGray"/>
             </Trigger>
 
             <Trigger Property="IsEnabled" Value="False">
@@ -118,7 +198,7 @@
                 <Setter Property="Foreground" Value="Black"/>
             </Trigger>
         </Style.Triggers>      
-    </Style>
+    </Style>-->
 
     <Style x:Key="NoButton" TargetType="Button" >
         <Setter Property="Background" Value="DarkGray" />
@@ -129,12 +209,12 @@
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Margin" Value="5"/>
 
-        <Setter Property="Height" Value="Auto"/>
-        <Setter Property="Width" Value="Auto"/>
+        <Setter Property="Height" Value="50"/>
+        <Setter Property="Width" Value="100"/>
         <Setter Property="MaxWidth" Value="500"/>
         <Setter Property="MaxHeight" Value="300"/>
 
-        <Setter Property="FontFamily" Value="Segoe UI"/>
+        <Setter Property="FontFamily" Value="pack://application:,,,/Resources/#IM FELL English SC"/>
         <Setter Property="FontWeight" Value="ExtraBold"/>
 
         <Style.Triggers>
@@ -162,12 +242,12 @@
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Margin" Value="5"/>
 
-        <Setter Property="Height" Value="Auto"/>
-        <Setter Property="Width" Value="Auto"/>
+        <Setter Property="Height" Value="50"/>
+        <Setter Property="Width" Value="100"/>
         <Setter Property="MaxWidth" Value="500"/>
         <Setter Property="MaxHeight" Value="300"/>
 
-        <Setter Property="FontFamily" Value="Segoe UI"/>
+        <Setter Property="FontFamily" Value="pack://application:,,,/Resources/#IM FELL English SC"/>
         <Setter Property="FontWeight" Value="ExtraBold"/>
 
         <Style.Triggers>
@@ -187,4 +267,5 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+    
 </ResourceDictionary>

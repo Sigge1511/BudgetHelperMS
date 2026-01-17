@@ -17,15 +17,15 @@ namespace BudgetHelperClassLibrary.ViewModels
         public ObservableCollection<Income> IncomesThisYear { get; set; } = new();
 
         // --- 2. Properties för valda objekt ---
-        private Category? _selectedCategory;
-        public Category? SelectedCategory
+        private int? _selectedCategory;
+        public int? SelectedCategory
         {
             get => _selectedCategory;
-            set { _selectedCategory = value; OnPropertyChanged(); AddIncomeComm.RaiseCanExecuteChanged(); }
+            set { _selectedCategory = value; OnPropertyChanged(); AddExpenseComm.RaiseCanExecuteChanged(); }
         }
 
-        private IncomeSource? _selectedSource;
-        public IncomeSource? SelectedSource
+        private int? _selectedSource;
+        public int? SelectedSource
         {
             get => _selectedSource;
             set { _selectedSource = value; OnPropertyChanged(); AddIncomeComm.RaiseCanExecuteChanged(); }
@@ -35,29 +35,65 @@ namespace BudgetHelperClassLibrary.ViewModels
         public decimal NewIncomeAmount
         {
             get => _newIncomeAmount;
-            set { _newIncomeAmount = value; OnPropertyChanged(); AddIncomeComm.RaiseCanExecuteChanged(); }
+            set
+            {
+                _newIncomeAmount = value; OnPropertyChanged();
+                AddIncomeComm.RaiseCanExecuteChanged();
+            }        
         }
 
         private Expense? _selectedExpense;
         public Expense? SelectedExpense
         {
             get => _selectedExpense;
-            set { _selectedExpense = value; OnPropertyChanged(); }
+            set { _selectedExpense = value; OnPropertyChanged(); AddExpenseComm.RaiseCanExecuteChanged(); }
         }
+
         private decimal? newExpenseAmount;
         public decimal? NewExpenseAmount
         {
             get => newExpenseAmount;
-            set { newExpenseAmount = value; OnPropertyChanged(); }
+            set { newExpenseAmount = value; 
+                OnPropertyChanged(); 
+                AddExpenseComm.RaiseCanExecuteChanged(); }
+        }
+
+        private string? newExpenseName;
+        public string? NewExpenseName
+        {
+            get => newExpenseName;
+            set { newExpenseName = value; 
+                OnPropertyChanged(); 
+                AddExpenseComm.RaiseCanExecuteChanged(); }
         }
 
         private DateTime _selectedDate = DateTime.Now; // Standardvärde som backup
         public DateTime SelectedDate
         {
             get => _selectedDate;
-            set { _selectedDate = value; OnPropertyChanged(); }
+            set { _selectedDate = value; OnPropertyChanged(); 
+                AddExpenseComm.RaiseCanExecuteChanged();
+                AddIncomeComm.RaiseCanExecuteChanged();
+            }
         }
 
+        private bool _selectedReccuring;
+        public bool SelectedIsRecurring
+        {
+            get => _selectedReccuring;
+            set
+            {
+                _selectedReccuring = value; 
+                OnPropertyChanged();
+                AddExpenseComm.RaiseCanExecuteChanged();
+            }
+        }
+        
+        private int? _selectedFrequencyInMonths;
+        public int? SelectedFrequencyInMonths {
+            get => _selectedFrequencyInMonths;
+            set {  _selectedFrequencyInMonths = value; OnPropertyChanged();}
+        }
 
         // Listan som visar alla inkomster i UI:t (Denna behöver uppdateras manuellt)
         public ObservableCollection<Income> AllIncomes { get; set; } = new();
@@ -91,8 +127,9 @@ namespace BudgetHelperClassLibrary.ViewModels
         {
             // Här hämtar vi kategorier från databasen via ditt repo
             var categoriesList = await _categoryRepo.GetAllCategoriesAsync();
+            Categories.Clear();
             foreach (var c in categoriesList) Categories.Add(c);
-
+            Expenses.Clear();
             // 1. Hämta datan som den är (troligen en List eller IEnumerable)
             var sources = await _incomeRepo.GetAllIncomeSourcesAsync();
 
@@ -105,6 +142,7 @@ namespace BudgetHelperClassLibrary.ViewModels
                 foreach (var s in sources)
                 {
                     IncomeSources.Add(s);
+
                 }
             }
             // Gör samma sak för IncomeSources (om du har ett sånt repo)
@@ -141,7 +179,7 @@ namespace BudgetHelperClassLibrary.ViewModels
             {
                 Amount = NewIncomeAmount!,
                 ReceivedDate = SelectedDate,
-                IncomeSourceId = SelectedSource!.Id
+                IncomeSourceId = (int)SelectedSource
             };
 
             await _incomeRepo.AddIncomeAsync(newIncome);
@@ -155,12 +193,22 @@ namespace BudgetHelperClassLibrary.ViewModels
         //*******************************************************************
         private bool CanAddExpense()
         {
-            throw new NotImplementedException();
+            return true;
+                //NewExpenseAmount > 0
+                //       && SelectedCategory != null
+                //       && !string.IsNullOrWhiteSpace(NewExpenseName);
         }
 
         private async Task AddExpense()
-        {
-            var expense = new Expense { Amount = (decimal)NewExpenseAmount, CategoryId = SelectedCategory.Id };
+        {                        
+
+            var expense = new Expense
+            { Amount = (decimal)NewExpenseAmount,
+              ExpenseDate = SelectedDate,
+              IsRecurring = SelectedIsRecurring,
+              FrequencyInMonths = SelectedFrequencyInMonths,
+              CategoryId = (int)SelectedCategory
+            };
             await _expenseRepo.AddExpenseAsync(expense);
         }
         //*******************************************************************
