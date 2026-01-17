@@ -3,6 +3,7 @@ using BudgetHelperClassLibrary.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,9 +22,15 @@ namespace BudgetHelperClassLibrary.Repositories
         }
 
         //Denna behöver bli en lista över alla inkomstkällor senare
-        public async Task<IncomeSource?> GetIncomeSourceAsync()
-        { return await _dbcntxt.IncomeSources.FirstOrDefaultAsync(); }
-
+        public async Task<ObservableCollection<IncomeSource>?> GetAllIncomeSourcesAsync()
+        {
+            List<IncomeSource> sourceList = await _dbcntxt.IncomeSources.ToListAsync();
+            return new ObservableCollection<IncomeSource>(sourceList);
+        }
+        public async Task<IncomeSource?> GetIncomeSourceAsync(int id)
+        {
+            return await _dbcntxt.IncomeSources.FirstOrDefaultAsync(s => s.Id == id);
+        }
         public async Task<Income?> GetIncomeByIdAsync(int id)
         {
             return await _dbcntxt.Incomes.FirstOrDefaultAsync(i => i.Id == id);

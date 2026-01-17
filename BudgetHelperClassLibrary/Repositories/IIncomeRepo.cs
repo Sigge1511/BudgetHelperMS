@@ -1,6 +1,7 @@
 ﻿using BudgetHelperClassLibrary.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,7 +11,8 @@ namespace BudgetHelperClassLibrary.Repositories
     public interface IIncomeRepo
     {
         Task<List<Income>> GetAllIncomesAsync();
-        Task<IncomeSource?> GetIncomeSourceAsync();
+        Task<IncomeSource?> GetIncomeSourceAsync(int id);
+        Task<ObservableCollection<IncomeSource>?> GetAllIncomeSourcesAsync();
         Task<Income?> GetIncomeByIdAsync(int id);
         Task<List<Income>> GetIncomesBySourceIdAsync(int categoryId);
         Task<List<Income>> GetIncomesByMonthAsync(int month, int year);

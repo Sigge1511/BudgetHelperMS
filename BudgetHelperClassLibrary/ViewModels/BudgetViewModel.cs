@@ -93,8 +93,20 @@ namespace BudgetHelperClassLibrary.ViewModels
             var categoriesList = await _categoryRepo.GetAllCategoriesAsync();
             foreach (var c in categoriesList) Categories.Add(c);
 
-            var sourcesList = await _incomeRepo.GetIncomeSourceAsync();
+            // 1. Hämta datan som den är (troligen en List eller IEnumerable)
+            var sources = await _incomeRepo.GetAllIncomeSourcesAsync();
 
+            // 2. Rensa din existerande ObservableCollection som finns i VM
+            IncomeSources.Clear();
+
+            // 3. Loopa igenom resultatet och lägg till i din samling
+            if (sources != null)
+            {
+                foreach (var s in sources)
+                {
+                    IncomeSources.Add(s);
+                }
+            }
             // Gör samma sak för IncomeSources (om du har ett sånt repo)
             // var sources = await _sourceRepo.GetAllSourcesAsync();
             // foreach (var s in sources) IncomeSources.Add(s);

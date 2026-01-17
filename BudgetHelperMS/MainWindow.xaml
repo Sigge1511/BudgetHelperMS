@@ -16,9 +16,11 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        <!--//Smoke image lives here-->
         <Rectangle Grid.RowSpan="2" 
                Fill="{StaticResource BgImageBrush}" 
                IsHitTestVisible="False" />
+        <!--//Top neon line lives here-->
         <Rectangle Grid.Row="0" 
                Height="2" 
                Fill="{StaticResource NeonBrush}" 
@@ -43,20 +45,74 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <!--* **** HÄR ÄR TOPPKOLUMNERNA-->
+            </Grid.ColumnDefinitions>            
+            
+            
+<!--* **** HÄR ÄR TOPPKOLUMNERNA-->  
+            <!--//Add incomes here-->
             <Border Grid.Row="0"  
                     Grid.RowSpan="4" 
                     Grid.ColumnSpan="3"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch">
-                <TextBlock  Text="Add incomes"
+                <StackPanel Margin="20">
+                    <TextBlock  Text="Add incomes"
                             Style="{StaticResource SectionHeader}"
                             HorizontalAlignment="Center"
                             VerticalAlignment="Top"
                             Margin="0,30,0,0"/>
+                    <TextBlock Style="{StaticResource SubHeader}" 
+                               Text="Amount"/>
+                    <TextBox Text="{Binding NewIncomeAmount, 
+                             UpdateSourceTrigger=PropertyChanged}"
+                             Background="{StaticResource MutedBrush}"
+                             Width="Auto" 
+                             Height="30" 
+                             Margin="0,10,0,0"/>
+                    <TextBlock Style="{StaticResource SubHeader}" 
+                               Margin="0,20,0,0"
+                               Text="From"/>
+                    <ComboBox ItemsSource="{Binding IncomeSources}" 
+                              DisplayMemberPath="Name" 
+                              SelectedValuePath="Id"
+                              SelectedValue="{Binding SelectedSourceId}"
+                              Background="{StaticResource MutedBrush}"
+                              Foreground="{StaticResource PanelJewelBrush1}" 
+                              BorderBrush="{StaticResource NeonBrush}"
+                              Padding="5">
+                        <ComboBox.Resources>
+                            <Style TargetType="ScrollViewer">
+                                <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+                                <Setter Property="Background" Value="{StaticResource MutedBrush}"/>
+                            </Style>
+                        </ComboBox.Resources>
+                    </ComboBox>
+                    <TextBlock Style="{StaticResource SubHeader}" 
+                               Text="Recieved"
+                             Margin="0,20,0,0"/>
+                    <DatePicker SelectedDate="{Binding NewIncomeDate}" 
+                                Foreground="White" 
+                                BorderBrush="{StaticResource NeonBrush}" 
+                                Background="Transparent"
+                                CalendarStyle="{StaticResource DarkCalendarStyle}">
+                                    <DatePicker.Resources>
+                                        <Style TargetType="DatePickerTextBox">
+                                            <Setter Property="Background" Value="#11ffffff"/>
+                                            <Setter Property="Foreground" Value="White"/>
+                                            <Setter Property="BorderThickness" Value="0"/>
+                                            <Setter Property="Padding" Value="5"/>
+                                        </Style>
+                                    </DatePicker.Resources>
+                    </DatePicker>
 
+                    <Button Content="SAVE" 
+                            Style="{StaticResource YesButton}" 
+                            Margin="0,20,0,0"
+                            HorizontalAlignment="Left"
+                            Command="{Binding AddIncomeCommand}"/>
+                </StackPanel>
             </Border>
+            <!--//Add expenses here-->
             <Border Grid.Row="0" 
                     Grid.RowSpan="4"
                     Grid.Column="3"
@@ -69,6 +125,7 @@
                    VerticalAlignment="Top"
                    Margin="0,30,0,0"/>
             </Border>
+            <!--//Summary last month-->
             <Border Grid.Row="0" 
                             Grid.RowSpan="4"
                             Grid.Column="6"
@@ -82,6 +139,7 @@
                     Margin="0,30,0,0" TextAlignment="Center">                    
                     Summary<LineBreak/>Last month</TextBlock>
             </Border>
+<!--//Month prognosis-->
             <Border Grid.Row="0" 
                             Grid.RowSpan="4"
                             Grid.Column="9"
@@ -95,8 +153,11 @@
                     Margin="0,30,0,0" TextAlignment="Center">                    
                     Prognosis for<LineBreak/>Next month</TextBlock>
             </Border>
-            <!--**************HÄR ÄR BOTTENKOLUMNERNA-->
-
+            
+            
+            
+<!--**************HÄR ÄR BOTTENKOLUMNERNA-->
+<!--//Latest incomes here-->
             <Border
                     Grid.Column="0"
                     Grid.ColumnSpan="5" Margin="0,585,159,0">
@@ -131,7 +192,7 @@
                     </ItemsControl>
                 </StackPanel>
             </Border>
-
+<!--//Latest expenses here-->
             <Border
                             Grid.Column="4"
                             Grid.ColumnSpan="4" Margin="0,585,0,0">
@@ -167,7 +228,7 @@
                     </ItemsControl>
                 </StackPanel>
             </Border>
-
+<!--//Year so far-->
             <Border
                             Grid.Column="7"
                             Grid.ColumnSpan="5" Margin="159,585,0,0">
