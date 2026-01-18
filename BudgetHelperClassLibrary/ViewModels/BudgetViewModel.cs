@@ -1,5 +1,6 @@
 ﻿using BudgetHelperClassLibrary.Commands;
 using BudgetHelperClassLibrary.Models;
+using BudgetHelperClassLibrary.CalculationService;
 using BudgetHelperClassLibrary.Repositories;
 using System.Collections.ObjectModel;
 
@@ -94,6 +95,27 @@ namespace BudgetHelperClassLibrary.ViewModels
             get => _selectedFrequencyInMonths;
             set {  _selectedFrequencyInMonths = value; OnPropertyChanged();}
         }
+        //******** LAST MONTH SUMMARY ********
+        private decimal? totalIncomesLastMonth;
+        public decimal? TotalIncomesLastMonth
+        {
+            get => totalIncomesLastMonth;
+            set { totalIncomesLastMonth = value; OnPropertyChanged(); }
+        }
+
+        private decimal? totalExpensesLastMonth;
+        public decimal? TotalExpensesLastMonth
+        {
+            get => totalExpensesLastMonth;
+            set { totalExpensesLastMonth = value; OnPropertyChanged(); }
+        }
+
+        private decimal? netAmountLastMonth;
+        public decimal? NetAmountLastMonth
+        {
+            get => netAmountLastMonth;
+            set { netAmountLastMonth = value; OnPropertyChanged(); }
+        }
 
         // Listan som visar alla inkomster i UI:t (Denna behöver uppdateras manuellt)
         public ObservableCollection<Income> AllIncomes { get; set; } = new();
@@ -102,6 +124,7 @@ namespace BudgetHelperClassLibrary.ViewModels
         public RelayCommand AddExpenseComm { get; }
         public RelayCommand DeleteIncomeComm { get; }
         public RelayCommand DeleteExpenseComm { get; }
+        public RelayCommand UpdateMonthSumComm { get; }
 
         private readonly IIncomeRepo _incomeRepo;
         private readonly IExpenseRepo _expenseRepo;
@@ -115,6 +138,7 @@ namespace BudgetHelperClassLibrary.ViewModels
             AddExpenseComm = new RelayCommand(async () => await AddExpense(), CanAddExpense);
             DeleteIncomeComm = new RelayCommand(async () => await DeleteIncome(), CanDeleteIncome);
             DeleteExpenseComm = new RelayCommand(async () => await DeleteExpense(), CanDeleteExpense);
+            UpdateMonthSumComm = new RelayCommand(async () => await UpdateMonthSum());
 
             _incomeRepo = incomeRepo;
             _expenseRepo = expenseRepo;
@@ -122,6 +146,7 @@ namespace BudgetHelperClassLibrary.ViewModels
             _budgetRepo = budgetRepo;
         }
 
+        
 
         public async Task LoadDataAsync()
         {
@@ -129,14 +154,9 @@ namespace BudgetHelperClassLibrary.ViewModels
             var categoriesList = await _categoryRepo.GetAllCategoriesAsync();
             Categories.Clear();
             foreach (var c in categoriesList) Categories.Add(c);
-            Expenses.Clear();
-            // 1. Hämta datan som den är (troligen en List eller IEnumerable)
+            //*******************************************************************
             var sources = await _incomeRepo.GetAllIncomeSourcesAsync();
-
-            // 2. Rensa din existerande ObservableCollection som finns i VM
             IncomeSources.Clear();
-
-            // 3. Loopa igenom resultatet och lägg till i din samling
             if (sources != null)
             {
                 foreach (var s in sources)
@@ -145,52 +165,50 @@ namespace BudgetHelperClassLibrary.ViewModels
 
                 }
             }
-            // Gör samma sak för IncomeSources (om du har ett sånt repo)
-            // var sources = await _sourceRepo.GetAllSourcesAsync();
-            // foreach (var s in sources) IncomeSources.Add(s);
-
-            // Hämta inkomster
-            var incomes = await _incomeRepo.GetAllIncomesAsync();
-            // Sortera (t.ex. på datum om du har det) och ta de 5 senaste
-            var latest = incomes.OrderByDescending(x => x.Id).Take(5);
-
-            LatestIncomes.Clear();
-            foreach (var item in latest) LatestIncomes.Add(item);
-
-            // Gör samma sak för Expenses...
-            var expenses = await _expenseRepo.GetAllExpensesAsync();
-            var latestEx = expenses.OrderByDescending(x => x.Id).Take(5);
-
+            //*******************************************************************
+            var expenseList = await _expenseRepo.GetAllExpensesAsync();
             LatestExpenses.Clear();
-            foreach (var item in latestEx) LatestExpenses.Add(item);
+            foreach (var e in expenseList) LatestExpenses.Add(e);
+            var latestExpensesList = expenseList.OrderByDescending(x => x.Id).Take(5);
+            //*******************************************************************          
+            var incomes = await _incomeRepo.GetAllIncomesAsync();
+            LatestIncomes.Clear();
+            foreach (var i in incomes) LatestIncomes.Add(i);
+            var latestIncomesList = incomes.OrderByDescending(x => x.Id).Take(5);
         }
 
-
-
+//***********   METODER   ********************************************************
         private bool CanAddIncome()
         {
-            // Koll: Belopp, Kategori och Källa
-            return NewIncomeAmount > 0 && SelectedCategory != null && SelectedSource != null;
+            // Kolla Belopp, Datum och Källa
+            return NewIncomeAmount > 0 && SelectedSource.HasValue && SelectedDate != default;
+            //NewIncomeAmount > 0 && SelectedCategory != null && SelectedSource != null;
         }
-
         private async Task AddIncome()
         {
-            var newIncome = new Income
+            try
             {
-                Amount = NewIncomeAmount!,
-                ReceivedDate = SelectedDate,
-                IncomeSourceId = (int)SelectedSource
-            };
+                var newIncome = new Income
+                {
+                    Amount = NewIncomeAmount!,
+                    ReceivedDate = SelectedDate,
+                    IncomeSourceId = (int)SelectedSource
+                };
 
-            await _incomeRepo.AddIncomeAsync(newIncome);
+                await _incomeRepo.AddIncomeAsync(newIncome);
 
-            // Nollställ allt efteråt
-            NewIncomeAmount = 0;
-            SelectedCategory = null;
-            SelectedSource = null;
-            SelectedDate = DateTime.Now; // Återställ allt igen
+                // Nollställ allt efteråt
+                NewIncomeAmount = 0;
+                SelectedSource = null;
+                SelectedDate = DateTime.Now; // Återställ allt igen
+            }
+            catch (Exception ex)
+            {
+                // Hantera eventuella fel här, t.ex. logga eller visa ett meddelande
+                Console.WriteLine($"Error adding income: {ex.Message}");
+            }
         }
-        //*******************************************************************
+//*******************************************************************
         private bool CanAddExpense()
         {
             return true;
@@ -198,19 +216,42 @@ namespace BudgetHelperClassLibrary.ViewModels
                 //       && SelectedCategory != null
                 //       && !string.IsNullOrWhiteSpace(NewExpenseName);
         }
-
         private async Task AddExpense()
-        {                        
+        {
+            try
+            {
+                var expense = new Expense
+                {
+                    Amount = (decimal)NewExpenseAmount,
+                    ExpenseDate = SelectedDate,
+                    IsRecurring = SelectedIsRecurring,
+                    FrequencyInMonths = SelectedFrequencyInMonths,
+                    CategoryId = (int)SelectedCategory
+                };
 
-            var expense = new Expense
-            { Amount = (decimal)NewExpenseAmount,
-              ExpenseDate = SelectedDate,
-              IsRecurring = SelectedIsRecurring,
-              FrequencyInMonths = SelectedFrequencyInMonths,
-              CategoryId = (int)SelectedCategory
-            };
-            await _expenseRepo.AddExpenseAsync(expense);
+                await _expenseRepo.AddExpenseAsync(expense);
+            }
+            catch (Exception ex)
+            {
+                // Hantera eventuella fel här, t.ex. logga eller visa ett meddelande
+                Console.WriteLine($"Error adding expense: {ex.Message}");
+            }
         }
+        //*******************************************************************
+        public async Task UpdateMonthSum()
+        {
+            var allIncomes = await _incomeRepo.GetAllIncomesAsync();
+            var allExpenses = await _expenseRepo.GetAllExpensesAsync();
+
+            var calc = new Calculator();
+            var result = calc.SumOfLastMonth(allIncomes.ToList(), allExpenses.ToList());
+
+            // 3. Uppdatera dina variabler (OnPropertyChanged triggar UI-uppdateringen)
+            TotalIncomesLastMonth = result.TotalIncome;
+            TotalExpensesLastMonth = result.TotalExpense;
+            NetAmountLastMonth = result.NetAmount;
+        }
+
         //*******************************************************************
         private bool CanDeleteIncome()
         {

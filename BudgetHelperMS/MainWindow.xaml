@@ -77,7 +77,7 @@
                     <ComboBox ItemsSource="{Binding IncomeSources}" 
                               DisplayMemberPath="SourceName" 
                               SelectedValuePath="Id"
-                              SelectedValue="{Binding SelectedSourceId}"
+                              SelectedValue="{Binding SelectedSource}"
                               Style="{StaticResource DarkComboBoxStyle}"
                               Padding="5"
                               Margin="0,5,0,15">
@@ -212,17 +212,68 @@
             </Border>
             <!--//Summary last month-->
             <Border Grid.Row="0" 
-                            Grid.RowSpan="4"
-                            Grid.Column="6"
-                            Grid.ColumnSpan="3"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Stretch">
-                <TextBlock  Text=""
-                    Style="{StaticResource SectionHeader}"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Top"
-                    Margin="0,30,0,0" TextAlignment="Center">                    
-                    Summary<LineBreak/>Last month</TextBlock>
+                    Grid.RowSpan="4"
+                    Grid.Column="6"        
+                    Grid.ColumnSpan="3"        
+                    HorizontalAlignment="Stretch"        
+                    VerticalAlignment="Stretch">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource SectionHeader}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Top"
+                        Margin="0,30,0,0" TextAlignment="Center">
+                            Summary <LineBreak/> Last month
+                    </TextBlock>
+
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0,10,0,0">
+
+                        <TextBlock Style="{StaticResource SubHeader}"
+                                   Margin="20,10,30,0"
+                                   Text="Total Incomes:"
+                                   VerticalAlignment="Top"/>
+                        <TextBox   Width="200"
+                                   BorderBrush="{StaticResource MutedBrush}"
+                                   Background="{StaticResource PanelJewelBrush1}"
+                                   Foreground="{StaticResource NeonBrush}"
+
+                                   Text="{Binding TotalIncomesLastMonth, StringFormat=\{0:C\}}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal"
+                               Margin="0,20,0,0">  
+                        <TextBlock Style="{StaticResource SubHeader}"
+                                   Margin="20,10,30,0"
+                                   VerticalAlignment="Top"
+                                   Text="Total Expenses:"/>
+                        <TextBox   Width="200"                                    
+                                   BorderBrush="{StaticResource MutedBrush}"
+                                   Background="{StaticResource PanelJewelBrush1}"
+                                   Foreground="{StaticResource NeonBrush}"
+                                   Text="{Binding TotalExpensesLastMonth, 
+                                          StringFormat={}{0:C}}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0,20,0,0">
+                        <TextBlock Style="{StaticResource SubHeader}"
+                                   Margin="20,10,30,0"
+                                   VerticalAlignment="Top"
+                                   Text="Total balance"/>
+                        <TextBox   Width="200"
+                                   BorderBrush="{StaticResource MutedBrush}"
+                                   Background="{StaticResource PanelJewelBrush1}"
+                                   Foreground="{StaticResource NeonBrush}"
+                                   Text="{Binding NetAmountLastMonth, 
+                                          StringFormat={}{0:C}}"/>  
+                    </StackPanel>
+                    <Button Content="UPDATE" 
+                        Style="{StaticResource YesButton}" 
+                        Margin="27,20,0,0"
+                        HorizontalAlignment="Left"
+                        Command="{Binding UpdateMonthSumComm}"/>
+                </StackPanel>
+
+
+
             </Border>
             <!--//Month prognosis-->
             <Border Grid.Row="0" 
@@ -245,7 +296,7 @@
             <!--//Latest incomes here-->
             <Border
                     Grid.Column="0"
-                    Grid.ColumnSpan="5" Margin="0,585,159,0">
+                    Grid.ColumnSpan="5" Margin="0,777,159,0">
                 <StackPanel Margin="20">
                     <TextBlock Text="Latest Incomes" 
                        Style="{StaticResource SectionHeader}" 
@@ -263,7 +314,7 @@
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
 
-                                    <TextBlock Text="{Binding Name}" 
+                                    <TextBlock Text="{Binding IncomeSourceId}" 
                                    Foreground="{StaticResource TextBrush}" 
                                    FontSize="18"/>
 
@@ -280,7 +331,7 @@
             <!--//Latest expenses here-->
             <Border
                             Grid.Column="4"
-                            Grid.ColumnSpan="4" Margin="0,585,0,0">
+                            Grid.ColumnSpan="4" Margin="0,777,0,0">
                 <StackPanel Margin="20">
                     <TextBlock Text="Latest Expenses" 
                    Style="{StaticResource SectionHeader}" 
@@ -316,7 +367,7 @@
             <!--//Year so far-->
             <Border
                             Grid.Column="7"
-                            Grid.ColumnSpan="5" Margin="159,585,0,0">
+                            Grid.ColumnSpan="5" Margin="159,777,0,0">
                 <Grid Margin="20">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -330,9 +381,7 @@
                    HorizontalAlignment="Center" 
                    VerticalAlignment="Top"
                    Margin="0,0,0,15">
-                    Total incomes
-                    <LineBreak/>So far
-                    <LineBreak/>this year
+                    Total incomes so far this year
 
                         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
                             <ItemsControl ItemsSource="{Binding IncomesThisYear}">
