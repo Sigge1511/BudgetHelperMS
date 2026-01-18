@@ -271,10 +271,7 @@
                         HorizontalAlignment="Left"
                         Command="{Binding UpdateMonthSumComm}"/>
                 </StackPanel>
-
-
-
-            </Border>
+            </Border>            
             <!--//Month prognosis-->
             <Border Grid.Row="0" 
                             Grid.RowSpan="4"
@@ -282,12 +279,42 @@
                             Grid.ColumnSpan="3"
                             HorizontalAlignment="Stretch"
                             VerticalAlignment="Stretch">
-                <TextBlock  Text=""
-                    Style="{StaticResource SectionHeader}"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Top"
-                    Margin="0,30,0,0" TextAlignment="Center">                    
-                    Prognosis for<LineBreak/>Next month</TextBlock>
+                <StackPanel>
+                    <TextBlock  Text=""
+                                Style="{StaticResource SectionHeader}"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Top"
+                                Margin="0,30,0,0" TextAlignment="Center">                    
+                                Prognosis for<LineBreak/>Next month</TextBlock>
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0,10,0,0">
+
+                        <TextBlock Style="{StaticResource SubHeader}"
+                                   Margin="20,10,30,0"
+                                   VerticalAlignment="Top"> 
+                                   Estimated<LineBreak/> Incomes:</TextBlock>    
+                        <TextBox   Width="200"
+                                   Height="45"
+                                   BorderBrush="{StaticResource MutedBrush}"
+                                   Background="{StaticResource PanelJewelBrush1}"
+                                   Foreground="{StaticResource NeonBrush}"
+                                   Text="{Binding AvgIncomeLastThreeMonths, StringFormat=\{0:C\}}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0,20,0,0">
+                        <TextBlock Style="{StaticResource SubHeader}"
+                                   Margin="20,10,30,0"
+                                   VerticalAlignment="Top"
+                                   > Estimated<LineBreak/> Expenses:</TextBlock>
+                        <TextBox   Width="200" Height="45"                                
+                                   BorderBrush="{StaticResource MutedBrush}"
+                                   Background="{StaticResource PanelJewelBrush1}"
+                                   Foreground="{StaticResource NeonBrush}"
+                                   Text="{Binding AvgExpenseLastThreeMonths, 
+                                          StringFormat={}{0:C}}"/>
+                    </StackPanel>
+
+                </StackPanel>
             </Border>
 
 
@@ -296,7 +323,7 @@
             <!--//Latest incomes here-->
             <Border
                     Grid.Column="0"
-                    Grid.ColumnSpan="5" Margin="0,777,159,0">
+                    Grid.ColumnSpan="5" Margin="0,741,159,0">
                 <StackPanel Margin="20">
                     <TextBlock Text="Latest Incomes" 
                        Style="{StaticResource SectionHeader}" 
@@ -331,7 +358,7 @@
             <!--//Latest expenses here-->
             <Border
                             Grid.Column="4"
-                            Grid.ColumnSpan="4" Margin="0,777,0,0">
+                            Grid.ColumnSpan="4" Margin="0,741,0,0">
                 <StackPanel Margin="20">
                     <TextBlock Text="Latest Expenses" 
                    Style="{StaticResource SectionHeader}" 
@@ -367,7 +394,7 @@
             <!--//Year so far-->
             <Border
                             Grid.Column="7"
-                            Grid.ColumnSpan="5" Margin="159,777,0,0">
+                            Grid.ColumnSpan="5" Margin="159,655,0,0">
                 <Grid Margin="20">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>

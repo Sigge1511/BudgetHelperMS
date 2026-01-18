@@ -11,10 +11,7 @@ namespace BudgetHelperClassLibrary.CalculationService
 {
     public class Calculator
     {
-        public Calculator() 
-        { 
-        
-        }
+        public Calculator() { }
 
         public (decimal TotalIncome, 
                decimal TotalExpense, 
@@ -37,11 +34,22 @@ namespace BudgetHelperClassLibrary.CalculationService
             return (sumIncome, sumExpense, netAmount);
         }
 
-        public decimal CalcSickComp(decimal income)
+        public (decimal Deduction, decimal Compensation) SickCompCalc(decimal monthlyIncome, 
+                                                                      int daysAbsent, bool isVAK = false)
         {
-            decimal sickleaveRate = 0.8015m; // 80.15%
-            decimal sickleaveAmount = income * sickleaveRate;
-            return sickleaveAmount;
+            decimal yearlyIncome = monthlyIncome * 12;
+            decimal basis = (isVAK && yearlyIncome > 410000m) ? 410000m / 12 : monthlyIncome;
+
+            decimal dailyRate = basis / 21m; // Standard arbetsdagar
+            decimal deduction = dailyRate * daysAbsent;
+            decimal compensation = deduction * 0.8m;
+
+            return (Math.Round(deduction, 2), Math.Round(compensation, 2));
         }
+
+
+
+
+
     }
 }

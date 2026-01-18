@@ -1,8 +1,9 @@
-﻿using BudgetHelperClassLibrary.Commands;
+﻿using BudgetHelperClassLibrary.CalculationService;
+using BudgetHelperClassLibrary.Commands;
 using BudgetHelperClassLibrary.Models;
-using BudgetHelperClassLibrary.CalculationService;
 using BudgetHelperClassLibrary.Repositories;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 
 namespace BudgetHelperClassLibrary.ViewModels
@@ -17,7 +18,10 @@ namespace BudgetHelperClassLibrary.ViewModels
         public ObservableCollection<Income> LatestIncomes { get; set; } = new();
         public ObservableCollection<Income> IncomesThisYear { get; set; } = new();
 
-        // --- 2. Properties för valda objekt ---
+
+        Calculator calc = new Calculator();
+
+        //*********** PROPS FOR INPUT  ************ 
         private int? _selectedCategory;
         public int? SelectedCategory
         {
@@ -116,6 +120,22 @@ namespace BudgetHelperClassLibrary.ViewModels
             get => netAmountLastMonth;
             set { netAmountLastMonth = value; OnPropertyChanged(); }
         }
+        //******** FOR MY PROGNOSIS ********
+        private decimal avgIncomeLastThreeMonths;
+        public decimal AvgIncomeLastThreeMonths
+        {
+            get => avgIncomeLastThreeMonths;
+            set { avgIncomeLastThreeMonths = value; OnPropertyChanged(); }
+        }
+
+        private decimal avgExpenseLastThreeMonths;
+        public decimal AvgExpenseLastThreeMonths
+        {
+            get => avgExpenseLastThreeMonths;
+            set { avgExpenseLastThreeMonths = value; OnPropertyChanged(); }
+        }
+
+
 
         // Listan som visar alla inkomster i UI:t (Denna behöver uppdateras manuellt)
         public ObservableCollection<Income> AllIncomes { get; set; } = new();
@@ -175,9 +195,15 @@ namespace BudgetHelperClassLibrary.ViewModels
             LatestIncomes.Clear();
             foreach (var i in incomes) LatestIncomes.Add(i);
             var latestIncomesList = incomes.OrderByDescending(x => x.Id).Take(5);
+            //*******************************************************************          
+            LatestIncomes = new ObservableCollection<Income>(incomes.OrderByDescending(i => i.ReceivedDate).Take(5));
+            AvgIncomeLastThreeMonths = CalculateAverage(incomes);
+            //Update monthly summary
+            await UpdateMonthSum();
+            await UpdateAverages();
         }
 
-//***********   METODER   ********************************************************
+        //***********   METODER   ********************************************************
         private bool CanAddIncome()
         {
             // Kolla Belopp, Datum och Källa
@@ -188,33 +214,31 @@ namespace BudgetHelperClassLibrary.ViewModels
         {
             try
             {
+                decimal amount = NewIncomeAmount;
                 var newIncome = new Income
                 {
-                    Amount = NewIncomeAmount!,
+                    Amount = amount, // Här sparas det (ev. omräknade) beloppet
                     ReceivedDate = SelectedDate,
                     IncomeSourceId = (int)SelectedSource
                 };
-
                 await _incomeRepo.AddIncomeAsync(newIncome);
 
-                // Nollställ allt efteråt
                 NewIncomeAmount = 0;
                 SelectedSource = null;
                 SelectedDate = DateTime.Now; // Återställ allt igen
+                
+                await UpdateMonthSum(); // Uppdatera direkt i vyn
             }
             catch (Exception ex)
             {
-                // Hantera eventuella fel här, t.ex. logga eller visa ett meddelande
                 Console.WriteLine($"Error adding income: {ex.Message}");
             }
         }
 //*******************************************************************
         private bool CanAddExpense()
         {
-            return true;
-                //NewExpenseAmount > 0
-                //       && SelectedCategory != null
-                //       && !string.IsNullOrWhiteSpace(NewExpenseName);
+            return  SelectedCategory != null && NewExpenseAmount.HasValue
+                    && !string.IsNullOrWhiteSpace(NewExpenseName);
         }
         private async Task AddExpense()
         {
@@ -237,19 +261,47 @@ namespace BudgetHelperClassLibrary.ViewModels
                 Console.WriteLine($"Error adding expense: {ex.Message}");
             }
         }
-        //*******************************************************************
+        //**************  FOR SUMMARY AND PROGNOSIS  ********************************
         public async Task UpdateMonthSum()
         {
             var allIncomes = await _incomeRepo.GetAllIncomesAsync();
             var allExpenses = await _expenseRepo.GetAllExpensesAsync();
 
-            var calc = new Calculator();
+            
             var result = calc.SumOfLastMonth(allIncomes.ToList(), allExpenses.ToList());
 
             // 3. Uppdatera dina variabler (OnPropertyChanged triggar UI-uppdateringen)
             TotalIncomesLastMonth = result.TotalIncome;
             TotalExpensesLastMonth = result.TotalExpense;
             NetAmountLastMonth = result.NetAmount;
+        }
+        private async Task UpdateAverages()
+        {
+            try
+            {
+                var allIncomes = await _incomeRepo.GetAllIncomesAsync();
+                var allExpenses = await _expenseRepo.GetAllExpensesAsync();
+
+                // Här mappar vi om till en anonym typ med TYDLIGA namn och typer
+                AvgIncomeLastThreeMonths = CalculateAverage(allIncomes.Select(i => new { ReceivedDate = i.ReceivedDate, Amount = i.Amount }));
+
+                // Samma här för utgifter
+                AvgExpenseLastThreeMonths = CalculateAverage(allExpenses.Select(e => new { ReceivedDate = e.ExpenseDate, Amount = e.Amount }));
+            }
+            catch (Exception ex){
+                Debug.WriteLine($"Couldn't update the average: {ex.Message}");}
+        }
+        // Hjälpmetod för summering
+        private decimal CalculateAverage(IEnumerable<dynamic> data)
+        {
+            var monthlySums = data
+                .GroupBy(d => new { d.ReceivedDate.Year, d.ReceivedDate.Month })
+                .OrderByDescending(g => g.Key.Year).ThenByDescending(g => g.Key.Month)
+                .Take(3)
+                .Select(g => (decimal)g.Sum(x => (decimal)x.Amount))
+                .ToList();
+
+            return monthlySums.Any() ? Math.Round(monthlySums.Average(), 2) : 0;
         }
 
         //*******************************************************************
