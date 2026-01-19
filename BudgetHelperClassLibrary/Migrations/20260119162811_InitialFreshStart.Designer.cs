@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BudgetHelperClassLibrary.Migrations
 {
     [DbContext(typeof(BudgetHelperDbContext))]
-    [Migration("20260113222033_Initial")]
-    partial class Initial
+    [Migration("20260119162811_InitialFreshStart")]
+    partial class InitialFreshStart
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -111,7 +111,7 @@ namespace BudgetHelperClassLibrary.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("CategoryId")
+                    b.Property<int?>("CategoryId")
                         .HasColumnType("int");
 
                     b.Property<int>("IncomeSourceId")
@@ -121,6 +121,10 @@ namespace BudgetHelperClassLibrary.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("IncomeSourceId");
 
                     b.ToTable("Incomes");
                 });
@@ -157,34 +161,19 @@ namespace BudgetHelperClassLibrary.Migrations
                     b.ToTable("CategoryExpense");
                 });
 
-            modelBuilder.Entity("CategoryIncome", b =>
+            modelBuilder.Entity("BudgetHelperClassLibrary.Models.Income", b =>
                 {
-                    b.Property<int>("CategoryListId")
-                        .HasColumnType("int");
+                    b.HasOne("BudgetHelperClassLibrary.Models.Category", null)
+                        .WithMany("IncomesList")
+                        .HasForeignKey("CategoryId");
 
-                    b.Property<int>("IncomesListId")
-                        .HasColumnType("int");
+                    b.HasOne("BudgetHelperClassLibrary.Models.IncomeSource", "IncomeSource")
+                        .WithMany("Incomes")
+                        .HasForeignKey("IncomeSourceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasKey("CategoryListId", "IncomesListId");
-
-                    b.HasIndex("IncomesListId");
-
-                    b.ToTable("CategoryIncome");
-                });
-
-            modelBuilder.Entity("IncomeIncomeSource", b =>
-                {
-                    b.Property<int>("IncomeSourceListId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IncomesId")
-                        .HasColumnType("int");
-
-                    b.HasKey("IncomeSourceListId", "IncomesId");
-
-                    b.HasIndex("IncomesId");
-
-                    b.ToTable("IncomeIncomeSource");
+                    b.Navigation("IncomeSource");
                 });
 
             modelBuilder.Entity("CategoryExpense", b =>
@@ -202,34 +191,14 @@ namespace BudgetHelperClassLibrary.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("CategoryIncome", b =>
+            modelBuilder.Entity("BudgetHelperClassLibrary.Models.Category", b =>
                 {
-                    b.HasOne("BudgetHelperClassLibrary.Models.Category", null)
-                        .WithMany()
-                        .HasForeignKey("CategoryListId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BudgetHelperClassLibrary.Models.Income", null)
-                        .WithMany()
-                        .HasForeignKey("IncomesListId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("IncomesList");
                 });
 
-            modelBuilder.Entity("IncomeIncomeSource", b =>
+            modelBuilder.Entity("BudgetHelperClassLibrary.Models.IncomeSource", b =>
                 {
-                    b.HasOne("BudgetHelperClassLibrary.Models.IncomeSource", null)
-                        .WithMany()
-                        .HasForeignKey("IncomeSourceListId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BudgetHelperClassLibrary.Models.Income", null)
-                        .WithMany()
-                        .HasForeignKey("IncomesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Incomes");
                 });
 #pragma warning restore 612, 618
         }

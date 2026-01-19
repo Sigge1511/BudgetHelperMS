@@ -18,7 +18,9 @@ namespace BudgetHelperClassLibrary.Repositories
 
         public async Task<List<Income>> GetAllIncomesAsync()
         {
-            return await _dbcntxt.Incomes.ToListAsync();
+            return await _dbcntxt.Incomes
+                        .Include(i => i.IncomeSource)
+                        .ToListAsync();
         }
 
         //Denna behöver bli en lista över alla inkomstkällor senare

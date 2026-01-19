@@ -18,8 +18,7 @@ namespace BudgetHelperClassLibrary.Models
         [Required]
         public DateTime ReceivedDate { get; set; }
                
-        public virtual ObservableCollection<IncomeSource>? IncomeSourceList { get; set; }
-        public virtual ObservableCollection<Category>? CategoryList { get; set; }
+        public virtual IncomeSource? IncomeSource { get; set; }
 
         public Income() { }
     }

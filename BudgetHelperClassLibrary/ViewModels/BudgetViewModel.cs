@@ -135,8 +135,6 @@ namespace BudgetHelperClassLibrary.ViewModels
             set { avgExpenseLastThreeMonths = value; OnPropertyChanged(); }
         }
 
-
-
         // Listan som visar alla inkomster i UI:t (Denna behöver uppdateras manuellt)
         public ObservableCollection<Income> AllIncomes { get; set; } = new();
 
@@ -164,9 +162,7 @@ namespace BudgetHelperClassLibrary.ViewModels
             _expenseRepo = expenseRepo;
             _categoryRepo = categoryRepo;
             _budgetRepo = budgetRepo;
-        }
-
-        
+        }        
 
         public async Task LoadDataAsync()
         {
@@ -193,10 +189,11 @@ namespace BudgetHelperClassLibrary.ViewModels
             //*******************************************************************          
             var incomes = await _incomeRepo.GetAllIncomesAsync();
             LatestIncomes.Clear();
-            foreach (var i in incomes) LatestIncomes.Add(i);
             var latestIncomesList = incomes.OrderByDescending(x => x.Id).Take(5);
+            foreach (var i in latestIncomesList)
+            {LatestIncomes.Add(i);}
             //*******************************************************************          
-            LatestIncomes = new ObservableCollection<Income>(incomes.OrderByDescending(i => i.ReceivedDate).Take(5));
+            
             AvgIncomeLastThreeMonths = CalculateAverage(incomes);
             //Update monthly summary
             await UpdateMonthSum();
