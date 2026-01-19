@@ -159,6 +159,20 @@ namespace BudgetHelperClassLibrary.ViewModels
             get => projectedSalary;
             set { projectedSalary = value; OnPropertyChanged(); }
         }
+        //******** FOR SICK DAYS ETC ********
+        private int sickDays;
+        public int SickDays
+        {
+            get => sickDays;
+            set { sickDays = value; OnPropertyChanged(); }
+        }
+
+        private int careOfCatsDays;
+        public int CareOfCatsDays
+        {
+            get => careOfCatsDays;
+            set { careOfCatsDays = value; OnPropertyChanged(); }
+        }
 
 
         // Listan som visar alla inkomster i UI:t (Denna behöver uppdateras manuellt)

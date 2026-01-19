@@ -270,6 +270,37 @@
                         Margin="27,20,0,0"
                         HorizontalAlignment="Left"
                         Command="{Binding UpdateMonthSumComm}"/>
+                
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0,77,0,0">
+                        <TextBlock Style="{StaticResource SubHeader}"
+                                   Margin="20,10,30,0"
+                                   VerticalAlignment="Top"
+                                   Text="Sick days past month:"/>
+                        <TextBox   Width="100"
+                                   BorderBrush="{StaticResource MutedBrush}"
+                                   Background="{StaticResource PanelJewelBrush1}"
+                                   Foreground="{StaticResource NeonBrush}"
+                                   Text="{Binding SickDays}"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal"
+                                Margin="0,20,0,0">
+                        <TextBlock Style="{StaticResource SubHeader}"
+                                   Margin="20,10,30,0"
+                                   VerticalAlignment="Top"
+                                   Text="Sick cat days:"/>
+                        <TextBox   Width="200"
+                                   BorderBrush="{StaticResource MutedBrush}"
+                                   Background="{StaticResource PanelJewelBrush1}"
+                                   Foreground="{StaticResource NeonBrush}"
+                                   Text="{Binding CareOfCatsDays}"/>
+
+                    </StackPanel>
+                    <Button Content="SAVE" 
+                            Style="{StaticResource YesButton}" 
+                            Margin="27,20,0,0"
+                            HorizontalAlignment="Left"
+                            Command="{Binding UpdateSickDaysComm}"/>
                 </StackPanel>
             </Border>            
             <!--//Month prognosis-->

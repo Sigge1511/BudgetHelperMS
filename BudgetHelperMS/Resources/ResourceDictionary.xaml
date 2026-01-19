@@ -13,7 +13,7 @@
     <ImageBrush x:Key="BgImageBrush" 
                 ImageSource="pack://application:,,,/Resources/bgsmoke.png"                
                 Stretch="UniformToFill" 
-                Opacity="0.1"/>
+                Opacity="0.2"/>
 
 
     <SolidColorBrush x:Key="PrimaryBackground" Color="Black"/>
