@@ -2,8 +2,10 @@
 using BudgetHelperClassLibrary.Commands;
 using BudgetHelperClassLibrary.Models;
 using BudgetHelperClassLibrary.Repositories;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
 namespace BudgetHelperClassLibrary.ViewModels
@@ -17,7 +19,9 @@ namespace BudgetHelperClassLibrary.ViewModels
         public ObservableCollection<Expense> LatestExpenses { get; set; } = new();
         public ObservableCollection<Income> LatestIncomes { get; set; } = new();
         public ObservableCollection<Income> IncomesThisYear { get; set; } = new();
+        public ObservableCollection<string> TopCategories { get; set; } = new();
 
+        
 
         Calculator calc = new Calculator();
 
@@ -52,6 +56,13 @@ namespace BudgetHelperClassLibrary.ViewModels
         {
             get => _selectedExpense;
             set { _selectedExpense = value; OnPropertyChanged(); AddExpenseComm.RaiseCanExecuteChanged(); }
+        }
+
+        private Income? _selectedIncome;
+        public Income? SelectedIncome
+        {
+            get => _selectedIncome;
+            set { _selectedIncome = value; OnPropertyChanged(); AddExpenseComm.RaiseCanExecuteChanged(); }
         }
 
         private decimal? newExpenseAmount;
@@ -135,11 +146,28 @@ namespace BudgetHelperClassLibrary.ViewModels
             set { avgExpenseLastThreeMonths = value; OnPropertyChanged(); }
         }
 
+        private decimal totalIncomeYear; 
+        public decimal TotalIncomeYear
+        {
+            get => totalIncomeYear;
+            set { totalIncomeYear = value; OnPropertyChanged(); }
+        }
+
+        private decimal projectedSalary;
+        public decimal ProjectedSalary
+        {
+            get => projectedSalary;
+            set { projectedSalary = value; OnPropertyChanged(); }
+        }
+
+
         // Listan som visar alla inkomster i UI:t (Denna behöver uppdateras manuellt)
         public ObservableCollection<Income> AllIncomes { get; set; } = new();
 
         public RelayCommand AddIncomeComm { get; }
+        public RelayCommand UpdateIncomeComm { get; }
         public RelayCommand AddExpenseComm { get; }
+        public RelayCommand UpdateExpenseComm { get; }
         public RelayCommand DeleteIncomeComm { get; }
         public RelayCommand DeleteExpenseComm { get; }
         public RelayCommand UpdateMonthSumComm { get; }
@@ -152,17 +180,24 @@ namespace BudgetHelperClassLibrary.ViewModels
         public BudgetViewModel(IIncomeRepo incomeRepo, IExpenseRepo expenseRepo,
                                ICategoryRepo categoryRepo, IBudgetRepo budgetRepo)
         {
-            AddIncomeComm = new RelayCommand(async () => await AddIncome(), CanAddIncome);
-            AddExpenseComm = new RelayCommand(async () => await AddExpense(), CanAddExpense);
+            AddIncomeComm = new RelayCommand(async () => await AddIncome(), CanAddIncome);            
+            UpdateIncomeComm = new RelayCommand(async () => await UpdateIncome(), CanUpdateExpense);
             DeleteIncomeComm = new RelayCommand(async () => await DeleteIncome(), CanDeleteIncome);
+
+            AddExpenseComm = new RelayCommand(async () => await AddExpense(), CanAddExpense);
+            UpdateExpenseComm = new RelayCommand(async () => await UpdateExpense(), CanUpdateIncome);
             DeleteExpenseComm = new RelayCommand(async () => await DeleteExpense(), CanDeleteExpense);
+
+
             UpdateMonthSumComm = new RelayCommand(async () => await UpdateMonthSum());
 
             _incomeRepo = incomeRepo;
             _expenseRepo = expenseRepo;
             _categoryRepo = categoryRepo;
             _budgetRepo = budgetRepo;
-        }        
+        }
+
+        
 
         public async Task LoadDataAsync()
         {
@@ -195,10 +230,13 @@ namespace BudgetHelperClassLibrary.ViewModels
             //*******************************************************************          
             
             AvgIncomeLastThreeMonths = CalculateAverage(incomes);
-            //Update monthly summary
             await UpdateMonthSum();
             await UpdateAverages();
+            await UpdateYearStats();
+            await GetIncomesThisYearAsync();
         }
+
+        
 
         //***********   METODER   ********************************************************
         private bool CanAddIncome()
@@ -231,7 +269,26 @@ namespace BudgetHelperClassLibrary.ViewModels
                 Console.WriteLine($"Error adding income: {ex.Message}");
             }
         }
-//*******************************************************************
+
+        private bool CanUpdateIncome()
+        {
+            return SelectedIncome != null;
+        }
+        private async Task UpdateIncome()
+        {
+            throw new NotImplementedException();
+        }
+
+        private bool CanDeleteIncome()
+        {
+            return true;
+        }
+        private async Task DeleteIncome()
+        {
+            throw new NotImplementedException();
+        }
+        //*******************************************************************
+        
         private bool CanAddExpense()
         {
             return  SelectedCategory != null && NewExpenseAmount.HasValue
@@ -258,6 +315,28 @@ namespace BudgetHelperClassLibrary.ViewModels
                 Console.WriteLine($"Error adding expense: {ex.Message}");
             }
         }
+
+        private bool CanUpdateExpense()
+        {
+            return true;
+        }
+        private async Task UpdateExpense()
+        {
+            throw new NotImplementedException();
+        }
+
+        private bool CanDeleteExpense()
+        {
+            return true;
+        }
+        private async Task DeleteExpense()
+        {
+            throw new NotImplementedException();
+        }
+
+        //*******************************************************************
+
+
         //**************  FOR SUMMARY AND PROGNOSIS  ********************************
         public async Task UpdateMonthSum()
         {
@@ -300,27 +379,21 @@ namespace BudgetHelperClassLibrary.ViewModels
 
             return monthlySums.Any() ? Math.Round(monthlySums.Average(), 2) : 0;
         }
+        //***********************************************************
+        //TOTALS
+        private async Task UpdateYearStats()
+        {
+            var currentYear = DateTime.Now.Year;
+            List<Income> incomes = (await _incomeRepo.GetAllIncomesAsync()).ToList();
+            
+            IncomesThisYear.Clear(); // Current year so far
+            var filteredIncomes = incomes.Where(i => i.ReceivedDate.Year == currentYear).ToList();
+            foreach (var inc in filteredIncomes) IncomesThisYear.Add(inc);
+            TotalIncomeYear = IncomesThisYear.Sum(i => i.Amount);
 
-        //*******************************************************************
-        private bool CanDeleteIncome()
-        {
-            throw new NotImplementedException();
+            //My top three spending categories
+            await GetTopSpendingInfo();
         }
-
-        private async Task DeleteIncome()
-        {
-            throw new NotImplementedException();
-        }
-        //*******************************************************************
-        private bool CanDeleteExpense()
-        {
-            throw new NotImplementedException();
-        }
-        private async Task DeleteExpense()
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task GetIncomesThisYearAsync()
         {
             var allIncomes = await _incomeRepo.GetAllIncomesAsync();
@@ -343,5 +416,24 @@ namespace BudgetHelperClassLibrary.ViewModels
             var latestIncomes = await _incomeRepo.GetAllIncomesAsync();
             return new ObservableCollection<Income>(latestIncomes);
         }
+
+        private async Task GetTopSpendingInfo()
+        {
+            var allExpenses = await _expenseRepo.GetAllExpensesAsync();
+
+            // Fyll din stora Expenses-lista så UI-tabellen uppdateras [cite: 2025-11-22]
+            Expenses.Clear();
+            foreach (var e in allExpenses) Expenses.Add(e);
+
+            // NU kör vi beräkningen för de tre största [cite: 2026-01-18]
+            var topThree = calc.GetTopThreeSpendingCategories(Expenses.ToList());
+            TopCategories.Clear();
+            foreach (var cat in topThree) TopCategories.Add(cat);
+        }
+
+        //*******************************************************************
+
+
+
     }
 }

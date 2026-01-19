@@ -18,6 +18,13 @@ namespace BudgetHelperClassLibrary.Data
         {
             // Detta tvingar EF att ignorera CategoryId-kolumnen för Income-modellen
             modelBuilder.Entity<Income>().Ignore("CategoryId");
+                        
+
+            // Lägg till denna för att rensa bort gamla rester av list-kopplingar för expenses
+            modelBuilder.Entity<Expense>()
+                .HasOne(e => e.Category)
+                .WithMany(c => c.ExpensesList)
+                .HasForeignKey(e => e.CategoryId);
 
             base.OnModelCreating(modelBuilder);
         }

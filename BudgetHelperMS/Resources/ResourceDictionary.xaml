@@ -31,10 +31,16 @@
     <Style TargetType="Window">
         <Setter Property="Background" Value="{DynamicResource PrimaryBackground}"/>
     </Style>
-    
-    <!--<Style TargetType="Grid">
-        <Setter Property="Background" Value="Black"/>
-    </Style>-->
+
+    <Style x:Key="EntryBox" TargetType="TextBox">
+        <Setter Property="Background" Value="{StaticResource PanelJewelBrush1}"/>
+        <Setter Property="Foreground" Value="{StaticResource NeonBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource MutedBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="5"/>
+        <Setter Property="FontFamily" Value="pack://application:,,,/Resources/#IM FELL English SC"/>
+    </Style>
+
     <Style x:Key="MainGridStyle" TargetType="Grid">
         <Setter Property="Margin" Value="10"/>
         

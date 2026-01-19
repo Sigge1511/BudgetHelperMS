@@ -48,8 +48,49 @@ namespace BudgetHelperClassLibrary.CalculationService
         }
 
 
+        public decimal GetTotalIncomeSoFar(List<Income> incomes)
+        {
+            int currentYear = DateTime.Now.Year;
+            return incomes
+                .Where(i => i.ReceivedDate.Year == currentYear)
+                .Sum(i => i.Amount);
+        }
 
 
+        public decimal CalculateActualSalaryYearly(List<Income> allIncomes)
+        {
+            // Vi definierar vilka källor som räknas som "lön"
+            var salaryKeywords = new[] { "Salary", "Lön", "VAK", "Sjuk", "Care of Cat" };
 
+            var salaryIncomes = allIncomes
+                .Where(i => salaryKeywords.Any(key =>
+                    i.IncomeSource.SourceName.Contains(key, StringComparison.OrdinalIgnoreCase)))
+                .ToList();
+
+            if (!salaryIncomes.Any()) return 0;
+
+            // Här räknar vi ut snittet på bara dessa inkomster
+            decimal averageSalary = salaryIncomes.Average(i => i.Amount);
+            return averageSalary * 12;
+        }
+
+        public IEnumerable<string> GetTopThreeSpendingCategories(List<Expense> expenses)
+        {
+            if (expenses == null || !expenses.Any()) return new List<string>();
+
+            return expenses
+                .Where(e => e.Category != null)
+                .GroupBy(e => e.Category.Name)
+                .Select(g => new
+                {
+                    Name = g.Key,
+                    Total = g.Sum(e => e.Amount)
+                })
+                .OrderByDescending(x => x.Total)
+                .Take(3)
+                // Här gör vi om det till en snygg rad för din punktlista!
+                .Select(x => $"{x.Name}: {x.Total:C}")
+                .ToList();
+        }
     }
 }

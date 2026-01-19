@@ -14,10 +14,12 @@ namespace BudgetHelperClassLibrary.Repositories
         private readonly BudgetHelperDbContext _dbcntxt;
 
         public ExpenseRepo(BudgetHelperDbContext dbcntxt) =>_dbcntxt = dbcntxt;
-        
 
-        public async Task<List<Expense>>? GetAllExpensesAsync() => await _dbcntxt.Expenses.ToListAsync();        
-        public async Task<Expense?> GetExpenseByIdAsync(int id)=> 
+
+        public async Task<List<Expense>> GetAllExpensesAsync() =>
+            await _dbcntxt.Expenses
+                .Include(e => e.Category) // Lägg till denna för att få med namnet!
+                .ToListAsync(); public async Task<Expense?> GetExpenseByIdAsync(int id)=> 
                                     await _dbcntxt.Expenses
                                     .FirstOrDefaultAsync(e => e.Id == id);        
         public async Task<List<Expense>>? GetExpensesByCategoryIdAsync(int categoryId)

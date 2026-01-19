@@ -67,7 +67,7 @@
                                Text="Amount *"/>
                     <TextBox Text="{Binding NewIncomeAmount, 
                              UpdateSourceTrigger=PropertyChanged}"
-                             Background="White"
+                             Style="{StaticResource EntryBox}"
                              Width="Auto" 
                              Height="30" 
                              Margin="0,10,0,0"/>
@@ -131,7 +131,7 @@
                     <TextBox Text="{Binding NewExpenseAmount, 
                              UpdateSourceTrigger=PropertyChanged,
                              Mode=TwoWay}"
-                             Background="White"
+                             Style="{StaticResource EntryBox}"
                              Width="Auto" 
                              Height="30" 
                              Margin="0,10,0,0"/>
@@ -140,7 +140,7 @@
                                Margin="0,10,0,0"/>
                     <TextBox Text="{Binding NewExpenseName, 
                              UpdateSourceTrigger=PropertyChanged}"
-                             Background="White"
+                             Style="{StaticResource EntryBox}"
                              Width="Auto" 
                              Height="30" 
                              Margin="0,10,0,0"/>
@@ -197,7 +197,7 @@
                     <TextBox Text="{Binding SelectedFrequencyInMonths, 
                              UpdateSourceTrigger=PropertyChanged, 
                              TargetNullValue=''}"
-                             Background="White"
+                             Style="{StaticResource EntryBox}"
                              Width="Auto" 
                              Height="30" 
                              Margin="0,10,0,0"/>
@@ -295,9 +295,7 @@
                                    Estimated<LineBreak/> Incomes:</TextBlock>    
                         <TextBox   Width="200"
                                    Height="45"
-                                   BorderBrush="{StaticResource MutedBrush}"
-                                   Background="{StaticResource PanelJewelBrush1}"
-                                   Foreground="{StaticResource NeonBrush}"
+                                   Style="{StaticResource EntryBox}"
                                    Text="{Binding AvgIncomeLastThreeMonths, StringFormat=\{0:C\}}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal"
@@ -307,9 +305,7 @@
                                    VerticalAlignment="Top"
                                    > Estimated<LineBreak/> Expenses:</TextBlock>
                         <TextBox   Width="200" Height="45"                                
-                                   BorderBrush="{StaticResource MutedBrush}"
-                                   Background="{StaticResource PanelJewelBrush1}"
-                                   Foreground="{StaticResource NeonBrush}"
+                                   Style="{StaticResource EntryBox}"
                                    Text="{Binding AvgExpenseLastThreeMonths, 
                                           StringFormat={}{0:C}}"/>
                     </StackPanel>
@@ -319,7 +315,7 @@
 
 
 
-            <!--**************HÄR ÄR BOTTENKOLUMNERNA-->
+<!--**************HÄR ÄR BOTTENKOLUMNERNA-->
             <!--//Latest incomes here-->
             <Border
                     Grid.Column="0"
@@ -352,11 +348,11 @@
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
                                             <Button Content="Update" 
-                                                    Command="{Binding DataContext.UpdateIncomeCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                                    Command="{Binding DataContext.UpdateIncomeComm, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
                                                     CommandParameter="{Binding}"
                                                     Background="#FF2D5A27" Foreground="White" Padding="5,2" Margin="2" BorderThickness="0"/>
                                             <Button Content="Remove" 
-                                                    Command="{Binding DataContext.DeleteIncomeCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                                    Command="{Binding DataContext.DeleteIncomeComm, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
                                                     CommandParameter="{Binding}"
                                                     Background="#FF8B0000" Foreground="White" Padding="5,2" Margin="2" BorderThickness="0"/>
                                         </StackPanel>
@@ -369,87 +365,128 @@
             </Border>
             <!--//Latest expenses here-->
             <Border
-                            Grid.Column="4"
-                            Grid.ColumnSpan="4" Margin="0,741,0,0">
+                Grid.Column="4" Grid.ColumnSpan="4" Margin="0,741,0,0">
                 <StackPanel Margin="20">
                     <TextBlock Text="Latest Expenses" 
-                   Style="{StaticResource SectionHeader}" 
-                   FontSize="40"
-                   TextAlignment="Center"
-                   HorizontalAlignment="Center" 
-                   Margin="0,0,0,20"/>
+                               Style="{StaticResource SectionHeader}" 
+                               FontSize="40" 
+                               TextAlignment="Center"
+                               HorizontalAlignment="Center" 
+                               Margin="0,0,0,20"/>
 
-                    <ItemsControl ItemsSource="{Binding LatestExpenses}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Grid Margin="0,5" HorizontalAlignment="Stretch">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
+                    <DataGrid ItemsSource="{Binding LatestExpenses}" 
+                              AutoGenerateColumns="False" 
+                              Background="#CC000000" 
+                              RowBackground="Transparent" 
+                              Foreground="White"
+                              BorderBrush="#FF2D5A27"
+                              HeadersVisibility="Column"
+                              GridLinesVisibility="Horizontal"
+                              HorizontalGridLinesBrush="#33FFFFFF"
+                              CanUserAddRows="False">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Date" Binding="{Binding ExpenseDate, StringFormat=d}" Width="80" />
+                            <DataGridTextColumn Header="Source" Binding="{Binding Category.Name}" Width="*" />
+                            <DataGridTextColumn Header="Amount" Binding="{Binding Amount, StringFormat={}{0:C}}" Width="100" />
+                            <DataGridTextColumn Header="Recurring" Binding="{Binding IsRecurring}" Width="100" />
+                            <DataGridTextColumn Header="How often (M)" Binding="{Binding FrequencyInMonths}" Width="100" />
 
-                                    <TextBlock Text="{Binding Name}" 
-                                   Foreground="{StaticResource TextBrush}" 
-                                   FontSize="18"/>
-
-                                    <TextBlock Grid.Column="1" 
-                                   Text="{Binding Amount, StringFormat={}{0:C}}" 
-                                   Foreground="{StaticResource NeonBrush}" 
-                                   FontWeight="Bold" 
-                                   FontSize="18"/>
-                                </Grid>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                            <DataGridTemplateColumn Header="Actions" Width="150">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Button Content="Update" 
+                                                    Command="{Binding DataContext.UpdateExpenseComm, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                                    CommandParameter="{Binding}"
+                                                    Background="#FF2D5A27" Foreground="White" Padding="5,2" Margin="2" BorderThickness="0"/>
+                                            <Button Content="Remove" 
+                                                    Command="{Binding DataContext.DeleteExpenseComm, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                                    CommandParameter="{Binding}"
+                                                    Background="#FF8B0000" Foreground="White" Padding="5,2" Margin="2" BorderThickness="0"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </StackPanel>
             </Border>
             <!--//Year so far-->
-            <Border
-                            Grid.Column="7"
-                            Grid.ColumnSpan="5" Margin="159,655,0,0">
+            <Border Grid.Column="7"
+                    Grid.ColumnSpan="5" Margin="159,655,0,0">
                 <Grid Margin="20">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="1">
+                        <TextBlock Grid.Row="0" 
+                               Style="{StaticResource SectionHeader}" 
+                               FontSize="40"
+                               TextAlignment="Center"
+                               HorizontalAlignment="Center" 
+                               VerticalAlignment="Top"
+                               Margin="0,0,0,15">
+                               Total incomes so far this year</TextBlock>
 
-                    <TextBlock Grid.Row="0" 
-                   Style="{StaticResource SectionHeader}" 
-                   FontSize="40"
-                   TextAlignment="Center"
-                   HorizontalAlignment="Center" 
-                   VerticalAlignment="Top"
-                   Margin="0,0,0,15">
-                    Total incomes so far this year
-
-                        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                            <ItemsControl ItemsSource="{Binding IncomesThisYear}">
+                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                            <TextBlock Grid.Row="1" 
+                                       Style="{StaticResource SubHeader}" 
+                                       FontSize="40"
+                                       TextAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,10,0"
+                                       Text="Amount so far: "/>
+                            <TextBox Grid.Row="1"
+                                       Width="200"
+                                       Height="45"
+                                       Style="{StaticResource EntryBox}"
+                                       FontSize="25"
+                                       TextAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Margin="20,0,0,0"
+                                       Text="{Binding TotalIncomeYear, StringFormat={}{0:C}}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                            <TextBlock Grid.Row="1" 
+                                       Style="{StaticResource SubHeader}" 
+                                       FontSize="40"
+                                       TextAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,10,0">
+                                       Estimated <LineBreak/>this year:</TextBlock>
+                            <TextBox Grid.Row="1"
+                                       Width="200"
+                                       Height="45"
+                                       Style="{StaticResource EntryBox}"
+                                       FontSize="25"
+                                       TextAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Margin="20,0,0,0"
+                                       Text="{Binding ProjectedSalary, StringFormat={}{0:C}}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Height="144" Margin="0,10,0,0">
+                            <TextBlock Grid.Row="1" 
+                                       Style="{StaticResource SubHeader}" 
+                                       FontSize="40"
+                                       TextAlignment="Center"
+                                       VerticalAlignment="Top"
+                                       Margin="0,0,10,0"
+                                       Text="You spent most on:"/>
+                            <ItemsControl Grid.Row="1" 
+                                          ItemsSource="{Binding TopCategories}"
+                                          Margin="20,0,0,0">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
-                                        <Grid Margin="0,2,5,2">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto"/>
-                                                <ColumnDefinition Width="*"/>
-                                                <ColumnDefinition Width="Auto"/>
-                                            </Grid.ColumnDefinitions>
-
-                                            <TextBlock Text="{Binding Date, StringFormat={}{0:MM/dd}}" 
-                                           Foreground="{StaticResource MutedBrush}" 
-                                           FontSize="14" Margin="0,0,10,0" VerticalAlignment="Center"/>
-
-                                            <TextBlock Grid.Column="1" Text="{Binding Name}" 
-                                           Foreground="{StaticResource TextBrush}" 
-                                           FontSize="16" VerticalAlignment="Center"/>
-
-                                            <TextBlock Grid.Column="2" Text="{Binding Amount, StringFormat={}{0:C}}" 
-                                           Foreground="{StaticResource NeonBrush}" 
-                                           FontWeight="Bold" FontSize="16" VerticalAlignment="Center"/>
-                                        </Grid>
+                                        <TextBlock Text="{Binding}" 
+                                                   FontSize="18" 
+                                                   Foreground="{StaticResource NeonBrush}" 
+                                                   Margin="0,5"/>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
-                        </ScrollViewer>
-                    </TextBlock>
+                        </StackPanel>
+                    </StackPanel>
                 </Grid>
             </Border>
         </Grid>
