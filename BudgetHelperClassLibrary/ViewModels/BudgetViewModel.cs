@@ -110,6 +110,13 @@ namespace BudgetHelperClassLibrary.ViewModels
             get => _selectedFrequencyInMonths;
             set {  _selectedFrequencyInMonths = value; OnPropertyChanged();}
         }
+
+        private string newCategory;
+        public string? NewCategory
+        {
+            get => newCategory;
+            set { newCategory = value; OnPropertyChanged(); }
+        }
         //******** LAST MONTH SUMMARY ********
         private decimal? totalIncomesLastMonth;
         public decimal? TotalIncomesLastMonth
@@ -185,6 +192,8 @@ namespace BudgetHelperClassLibrary.ViewModels
         public RelayCommand DeleteIncomeComm { get; }
         public RelayCommand DeleteExpenseComm { get; }
         public RelayCommand UpdateMonthSumComm { get; }
+        public RelayCommand UpdateSickDaysComm { get; }
+        public RelayCommand AddNewCategoryComm { get; }
 
         private readonly IIncomeRepo _incomeRepo;
         private readonly IExpenseRepo _expenseRepo;
@@ -204,6 +213,10 @@ namespace BudgetHelperClassLibrary.ViewModels
 
 
             UpdateMonthSumComm = new RelayCommand(async () => await UpdateMonthSum());
+            UpdateSickDaysComm = new RelayCommand(async () => await UpdateSickDays(), CanUpdateSickdays());
+
+            AddNewCategoryComm = new RelayCommand(async () => await AddNewCategory(), CanAddNewCategory);
+
 
             _incomeRepo = incomeRepo;
             _expenseRepo = expenseRepo;
@@ -349,7 +362,14 @@ namespace BudgetHelperClassLibrary.ViewModels
         }
 
         //*******************************************************************
-
+        private bool CanAddNewCategory()
+        {
+            return SickDays!=null || CareOfCatsDays!=null;
+        }
+        private async Task AddNewCategory()
+        {
+            throw new NotImplementedException();
+        }
 
         //**************  FOR SUMMARY AND PROGNOSIS  ********************************
         public async Task UpdateMonthSum()
@@ -393,19 +413,49 @@ namespace BudgetHelperClassLibrary.ViewModels
 
             return monthlySums.Any() ? Math.Round(monthlySums.Average(), 2) : 0;
         }
+
+        private Func<bool>? CanUpdateSickdays()
+        {
+            throw new NotImplementedException();
+        }
+        private async Task UpdateSickDays()
+        {
+            throw new NotImplementedException();
+        }
         //***********************************************************
         //TOTALS
         private async Task UpdateYearStats()
         {
             var currentYear = DateTime.Now.Year;
             List<Income> incomes = (await _incomeRepo.GetAllIncomesAsync()).ToList();
-            
-            IncomesThisYear.Clear(); // Current year so far
-            var filteredIncomes = incomes.Where(i => i.ReceivedDate.Year == currentYear).ToList();
-            foreach (var inc in filteredIncomes) IncomesThisYear.Add(inc);
-            TotalIncomeYear = IncomesThisYear.Sum(i => i.Amount);
+            List<Expense> expenses = (await _expenseRepo.GetAllExpensesAsync()).ToList();
 
-            //My top three spending categories
+            IncomesThisYear.Clear(); // Current year so far
+            var incomesThisYear = incomes.Where(i => i.ReceivedDate.Year == currentYear).ToList();
+            var expensesThisYear = expenses.Where(e => e.ExpenseDate.Year == currentYear).ToList();
+
+            // 3. Uppdatera de stora listorna i UI:t (för DataGrids) [cite: 2025-09-28]
+            IncomesThisYear.Clear();
+            foreach (var inc in incomesThisYear) IncomesThisYear.Add(inc);
+
+            Expenses.Clear();
+            foreach (var exp in expensesThisYear) Expenses.Add(exp);
+
+            
+            decimal avgMonthly = incomesThisYear.Any() ? incomesThisYear.Average(i => i.Amount) : 0;
+
+            // Compensation delay for next month
+            decimal expectedComp = calc.GetExpectedCompensationNextMonth(
+                avgMonthly,
+                SickDays,
+                CareOfCatsDays);
+
+            TotalIncomeYear = calc.GetTotalIncomeSoFar(incomesThisYear);
+
+            // Årsprognos inklusive den kommande kompensationen [cite: 2026-01-18]
+            ProjectedSalary = calc.CalculateYearlyProjectionWithComp(incomesThisYear, expectedComp);
+
+            // Uppdatera "Väckarklockan" (Topp 3 kategorier) baserat på årets utgifter [cite: 2026-01-18]
             await GetTopSpendingInfo();
         }
         public async Task GetIncomesThisYearAsync()
@@ -444,6 +494,9 @@ namespace BudgetHelperClassLibrary.ViewModels
             TopCategories.Clear();
             foreach (var cat in topThree) TopCategories.Add(cat);
         }
+
+
+        
 
         //*******************************************************************
 

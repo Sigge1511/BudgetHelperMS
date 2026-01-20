@@ -69,6 +69,33 @@ namespace BudgetHelperClassLibrary.Repositories
             _dbcntxt.Incomes.Remove(income);
             await _dbcntxt.SaveChangesAsync();
         }
+
+
+        public async Task SaveOrUpdateAbsenceAsync(int year, int month, int sickDays, int vakDays)
+        {
+            // 1. Kolla om det redan finns en post för denna månad [cite: 2025-09-29]
+            var existing = await _dbcntxt.AbsenceDays
+                .FirstOrDefaultAsync(a => a.Year == year && a.Month == month);
+
+            if (existing != null)
+            {
+                // 2. Uppdatera befintlig [cite: 2026-01-18]
+                existing.SickDays = sickDays;
+                existing.VakDays = vakDays;
+            }
+            else
+            {
+                // 3. Skapa ny om den inte fanns [cite: 2026-01-18]
+                _dbcntxt.AbsenceDays.Add(new AbsenceDays
+                {
+                    Year = year,
+                    Month = month,
+                    SickDays = sickDays,
+                    VakDays = vakDays
+                });
+            }
+            await _dbcntxt.SaveChangesAsync();
+        }
     }
 
 

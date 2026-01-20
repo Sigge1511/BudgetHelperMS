@@ -57,7 +57,7 @@
                     Grid.ColumnSpan="3"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch">
-                <StackPanel Margin="20">
+                <StackPanel Margin="20,5,0,0">
                     <TextBlock  Text="Add incomes"
                             Style="{StaticResource SectionHeader}"
                             HorizontalAlignment="Center"
@@ -120,96 +120,131 @@
                     Grid.ColumnSpan="3"       
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch">
-                <StackPanel Margin="20">
+                <StackPanel Margin="20,5,0,0">
                     <TextBlock  Text="Add Expenses"
                         Style="{StaticResource SectionHeader}"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
                         Margin="0,30,0,0"/>
-                    <TextBlock Style="{StaticResource SubHeader}" 
-                       Text="Amount *"/>
-                    <TextBox Text="{Binding NewExpenseAmount, 
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+
+
+                        <TextBlock Style="{StaticResource SubHeader}" 
+                                    Text="Amount *"/>
+                        <TextBox Text="{Binding NewExpenseAmount, 
                              UpdateSourceTrigger=PropertyChanged,
                              Mode=TwoWay}"
                              Style="{StaticResource EntryBox}"
-                             Width="Auto" 
+                             Width="200" 
                              Height="30" 
-                             Margin="0,10,0,0"/>
-                    <TextBlock Style="{StaticResource SubHeader}" 
+                             Margin="30,10,0,0"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+
+                        <TextBlock Style="{StaticResource SubHeader}" 
                                Text="Name *"
                                Margin="0,10,0,0"/>
-                    <TextBox Text="{Binding NewExpenseName, 
+                        <TextBox Text="{Binding NewExpenseName, 
                              UpdateSourceTrigger=PropertyChanged}"
                              Style="{StaticResource EntryBox}"
-                             Width="Auto" 
+                             Width="200" 
                              Height="30" 
-                             Margin="0,10,0,0"/>
-                    <TextBlock Style="{StaticResource SubHeader}" 
+                             Margin="30,10,0,0"/>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+
+                        <TextBlock Style="{StaticResource SubHeader}" 
                                Margin="0,20,0,0"
                                Text="Category *"/>
-                    <ComboBox ItemsSource="{Binding Categories}" 
+                        <ComboBox ItemsSource="{Binding Categories}" 
                               DisplayMemberPath="Name" 
                               SelectedValuePath="Id"
                               SelectedValue="{Binding SelectedCategory}"
                               Style="{StaticResource DarkComboBoxStyle}"
                               Padding="5"
-                              Margin="0,5,0,15">
-                        <ComboBox.Resources>
-                            <Style TargetType="ScrollViewer">
-                                <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
-                                <Setter Property="Background" Value="{StaticResource MutedBrush}"/>
-                            </Style>
-                        </ComboBox.Resources>
-                    </ComboBox>
-                    <TextBlock Style="{StaticResource SubHeader}" 
+                              Width="200"
+                              Margin="30,25,0,15" SelectionChanged="ComboBox_SelectionChanged">
+                            <ComboBox.Resources>
+                                <Style TargetType="ScrollViewer">
+                                    <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+                                    <Setter Property="Background" Value="{StaticResource MutedBrush}"/>
+                                </Style>
+                            </ComboBox.Resources>
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+
+                        <TextBlock Style="{StaticResource SubHeader}" 
                                Text="Date"
                                Margin="0,20,0,0"/>
-                    <DatePicker SelectedDate="{Binding SelectedDate}" 
+                        <DatePicker SelectedDate="{Binding SelectedDate}" 
                                 Foreground="White" 
                                 BorderBrush="{StaticResource NeonBrush}" 
                                 Background="Transparent"
+                                    Margin="30,25,0,0"
+                                    Width="200"
                                 CalendarStyle="{StaticResource DarkCalendarStyle}">
-                        <DatePicker.Resources>
-                            <Style TargetType="DatePickerTextBox">
-                                <Setter Property="Background" Value="#11ffffff"/>
-                                <Setter Property="Foreground" Value="White"/>
-                                <Setter Property="BorderThickness" Value="0"/>
-                                <Setter Property="Padding" Value="5"/>
-                            </Style>
-                        </DatePicker.Resources>
-                    </DatePicker>
-                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                            <DatePicker.Resources>
+                                <Style TargetType="DatePickerTextBox">
+                                    <Setter Property="Background" Value="#11ffffff"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                    <Setter Property="Padding" Value="5"/>
+                                </Style>
+                            </DatePicker.Resources>
+                        </DatePicker>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
                         <TextBlock Style="{StaticResource SubHeader}"                          
                                    Height="Auto"
                                    Text="Reccuring expense?" Width="289"/>
                         <CheckBox IsChecked="{Binding SelectedIsRecurring}"
                                   Height="17"
                                   Background="{StaticResource MutedBrush}"
-                                  BorderBrush="{StaticResource NeonBrush}" Checked="CheckBox_Checked_1">
+                                  BorderBrush="{StaticResource NeonBrush}" 
+                                  Checked="CheckBox_Checked_1"
+                                  VerticalAlignment="Center">
                             <CheckBox.LayoutTransform>
-                                <ScaleTransform ScaleX="2" ScaleY="1.5" />
+                                <ScaleTransform ScaleX="2" ScaleY="2"/>
                             </CheckBox.LayoutTransform>
                         </CheckBox>
                     </StackPanel>
-                    <TextBlock Style="{StaticResource SubHeader}" 
-                               Margin="0,20,0,0"
-                               Text="Reccurs how often (In Months)"/>
-                    <TextBox Text="{Binding SelectedFrequencyInMonths, 
-                             UpdateSourceTrigger=PropertyChanged, 
-                             TargetNullValue=''}"
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+
+                        <TextBlock Style="{StaticResource SubHeader}" 
+                               Margin="0,20,0,0">
+                               Reccurs how <LineBreak/> (In Months)</TextBlock>
+                        <TextBox Text="{Binding SelectedFrequencyInMonths, TargetNullValue='', UpdateSourceTrigger=PropertyChanged}"
                              Style="{StaticResource EntryBox}"
-                             Width="Auto" 
-                             Height="30" 
-                             Margin="0,10,0,0"/>
-
-
+                             Width="200"
+                             Height="30" Margin="30,25,0,0"/>
+                        
+                    </StackPanel>
                     <Button Content="SAVE" 
+                            Style="{StaticResource YesButton}"
+                            Command="{Binding AddExpenseComm}" 
+                            HorizontalAlignment="Right"       
+                            Margin="0,0,56,0"
+                            Click="Button_Click"/>
+
+                    <StackPanel Orientation="Horizontal" Margin="0,45,0,0">
+                        <TextBlock Style="{StaticResource SubHeader}" 
+                                   Text="Add new category"/>
+                        <TextBox Text="{Binding NewCategory, 
+                                 UpdateSourceTrigger=PropertyChanged}"
+                                 Style="{StaticResource EntryBox}"
+                                 Width="175" 
+                                 Height="30" 
+                                 Margin="20,0,0,0"/>
+                    </StackPanel>
+                    <Button Content="ADD" 
                             Style="{StaticResource YesButton}" 
                             Margin="0,20,0,0"
                             HorizontalAlignment="Left"
-                            Command="{Binding AddExpenseComm}"/>
+                            Command="{Binding AddNewCategoryComm}"/>
                 </StackPanel>
             </Border>
+            
             <!--//Summary last month-->
             <Border Grid.Row="0" 
                     Grid.RowSpan="4"
@@ -221,7 +256,7 @@
                     <TextBlock Style="{StaticResource SectionHeader}"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Top"
-                        Margin="0,30,0,0" TextAlignment="Center">
+                        Margin="20,10,0,0" TextAlignment="Center">
                             Summary <LineBreak/> Last month
                     </TextBlock>
 
@@ -240,7 +275,7 @@
                                    Text="{Binding TotalIncomesLastMonth, StringFormat=\{0:C\}}"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal"
-                               Margin="0,20,0,0">  
+                               Margin="0,20,0,0">
                         <TextBlock Style="{StaticResource SubHeader}"
                                    Margin="20,10,30,0"
                                    VerticalAlignment="Top"
@@ -263,14 +298,14 @@
                                    Background="{StaticResource PanelJewelBrush1}"
                                    Foreground="{StaticResource NeonBrush}"
                                    Text="{Binding NetAmountLastMonth, 
-                                          StringFormat={}{0:C}}"/>  
+                                          StringFormat={}{0:C}}"/>
                     </StackPanel>
                     <Button Content="UPDATE" 
                         Style="{StaticResource YesButton}" 
                         Margin="27,20,0,0"
                         HorizontalAlignment="Left"
                         Command="{Binding UpdateMonthSumComm}"/>
-                
+
                     <StackPanel Orientation="Horizontal"
                                 Margin="0,77,0,0">
                         <TextBlock Style="{StaticResource SubHeader}"
@@ -294,7 +329,6 @@
                                    Background="{StaticResource PanelJewelBrush1}"
                                    Foreground="{StaticResource NeonBrush}"
                                    Text="{Binding CareOfCatsDays}"/>
-
                     </StackPanel>
                     <Button Content="SAVE" 
                             Style="{StaticResource YesButton}" 
@@ -302,7 +336,7 @@
                             HorizontalAlignment="Left"
                             Command="{Binding UpdateSickDaysComm}"/>
                 </StackPanel>
-            </Border>            
+            </Border>
             <!--//Month prognosis-->
             <Border Grid.Row="0" 
                             Grid.RowSpan="4"
@@ -323,7 +357,7 @@
                         <TextBlock Style="{StaticResource SubHeader}"
                                    Margin="20,10,30,0"
                                    VerticalAlignment="Top"> 
-                                   Estimated<LineBreak/> Incomes:</TextBlock>    
+                                   Estimated<LineBreak/> Incomes:</TextBlock>
                         <TextBox   Width="200"
                                    Height="45"
                                    Style="{StaticResource EntryBox}"
@@ -346,7 +380,7 @@
 
 
 
-<!--**************HÄR ÄR BOTTENKOLUMNERNA-->
+            <!--**************HÄR ÄR BOTTENKOLUMNERNA-->
             <!--//Latest incomes here-->
             <Border
                     Grid.Column="0"

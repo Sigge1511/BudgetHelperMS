@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BudgetHelperClassLibrary.Migrations
 {
     [DbContext(typeof(BudgetHelperDbContext))]
-    [Migration("20260119162811_InitialFreshStart")]
-    partial class InitialFreshStart
+    [Migration("20260120181717_InitialCreateWithAbsence")]
+    partial class InitialCreateWithAbsence
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,6 +24,34 @@ namespace BudgetHelperClassLibrary.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("BudgetHelperClassLibrary.Models.AbsenceDays", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Month")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SickDays")
+                        .HasColumnType("int");
+
+                    b.Property<int>("VakDays")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Year")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Year", "Month")
+                        .IsUnique();
+
+                    b.ToTable("AbsenceDays");
+                });
 
             modelBuilder.Entity("BudgetHelperClassLibrary.Models.BudgetForPurchases", b =>
                 {
@@ -97,6 +125,8 @@ namespace BudgetHelperClassLibrary.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoryId");
+
                     b.ToTable("Expenses");
                 });
 
@@ -111,9 +141,6 @@ namespace BudgetHelperClassLibrary.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int?>("CategoryId")
-                        .HasColumnType("int");
-
                     b.Property<int>("IncomeSourceId")
                         .HasColumnType("int");
 
@@ -121,8 +148,6 @@ namespace BudgetHelperClassLibrary.Migrations
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
 
                     b.HasIndex("IncomeSourceId");
 
@@ -146,27 +171,19 @@ namespace BudgetHelperClassLibrary.Migrations
                     b.ToTable("IncomeSources");
                 });
 
-            modelBuilder.Entity("CategoryExpense", b =>
+            modelBuilder.Entity("BudgetHelperClassLibrary.Models.Expense", b =>
                 {
-                    b.Property<int>("CategoryListId")
-                        .HasColumnType("int");
+                    b.HasOne("BudgetHelperClassLibrary.Models.Category", "Category")
+                        .WithMany("ExpensesList")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<int>("ExpensesListId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CategoryListId", "ExpensesListId");
-
-                    b.HasIndex("ExpensesListId");
-
-                    b.ToTable("CategoryExpense");
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("BudgetHelperClassLibrary.Models.Income", b =>
                 {
-                    b.HasOne("BudgetHelperClassLibrary.Models.Category", null)
-                        .WithMany("IncomesList")
-                        .HasForeignKey("CategoryId");
-
                     b.HasOne("BudgetHelperClassLibrary.Models.IncomeSource", "IncomeSource")
                         .WithMany("Incomes")
                         .HasForeignKey("IncomeSourceId")
@@ -176,24 +193,9 @@ namespace BudgetHelperClassLibrary.Migrations
                     b.Navigation("IncomeSource");
                 });
 
-            modelBuilder.Entity("CategoryExpense", b =>
-                {
-                    b.HasOne("BudgetHelperClassLibrary.Models.Category", null)
-                        .WithMany()
-                        .HasForeignKey("CategoryListId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BudgetHelperClassLibrary.Models.Expense", null)
-                        .WithMany()
-                        .HasForeignKey("ExpensesListId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("BudgetHelperClassLibrary.Models.Category", b =>
                 {
-                    b.Navigation("IncomesList");
+                    b.Navigation("ExpensesList");
                 });
 
             modelBuilder.Entity("BudgetHelperClassLibrary.Models.IncomeSource", b =>

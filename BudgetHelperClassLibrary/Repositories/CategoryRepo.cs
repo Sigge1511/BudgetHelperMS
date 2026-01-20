@@ -36,17 +36,17 @@ namespace BudgetHelperClassLibrary.Repositories
             await _dbcntxt.SaveChangesAsync();
         }
 
-        public async Task UpdateCategoryAsync(Category category)
-        {
-            _dbcntxt.Categories.Update(category);
-            await _dbcntxt.SaveChangesAsync();
-        }
+        //public async Task UpdateCategoryAsync(Category category)
+        //{
+        //    _dbcntxt.Categories.Update(category);
+        //    await _dbcntxt.SaveChangesAsync();
+        //}
 
-        public async Task DeleteCategoryAsync(Category category)
-        {
-            _dbcntxt.Categories.Remove(category);
-            await _dbcntxt.SaveChangesAsync();
-        }
+        //public async Task DeleteCategoryAsync(Category category)
+        //{
+        //    _dbcntxt.Categories.Remove(category);
+        //    await _dbcntxt.SaveChangesAsync();
+        //}
     }
 }
 

@@ -26,6 +26,10 @@ namespace BudgetHelperClassLibrary.Data
                 .WithMany(c => c.ExpensesList)
                 .HasForeignKey(e => e.CategoryId);
 
+            modelBuilder.Entity<AbsenceDays>()
+                        .HasIndex(a => new { a.Year, a.Month })
+                        .IsUnique();
+
             base.OnModelCreating(modelBuilder);
         }
         public DbSet<Income> Incomes { get; set; }
@@ -33,6 +37,7 @@ namespace BudgetHelperClassLibrary.Data
         public DbSet<Expense> Expenses { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<BudgetForPurchases> BudgetForPurchases { get; set; }
+        public DbSet<AbsenceDays> AbsenceDays { get; set; }
 
-    }
+        }
 }
