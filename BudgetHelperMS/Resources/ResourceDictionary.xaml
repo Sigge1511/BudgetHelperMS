@@ -13,7 +13,7 @@
     <ImageBrush x:Key="BgImageBrush" 
                 ImageSource="pack://application:,,,/Resources/bgsmoke.png"                
                 Stretch="UniformToFill" 
-                Opacity="0.2"/>
+                Opacity="0.35"/>
 
 
     <SolidColorBrush x:Key="PrimaryBackground" Color="Black"/>
@@ -115,6 +115,7 @@
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="Padding" Value="8,5"/>
+        <Setter Property="FontFamily" Value="pack://application:,,,/Resources/#IM FELL English SC"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ComboBoxItem">
@@ -146,7 +147,9 @@
                     <Grid>
                         <ToggleButton Template="{StaticResource NeonComboBoxButtonTemplate}" 
                                   Focusable="false"
-                                  IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" 
+                                  IsChecked="{Binding IsDropDownOpen, 
+                                             Mode=TwoWay, 
+                                             RelativeSource={RelativeSource TemplatedParent}}" 
                                   ClickMode="Press" />
 
                         <ContentPresenter Name="ContentSite" 
@@ -170,45 +173,57 @@
         </Setter>
     </Style>
 
+    <Style x:Key="NeonColumnHeaderStyle" TargetType="DataGridColumnHeader">
+        <Setter Property="Background" Value="#1A1A1A"/>
+        <Setter Property="Foreground" Value="{StaticResource NeonBrush}"/>
+        <Setter Property="Padding" Value="5,2"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+        <Setter Property="BorderBrush" Value="{StaticResource NeonBrush}"/>
+    </Style>
 
-
-
-    <!--<Style x:Key="DarkComboBoxItemStyle" TargetType="ComboBoxItem">
-        <Setter Property="Background" Value="{StaticResource BgBrush}"/>
-        <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
-        <Setter Property="Padding" Value="5,8"/>
-        <Setter Property="FrameworkElement.OverridesDefaultStyle" Value="True" />
-
+    <Style x:Key="NeonDataGridTextStyle" TargetType="TextBlock">
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+        <Setter Property="Margin" Value="5,0" />
+    </Style>
+    
+    <Style x:Key="DataGridActionButtonStyle" TargetType="Button">
+        <Setter Property="Padding" Value="8,3"/>
+        <Setter Property="Margin" Value="2"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
         <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource PanelJewelBrush3}"/>
-                <Setter Property="Foreground" Value="{StaticResource NeonBrush}"/>
+            <Trigger Property="Content" Value="Update">
+                <Setter Property="Background" Value="#2D5A27"/>
             </Trigger>
-            <Trigger Property="IsSelected" Value="True">
-                <Setter Property="Background" Value="{StaticResource PanelJewelBrush1}"/>
-                <Setter Property="Foreground" Value="{StaticResource NeonBrush}"/>
+            <Trigger Property="Content" Value="Remove">
+                <Setter Property="Background" Value="#8B0000"/>
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Opacity" Value="0.8"/>
             </Trigger>
         </Style.Triggers>
     </Style>
 
-    <Style x:Key="DarkComboBoxStyle" TargetType="ComboBox">
-        <Setter Property="Background" Value="{StaticResource PanelJewelBrush1}"/>
+    <Style x:Key="NeonDataGridStyle" TargetType="DataGrid">
+        <Setter Property="Background" Value="#CC000000"/>
+        <Setter Property="RowBackground" Value="Transparent"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="BorderBrush" Value="{StaticResource NeonBrush}"/>
         <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="ItemContainerStyle" Value="{StaticResource DarkComboBoxItemStyle}"/>
-        <Setter Property="HorizontalContentAlignment" Value="Left"/>
-        <Setter Property="VerticalContentAlignment" Value="Center"/>
-        <Setter Property="FrameworkElement.OverridesDefaultStyle" Value="True" />
+        <Setter Property="GridLinesVisibility" Value="Horizontal"/>
+        <Setter Property="HorizontalGridLinesBrush" Value="#33FFFFFF"/>
+        <Setter Property="ColumnHeaderStyle" Value="{StaticResource NeonColumnHeaderStyle}"/>
+        <Setter Property="CanUserAddRows" Value="False"/>
+        <Setter Property="IsReadOnly" Value="True"/>
+        <Setter Property="RowHeight" Value="28"/>
+        <Setter Property="SelectionUnit" Value="FullRow"/>
+        <Setter Property="FontSize" Value="13"/>
+    </Style>
 
-        <Setter Property="Foreground" Value="White"/>
-
-        
-    </Style>-->
-
-    
-    
-    
     <!--Innehållstyper-->
     <DataTemplate x:Key="Listing">
         <Border Padding="5" 

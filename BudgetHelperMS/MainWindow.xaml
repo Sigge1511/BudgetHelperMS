@@ -395,33 +395,45 @@
                        HorizontalAlignment="Center" 
                        Margin="0,0,0,20"/>
 
-                    <DataGrid ItemsSource="{Binding LatestIncomes}" 
-                              AutoGenerateColumns="False" 
-                              Background="#CC000000" 
-                              RowBackground="Transparent" 
-                              Foreground="White"
-                              BorderBrush="#FF2D5A27"
-                              HeadersVisibility="Column"
-                              GridLinesVisibility="Horizontal"
-                              HorizontalGridLinesBrush="#33FFFFFF"
-                              CanUserAddRows="False">
+                    <DataGrid Style="{StaticResource NeonDataGridStyle}"
+                              ItemsSource="{Binding LatestIncomes}"
+                              AutoGenerateColumns="False"
+                              MaxHeight="275">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Date" Binding="{Binding ReceivedDate, StringFormat=d}" Width="80" />
-                            <DataGridTextColumn Header="Source" Binding="{Binding IncomeSource.SourceName}" Width="*" />
-                            <DataGridTextColumn Header="Amount" Binding="{Binding Amount, StringFormat={}{0:C}}" Width="100" />
+                            <DataGridTextColumn Header="Date" 
+                                                Binding="{Binding ReceivedDate, 
+                                                StringFormat=d}" 
+                                                Width="90" />
 
-                            <DataGridTemplateColumn Header="Actions" Width="150">
+                            <DataGridTextColumn Header="Source" 
+                                                Binding="{Binding IncomeSource.SourceName}" 
+                                                 Width="*" />
+                            <DataGridTextColumn Header="Amount" 
+                                                Binding="{Binding Amount, StringFormat='{}{0:F2}'}" 
+                                                Width="125">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="TextAlignment" Value="Right" />
+                                        <Setter Property="Margin" Value="0,0,5,0" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+
+                            <DataGridTemplateColumn Header="Actions" Width="175">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                             <Button Content="Update" 
+                                                    Style="{StaticResource DataGridActionButtonStyle}"
                                                     Command="{Binding DataContext.UpdateIncomeComm, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
                                                     CommandParameter="{Binding}"
-                                                    Background="#FF2D5A27" Foreground="White" Padding="5,2" Margin="2" BorderThickness="0"/>
+                                                    FontSize="10" Padding="4,1"/>
+
                                             <Button Content="Remove" 
+                                                    Style="{StaticResource DataGridActionButtonStyle}"
                                                     Command="{Binding DataContext.DeleteIncomeComm, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
                                                     CommandParameter="{Binding}"
-                                                    Background="#FF8B0000" Foreground="White" Padding="5,2" Margin="2" BorderThickness="0"/>
+                                                    FontSize="10" Padding="4,1"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
@@ -480,7 +492,7 @@
             </Border>
             <!--//Year so far-->
             <Border Grid.Column="8"
-                    Grid.ColumnSpan="4" Margin="109,436,0,0">
+                    Grid.ColumnSpan="4" Margin="109,469,0,0">
                 <Grid Margin="20">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
@@ -527,17 +539,19 @@
                         <TextBlock Grid.Row="1" 
                                    Style="{StaticResource SubHeader}" 
                                    FontSize="40"
-                                   Margin="0,10,10,0"
+                                   Foreground="{StaticResource MutedBrush}"
+                                   Margin="0,20,10,0"
                                    Text="You spent most on:" Height="44"/>
                         <ItemsControl Grid.Row="1" 
                                       ItemsSource="{Binding TopCategories}"
-                                      Margin="10,0,0,0">
+                                      Margin="5,0,0,0">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding}" 
-                                               FontSize="18" 
+                                               FontSize="22" 
                                                Foreground="{StaticResource NeonBrush}" 
-                                               Margin="0,5"/>
+                                               Margin="0,5"
+                                               FontFamily="pack://application:,,,/Resources/#IM FELL English SC"/>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>

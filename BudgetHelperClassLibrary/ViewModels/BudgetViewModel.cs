@@ -285,7 +285,7 @@ namespace BudgetHelperClassLibrary.ViewModels
             {LatestIncomes.Add(i);}
             //*******************************************************************          
             
-            AvgIncomeLastThreeMonths = CalculateAverage(incomes);
+            AvgIncomeLastThreeMonths = calc.CalculateAverage(incomes);
             await UpdateMonthSum();
             await UpdateSickDays();  
             await UpdateAverages();
@@ -394,7 +394,7 @@ namespace BudgetHelperClassLibrary.ViewModels
         //*******************************************************************
         private bool CanAddNewCategory()
         {
-            return SickDays!=null || CareOfCatsDays!=null;
+            return SickDays!=0 || CareOfCatsDays!=0;
         }
         private async Task AddNewCategory()
         {
@@ -428,8 +428,8 @@ namespace BudgetHelperClassLibrary.ViewModels
                 var incomeList = allIncomes.ToList();
 
                 // 1. Snitt (Det du redan har)
-                AvgIncomeLastThreeMonths = CalculateAverage(incomeList.Select(i => new { ReceivedDate = i.ReceivedDate, Amount = i.Amount }));
-                AvgExpenseLastThreeMonths = CalculateAverage((await _expenseRepo.GetAllExpensesAsync()).Select(e => new { ReceivedDate = e.ExpenseDate, Amount = e.Amount }));
+                AvgIncomeLastThreeMonths = calc.CalculateAverage(incomeList.Select(i => new { ReceivedDate = i.ReceivedDate, Amount = i.Amount }));
+                AvgExpenseLastThreeMonths = calc.CalculateAverage((await _expenseRepo.GetAllExpensesAsync()).Select(e => new { ReceivedDate = e.ExpenseDate, Amount = e.Amount }));
 
                 // 2. Årsprognos (Använd din befintliga ProjectedSalary)
                 // Vi räknar ut kompensationen baserat på snittlönen
@@ -443,27 +443,18 @@ namespace BudgetHelperClassLibrary.ViewModels
                 Debug.WriteLine($"Error: {ex.Message}");
             }
         }
-        // Hjälpmetod för summering
-        private decimal CalculateAverage(IEnumerable<dynamic> data)
+        
+
+        private bool CanUpdateSickdays()
         {
-            var monthlySums = data
-                .GroupBy(d => new { d.ReceivedDate.Year, d.ReceivedDate.Month })
-                .OrderByDescending(g => g.Key.Year).ThenByDescending(g => g.Key.Month)
-                .Take(3)
-                .Select(g => (decimal)g.Sum(x => (decimal)x.Amount))
-                .ToList();
-
-            return monthlySums.Any() ? Math.Round(monthlySums.Average(), 2) : 0;
+            return SickDays != 0 || CareOfCatsDays != 0;
         }
-
-        private bool CanUpdateSickdays() => true;
         private async Task UpdateSickDays()
         {
             var stats = await _incomeRepo.GetAbsenceForMonthAsync(DateTime.Now.Year, DateTime.Now.Month);
 
             if (stats != null)
             {
-                // OnPropertyChanged triggas i set-metoden och uppdaterar UI
                 SickDaysCount = stats.SickDays;
                 CareOfCatsDays = stats.VakDays;
             }

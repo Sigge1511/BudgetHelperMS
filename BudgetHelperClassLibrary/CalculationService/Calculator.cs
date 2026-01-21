@@ -13,6 +13,19 @@ namespace BudgetHelperClassLibrary.CalculationService
     {
         public Calculator() { }
 
+        public decimal CalculateAverage(IEnumerable<dynamic> data)
+        {
+            var monthlySums = data
+                .GroupBy(d => new { d.ReceivedDate.Year, d.ReceivedDate.Month })
+                .OrderByDescending(g => g.Key.Year).ThenByDescending(g => g.Key.Month)
+                .Take(3)
+                .Select(g => (decimal)g.Sum(x => (decimal)x.Amount))
+                .ToList();
+
+            return monthlySums.Any() ? Math.Round(monthlySums.Average(), 2) : 0;
+        } 
+
+
         public (decimal TotalIncome, 
                decimal TotalExpense, 
                decimal NetAmount) SumOfLastMonth(List<Income> incomes, List<Expense> expenses)
