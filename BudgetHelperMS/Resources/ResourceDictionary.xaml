@@ -37,7 +37,14 @@
         <Setter Property="Foreground" Value="{StaticResource NeonBrush}"/>
         <Setter Property="BorderBrush" Value="{StaticResource MutedBrush}"/>
         <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="Padding" Value="5"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="Width" Value="200"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="Width" Value="200"/>
+        <Setter Property="Margin" Value="30,10,0,0"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
+        <Setter Property="Padding" Value="5,0,5,0"/>
         <Setter Property="FontFamily" Value="pack://application:,,,/Resources/#IM FELL English SC"/>
     </Style>
 
@@ -70,17 +77,108 @@
                         <CalendarItem x:Name="PART_CalendarItem" 
                                   Background="{TemplateBinding Background}" 
                                   BorderBrush="{TemplateBinding BorderBrush}" 
-                                  BorderThickness="1"/>
+                                  BorderThickness="1"
+                                  Width="250"/>
                     </StackPanel>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-    <Style x:Key="DarkComboBoxItemStyle" TargetType="ComboBoxItem">
+
+    <ControlTemplate x:Key="NeonComboBoxButtonTemplate" TargetType="ToggleButton">
+        <Border x:Name="Border" 
+            Background="{StaticResource PanelJewelBrush1}" 
+            BorderBrush="{StaticResource NeonBrush}" 
+            BorderThickness="1" 
+            CornerRadius="2">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="25" />
+                </Grid.ColumnDefinitions>
+                <Path Grid.Column="1" 
+                  Fill="{StaticResource NeonBrush}" 
+                  HorizontalAlignment="Center" 
+                  VerticalAlignment="Center" 
+                  Data="M 0 0 L 4 4 L 8 0 Z" />
+            </Grid>
+        </Border>
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter TargetName="Border" Property="Background" Value="{StaticResource PanelJewelBrush3}" />
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <Style x:Key="NeonComboBoxItemStyle" TargetType="ComboBoxItem">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Padding" Value="8,5"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBoxItem">
+                    <Border x:Name="ItemBorder" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+                        <ContentPresenter />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="ItemBorder" Property="Background" Value="{StaticResource PanelJewelBrush3}" />
+                            <Setter Property="Foreground" Value="{StaticResource NeonBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="ItemBorder" Property="Background" Value="{StaticResource PanelJewelBrush1}" />
+                            <Setter Property="Foreground" Value="{StaticResource NeonBrush}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="DarkComboBoxStyle" TargetType="ComboBox">
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="ItemContainerStyle" Value="{StaticResource NeonComboBoxItemStyle}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBox">
+                    <Grid>
+                        <ToggleButton Template="{StaticResource NeonComboBoxButtonTemplate}" 
+                                  Focusable="false"
+                                  IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}" 
+                                  ClickMode="Press" />
+
+                        <ContentPresenter Name="ContentSite" 
+                                      IsHitTestVisible="False" 
+                                      Content="{TemplateBinding SelectionBoxItem}"
+                                      ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" 
+                                      Margin="10,3,30,3" 
+                                      VerticalAlignment="Center" />
+
+                        <Popup Name="Popup" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" AllowsTransparency="True">
+                            <Grid Name="DropDown" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                <Border Background="#1A1A1A" BorderThickness="1" BorderBrush="{StaticResource NeonBrush}" />
+                                <ScrollViewer Margin="4" SnapsToDevicePixels="True">
+                                    <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
+                                </ScrollViewer>
+                            </Grid>
+                        </Popup>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+
+
+    <!--<Style x:Key="DarkComboBoxItemStyle" TargetType="ComboBoxItem">
         <Setter Property="Background" Value="{StaticResource BgBrush}"/>
         <Setter Property="Foreground" Value="{StaticResource TextBrush}"/>
         <Setter Property="Padding" Value="5,8"/>
+        <Setter Property="FrameworkElement.OverridesDefaultStyle" Value="True" />
+
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{StaticResource PanelJewelBrush3}"/>
@@ -94,38 +192,50 @@
     </Style>
 
     <Style x:Key="DarkComboBoxStyle" TargetType="ComboBox">
-        <Setter Property="SnapsToDevicePixels" Value="True"/>
-        <Setter Property="OverridesDefaultStyle" Value="False"/>
-        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
-        <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
         <Setter Property="Background" Value="{StaticResource PanelJewelBrush1}"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="BorderBrush" Value="{StaticResource NeonBrush}"/>
         <Setter Property="BorderThickness" Value="1"/>
-
         <Setter Property="ItemContainerStyle" Value="{StaticResource DarkComboBoxItemStyle}"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="FrameworkElement.OverridesDefaultStyle" Value="True" />
 
-        <Style.Resources>
-            <SolidColorBrush x:Key="{x:Static SystemColors.WindowBrushKey}" Color="#080B0A" />
-            <SolidColorBrush x:Key="{x:Static SystemColors.WindowTextBrushKey}" Color="White" />
-        </Style.Resources>
-    </Style>
+        <Setter Property="Foreground" Value="White"/>
 
-    <!--För att styra tex knappar
-    Template för alla knappar-->
-    <ControlTemplate x:Key="RoundedButtonTemplate" TargetType="Button">
-        <Border x:Name="BtnBorder"
-                Background="{TemplateBinding Background}"
-                BorderBrush="{TemplateBinding BorderBrush}"
-                BorderThickness="{TemplateBinding BorderThickness}"
-                CornerRadius="12">
+        
+    </Style>-->
 
-            <Viewbox Stretch="Uniform">
-                <ContentPresenter HorizontalAlignment="Center" 
-                              VerticalAlignment="Center"/>
-            </Viewbox>
-        </Border>        
-    </ControlTemplate>
+    
+    
+    
+    <!--Innehållstyper-->
+    <DataTemplate x:Key="Listing">
+        <Border Padding="5" 
+            Margin="0,2">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="{Binding CategoryName}" 
+                       Foreground="{StaticResource NeonBrush}" 
+                       FontSize="20" 
+                       VerticalAlignment="Top"
+                       FontFamily="pack://application:,,,/Resources/#IM FELL English SC"/>
+
+                <TextBlock Grid.Column="1" 
+                       Text="{Binding TotalAmount, StringFormat='{}{F2}'}" 
+                       Foreground="{StaticResource NeonBrush}" 
+                       FontWeight="Bold" 
+                       FontSize="20"
+                       FontFamily="pack://application:,,,/Resources/#IM FELL English SC"
+                       VerticalAlignment="Top"
+                       Margin="15,0,0,0"/>
+            </Grid>
+        </Border>
+    </DataTemplate>
 
     <!--För att styra specifika knappar mha Style-->
     <Style x:Key="YesButton" TargetType="Button">
@@ -173,43 +283,9 @@
         </Setter>
     </Style>
 
-    <!--<Style x:Key="YesButton" TargetType="Button" >
-        <Setter Property="Background" Value="{StaticResource PanelJewelBrush3}" />
-        <Setter Property="Foreground" Value="{StaticResource NeonBrush}"/>
-        <Setter Property="BorderBrush" Value="{StaticResource NeonBrush}" />
-        <Setter Property="HorizontalAlignment" Value="Center"/>
-        <Setter Property="Padding" Value="10"/>
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="Margin" Value="5"/>
-
-        <Setter Property="Height" Value="50"/>
-        <Setter Property="Width" Value="100"/>
-        <Setter Property="MaxWidth" Value="500"/>
-        <Setter Property="MaxHeight" Value="300"/>
-
-        <Setter Property="FontFamily" Value="pack://application:,,,/Resources/#IM FELL English SC"/>
-        <Setter Property="FontWeight" Value="ExtraBold"/>
-
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="Blue"/>
-            </Trigger>
-
-            <Trigger Property="IsPressed" Value="True">
-                <Setter Property="Background" Value="DarkGray"/>
-            </Trigger>
-
-            <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Background" Value="LightBlue"/>
-                <Setter Property="Foreground" Value="Black"/>
-            </Trigger>
-        </Style.Triggers>      
-    </Style>-->
-
     <Style x:Key="NoButton" TargetType="Button" >
         <Setter Property="Background" Value="DarkGray" />
         <Setter Property="BorderBrush" Value="Black" />
-        <Setter Property="Template" Value="{StaticResource RoundedButtonTemplate}"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="Padding" Value="10"/>
         <Setter Property="BorderThickness" Value="0"/>
@@ -242,7 +318,6 @@
     <Style x:Key="NeutralButton" TargetType="Button" >
         <Setter Property="Background" Value="DarkGray" />
         <Setter Property="BorderBrush" Value="Black" />
-        <Setter Property="Template" Value="{StaticResource RoundedButtonTemplate}"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="Padding" Value="10"/>
         <Setter Property="BorderThickness" Value="0"/>

@@ -6,8 +6,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System.Configuration;
 using System.Data;
+using System.Globalization;
 using System.IO;
 using System.Windows;
+using System.Windows.Markup;
 
 namespace BudgetHelperMS
 {
@@ -19,7 +21,20 @@ namespace BudgetHelperMS
         // Root service provider accessible throughout the app
         public static IServiceProvider ServiceProvider { get; private set; }
 
-        // Keep the application scope alive so scoped services (DbContext, repos) remain valid
+        public App() 
+        {
+            var culture = new CultureInfo("en-US");
+            culture.NumberFormat.NumberGroupSeparator = "";
+            culture.NumberFormat.NumberDecimalSeparator = ".";
+
+            Thread.CurrentThread.CurrentCulture = culture;
+            Thread.CurrentThread.CurrentUICulture = culture;
+
+            FrameworkElement.LanguageProperty.OverrideMetadata(
+                typeof(FrameworkElement),
+                new FrameworkPropertyMetadata(
+                    XmlLanguage.GetLanguage(culture.IetfLanguageTag)));
+        }
         public static IServiceScope AppScope { get; private set; }
 
         protected override void OnStartup(StartupEventArgs e)

@@ -166,6 +166,28 @@ namespace BudgetHelperClassLibrary.ViewModels
             get => projectedSalary;
             set { projectedSalary = value; OnPropertyChanged(); }
         }
+
+        private decimal _nextMonthIn;
+        public decimal NextMonthIn
+        {
+            get => _nextMonthIn;
+            set { _nextMonthIn = value; OnPropertyChanged(); }
+        }
+
+        private decimal _nextMonthOut;
+        public decimal NextMonthOut
+        {
+            get => _nextMonthOut;
+            set { _nextMonthOut = value; OnPropertyChanged(); }
+        }
+
+        private decimal _nextMonthNet;
+        public decimal NextMonthNet
+        {
+            get => _nextMonthNet;
+            set { _nextMonthNet = value; OnPropertyChanged(); }
+        }
+
         //******** FOR SICK DAYS ETC ********
         private int sickDays;
         public int SickDays
@@ -179,6 +201,13 @@ namespace BudgetHelperClassLibrary.ViewModels
         {
             get => careOfCatsDays;
             set { careOfCatsDays = value; OnPropertyChanged(); }
+        }
+
+        private int sickDaysCount;
+        public int SickDaysCount
+        {
+            get => sickDaysCount;
+            set { sickDaysCount = value; OnPropertyChanged(); }
         }
 
 
@@ -213,7 +242,7 @@ namespace BudgetHelperClassLibrary.ViewModels
 
 
             UpdateMonthSumComm = new RelayCommand(async () => await UpdateMonthSum());
-            UpdateSickDaysComm = new RelayCommand(async () => await UpdateSickDays(), CanUpdateSickdays());
+            UpdateSickDaysComm = new RelayCommand(async () => await UpdateSickDays(), CanUpdateSickdays);
 
             AddNewCategoryComm = new RelayCommand(async () => await AddNewCategory(), CanAddNewCategory);
 
@@ -258,6 +287,7 @@ namespace BudgetHelperClassLibrary.ViewModels
             
             AvgIncomeLastThreeMonths = CalculateAverage(incomes);
             await UpdateMonthSum();
+            await UpdateSickDays();  
             await UpdateAverages();
             await UpdateYearStats();
             await GetIncomesThisYearAsync();
@@ -376,30 +406,42 @@ namespace BudgetHelperClassLibrary.ViewModels
         {
             var allIncomes = await _incomeRepo.GetAllIncomesAsync();
             var allExpenses = await _expenseRepo.GetAllExpensesAsync();
+            var incomeList = allIncomes.ToList();
+            var expenseList = allExpenses.ToList();
 
-            
-            var result = calc.SumOfLastMonth(allIncomes.ToList(), allExpenses.ToList());
-
-            // 3. Uppdatera dina variabler (OnPropertyChanged triggar UI-uppdateringen)
+            var result = calc.SumOfLastMonth(incomeList, expenseList);
             TotalIncomesLastMonth = result.TotalIncome;
             TotalExpensesLastMonth = result.TotalExpense;
             NetAmountLastMonth = result.NetAmount;
+
+            var forecast = calc.CalculateNextMonthForecast(incomeList, expenseList, SickDays, CareOfCatsDays);
+
+            NextMonthIn = forecast.ExpectedIn;
+            NextMonthOut = forecast.ExpectedOut;
+            NextMonthNet = forecast.Result;
         }
         private async Task UpdateAverages()
         {
             try
             {
                 var allIncomes = await _incomeRepo.GetAllIncomesAsync();
-                var allExpenses = await _expenseRepo.GetAllExpensesAsync();
+                var incomeList = allIncomes.ToList();
 
-                // Här mappar vi om till en anonym typ med TYDLIGA namn och typer
-                AvgIncomeLastThreeMonths = CalculateAverage(allIncomes.Select(i => new { ReceivedDate = i.ReceivedDate, Amount = i.Amount }));
+                // 1. Snitt (Det du redan har)
+                AvgIncomeLastThreeMonths = CalculateAverage(incomeList.Select(i => new { ReceivedDate = i.ReceivedDate, Amount = i.Amount }));
+                AvgExpenseLastThreeMonths = CalculateAverage((await _expenseRepo.GetAllExpensesAsync()).Select(e => new { ReceivedDate = e.ExpenseDate, Amount = e.Amount }));
 
-                // Samma här för utgifter
-                AvgExpenseLastThreeMonths = CalculateAverage(allExpenses.Select(e => new { ReceivedDate = e.ExpenseDate, Amount = e.Amount }));
+                // 2. Årsprognos (Använd din befintliga ProjectedSalary)
+                // Vi räknar ut kompensationen baserat på snittlönen
+                decimal expectedComp = calc.GetExpectedCompensationNextMonth(AvgIncomeLastThreeMonths, SickDays, CareOfCatsDays);
+
+                // Här sätter vi din befintliga property med den nya kalkylen
+                ProjectedSalary = calc.CalculateYearlyProjectionWithComp(incomeList, expectedComp);
             }
-            catch (Exception ex){
-                Debug.WriteLine($"Couldn't update the average: {ex.Message}");}
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error: {ex.Message}");
+            }
         }
         // Hjälpmetod för summering
         private decimal CalculateAverage(IEnumerable<dynamic> data)
@@ -414,13 +456,17 @@ namespace BudgetHelperClassLibrary.ViewModels
             return monthlySums.Any() ? Math.Round(monthlySums.Average(), 2) : 0;
         }
 
-        private Func<bool>? CanUpdateSickdays()
-        {
-            throw new NotImplementedException();
-        }
+        private bool CanUpdateSickdays() => true;
         private async Task UpdateSickDays()
         {
-            throw new NotImplementedException();
+            var stats = await _incomeRepo.GetAbsenceForMonthAsync(DateTime.Now.Year, DateTime.Now.Month);
+
+            if (stats != null)
+            {
+                // OnPropertyChanged triggas i set-metoden och uppdaterar UI
+                SickDaysCount = stats.SickDays;
+                CareOfCatsDays = stats.VakDays;
+            }
         }
         //***********************************************************
         //TOTALS

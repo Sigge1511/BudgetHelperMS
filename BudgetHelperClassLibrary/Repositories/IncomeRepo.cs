@@ -70,7 +70,12 @@ namespace BudgetHelperClassLibrary.Repositories
             await _dbcntxt.SaveChangesAsync();
         }
 
-
+        public async Task<AbsenceDays?> GetAbsenceForMonthAsync(int year, int month)
+        {
+            // Vi letar efter en post som matchar både år och månad
+            return await _dbcntxt.AbsenceDays
+                .FirstOrDefaultAsync(a => a.Year == year && a.Month == month);
+        }
         public async Task SaveOrUpdateAbsenceAsync(int year, int month, int sickDays, int vakDays)
         {
             // 1. Kolla om det redan finns en post för denna månad [cite: 2025-09-29]

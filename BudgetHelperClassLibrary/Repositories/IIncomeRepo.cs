@@ -19,5 +19,6 @@ namespace BudgetHelperClassLibrary.Repositories
         Task AddIncomeAsync(Income income);
         Task UpdateIncomeAsync(Income income);
         Task DeleteIncomeAsync(Income income);
+        Task<AbsenceDays?> GetAbsenceForMonthAsync(int year, int month);
     }
 }
