@@ -167,6 +167,13 @@ namespace BudgetHelperClassLibrary.ViewModels
             set { projectedSalary = value; OnPropertyChanged(); }
         }
 
+        private decimal yearlySalary;
+        public decimal YearlySalary
+        {
+            get => yearlySalary;
+            set { yearlySalary = value; OnPropertyChanged(); }
+        }
+
         private decimal _nextMonthIn;
         public decimal NextMonthIn
         {
@@ -467,18 +474,15 @@ namespace BudgetHelperClassLibrary.ViewModels
             List<Income> incomes = (await _incomeRepo.GetAllIncomesAsync()).ToList();
             List<Expense> expenses = (await _expenseRepo.GetAllExpensesAsync()).ToList();
 
-            IncomesThisYear.Clear(); // Current year so far
             var incomesThisYear = incomes.Where(i => i.ReceivedDate.Year == currentYear).ToList();
             var expensesThisYear = expenses.Where(e => e.ExpenseDate.Year == currentYear).ToList();
 
-            // 3. Uppdatera de stora listorna i UI:t (för DataGrids) [cite: 2025-09-28]
             IncomesThisYear.Clear();
             foreach (var inc in incomesThisYear) IncomesThisYear.Add(inc);
 
             Expenses.Clear();
             foreach (var exp in expensesThisYear) Expenses.Add(exp);
-
-            
+                        
             decimal avgMonthly = incomesThisYear.Any() ? incomesThisYear.Average(i => i.Amount) : 0;
 
             // Compensation delay for next month
@@ -487,12 +491,16 @@ namespace BudgetHelperClassLibrary.ViewModels
                 SickDays,
                 CareOfCatsDays);
 
+            //Pure total income this year
             TotalIncomeYear = calc.GetTotalIncomeSoFar(incomesThisYear);
 
-            // Årsprognos inklusive den kommande kompensationen [cite: 2026-01-18]
+            // Total prognois with ALL incomes and compensations for this year
             ProjectedSalary = calc.CalculateYearlyProjectionWithComp(incomesThisYear, expectedComp);
 
-            // Uppdatera "Väckarklockan" (Topp 3 kategorier) baserat på årets utgifter [cite: 2026-01-18]
+            // Yearly salary based on actual received SALARIES ONLY
+            YearlySalary = calc.GetYearlySalaryOnly(incomes);
+
+            // My top spending categories
             await GetTopSpendingInfo();
         }
         public async Task GetIncomesThisYearAsync()
@@ -512,11 +520,11 @@ namespace BudgetHelperClassLibrary.ViewModels
             }
         }
 
-        private async Task<ObservableCollection<Income>> GetLatestIncomesAsync()
-        {
-            var latestIncomes = await _incomeRepo.GetAllIncomesAsync();
-            return new ObservableCollection<Income>(latestIncomes);
-        }
+        //private async Task<ObservableCollection<Income>> GetLatestIncomesAsync()
+        //{
+        //    var latestIncomes = await _incomeRepo.GetAllIncomesAsync();
+        //    return new ObservableCollection<Income>(latestIncomes);
+        //}
 
         private async Task GetTopSpendingInfo()
         {

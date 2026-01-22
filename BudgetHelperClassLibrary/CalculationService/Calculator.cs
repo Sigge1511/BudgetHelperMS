@@ -88,34 +88,45 @@ namespace BudgetHelperClassLibrary.CalculationService
             return actualSoFar + futureEstimate + expectedCompNextMonth;
         }
 
-        public (decimal ExpectedIn, decimal ExpectedOut, decimal Result) CalculateNextMonthForecast(
-    List<Income> allIncomes,
-    List<Expense> allExpenses,
-    int currentMonthSickDays,
-    int currentMonthVakDays)
+        public decimal GetYearlySalaryOnly (List<Income> Salary)
         {
-            var recurringIds = new[] { 1, 6 }; //I.e salary and study loans
+            var salaryIncomes = Salary
+                .Where(i => i.IncomeSourceId==1)
+                .ToList();
 
-            var fixedIncomes = allIncomes
-                .Where(i => recurringIds.Contains(i.IncomeSourceId))
-                .GroupBy(i => i.IncomeSourceId)
-                .Select(g => g.OrderByDescending(i => i.ReceivedDate).First().Amount)
-                .Sum();
-
-            var fixedExpenses = allExpenses
-                .Where(e => e.IsRecurring)
-                .GroupBy(e => e.Name) // Gruppera så vi inte dubbelräknar gamla hyror
-                .Select(g => g.OrderByDescending(e => e.ExpenseDate).First().Amount)
-                .Sum();
-                        
-            decimal avgSalary = allIncomes.Any() ? allIncomes.Average(i => i.Amount) : 0;
-            decimal expectedComp = GetExpectedCompensationNextMonth(avgSalary, currentMonthSickDays, currentMonthVakDays);
-
-            decimal totalIn = fixedIncomes + expectedComp;
-            decimal netResult = totalIn - fixedExpenses;
-
-            return (Math.Round(totalIn, 2), Math.Round(fixedExpenses, 2), Math.Round(netResult, 2));
+            if (!salaryIncomes.Any()) return 0;
+            decimal yearlySalary = salaryIncomes.Average(i => i.Amount);
+            return yearlySalary * 12;
         }
+
+        public (decimal ExpectedIn, decimal ExpectedOut, decimal Result) CalculateNextMonthForecast(
+                        List<Income> allIncomes,
+                        List<Expense> allExpenses,
+                        int currentMonthSickDays,
+                        int currentMonthVakDays)
+                            {
+                                var recurringIds = new[] { 1, 6 }; //I.e salary and study loans
+
+                                var fixedIncomes = allIncomes
+                                    .Where(i => recurringIds.Contains(i.IncomeSourceId))
+                                    .GroupBy(i => i.IncomeSourceId)
+                                    .Select(g => g.OrderByDescending(i => i.ReceivedDate).First().Amount)
+                                    .Sum();
+
+                                var fixedExpenses = allExpenses
+                                    .Where(e => e.IsRecurring)
+                                    .GroupBy(e => e.Name) // Gruppera så vi inte dubbelräknar gamla hyror
+                                    .Select(g => g.OrderByDescending(e => e.ExpenseDate).First().Amount)
+                                    .Sum();
+                        
+                                decimal avgSalary = allIncomes.Any() ? allIncomes.Average(i => i.Amount) : 0;
+                                decimal expectedComp = GetExpectedCompensationNextMonth(avgSalary, currentMonthSickDays, currentMonthVakDays);
+
+                                decimal totalIn = fixedIncomes + expectedComp;
+                                decimal netResult = totalIn - fixedExpenses;
+
+                                return (Math.Round(totalIn, 2), Math.Round(fixedExpenses, 2), Math.Round(netResult, 2));
+                            }
         public decimal GetExpectedCompensationNextMonth(decimal avgMonthlyIncome, int sickDays, int vakDays)
         {
             // Vi anropar din befintliga metod två gånger med olika isVAK-flaggor
@@ -148,12 +159,12 @@ namespace BudgetHelperClassLibrary.CalculationService
 
 
 
-            //public decimal CalculateActualSalaryYearly(List<Income> allIncomes)
+            //public decimal CalculateActualSalaryYearly(List<Income> Salary)
             //{
             //    // Vi definierar vilka källor som räknas som "lön"
             //    var salaryKeywords = new[] { "Salary", "Lön", "VAK", "Sjuk", "Care of Cat" };
 
-            //    var salaryIncomes = allIncomes
+            //    var salaryIncomes = Salary
             //        .Where(i => salaryKeywords.Any(key =>
             //            i.IncomeSource.SourceName.Contains(key, StringComparison.OrdinalIgnoreCase)))
             //        .ToList();
@@ -161,8 +172,8 @@ namespace BudgetHelperClassLibrary.CalculationService
             //    if (!salaryIncomes.Any()) return 0;
 
             //    // Här räknar vi ut snittet på bara dessa inkomster
-            //    decimal averageSalary = salaryIncomes.Average(i => i.Amount);
-            //    return averageSalary * 12;
+            //    decimal yearlySalary = salaryIncomes.Average(i => i.Amount);
+            //    return yearlySalary * 12;
             //}
         }
     }
