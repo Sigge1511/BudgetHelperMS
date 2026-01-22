@@ -223,10 +223,12 @@ namespace BudgetHelperClassLibrary.ViewModels
 
         public RelayCommand AddIncomeComm { get; }
         public RelayCommand UpdateIncomeComm { get; }
+        public RelayCommand DeleteIncomeComm { get; }
+
         public RelayCommand AddExpenseComm { get; }
         public RelayCommand UpdateExpenseComm { get; }
-        public RelayCommand DeleteIncomeComm { get; }
         public RelayCommand DeleteExpenseComm { get; }
+
         public RelayCommand UpdateMonthSumComm { get; }
         public RelayCommand UpdateSickDaysComm { get; }
         public RelayCommand AddNewCategoryComm { get; }
@@ -285,14 +287,14 @@ namespace BudgetHelperClassLibrary.ViewModels
             foreach (var e in expenseList) LatestExpenses.Add(e);
             var latestExpensesList = expenseList.OrderByDescending(x => x.Id).Take(5);
             //*******************************************************************          
-            var incomes = await _incomeRepo.GetAllIncomesAsync();
+            var incomesList = await _incomeRepo.GetAllIncomesAsync();
             LatestIncomes.Clear();
-            var latestIncomesList = incomes.OrderByDescending(x => x.Id).Take(5);
-            foreach (var i in latestIncomesList)
-            {LatestIncomes.Add(i);}
+            foreach (var i in incomesList) LatestIncomes.Add(i);
+            var latestIncomesList = incomesList.OrderByDescending(x => x.Id).Take(5);
+
             //*******************************************************************          
-            
-            AvgIncomeLastThreeMonths = calc.CalculateAverage(incomes);
+
+            AvgIncomeLastThreeMonths = calc.CalculateAverage(incomesList);
             await UpdateMonthSum();
             await UpdateSickDays();  
             await UpdateAverages();
@@ -494,7 +496,7 @@ namespace BudgetHelperClassLibrary.ViewModels
             //Pure total income this year
             TotalIncomeYear = calc.GetTotalIncomeSoFar(incomesThisYear);
 
-            // Total prognois with ALL incomes and compensations for this year
+            // Total prognois with ALL incomesList and compensations for this year
             ProjectedSalary = calc.CalculateYearlyProjectionWithComp(incomesThisYear, expectedComp);
 
             // Yearly salary based on actual received SALARIES ONLY
@@ -519,13 +521,7 @@ namespace BudgetHelperClassLibrary.ViewModels
                 IncomesThisYear.Add(income);
             }
         }
-
-        //private async Task<ObservableCollection<Income>> GetLatestIncomesAsync()
-        //{
-        //    var latestIncomes = await _incomeRepo.GetAllIncomesAsync();
-        //    return new ObservableCollection<Income>(latestIncomes);
-        //}
-
+                
         private async Task GetTopSpendingInfo()
         {
             var allExpenses = await _expenseRepo.GetAllExpensesAsync();

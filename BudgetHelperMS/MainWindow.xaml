@@ -398,31 +398,199 @@
             <!--//Latest incomes here-->
             <Border
                     Grid.Column="0"
-                    Grid.ColumnSpan="5" Margin="0,741,159,0">
+                    Grid.ColumnSpan="5" 
+                    Height="325" 
+                    VerticalAlignment="Top"
+                    Margin="0,723,159,0" RenderTransformOrigin="0.5,0.5">
+                <Border.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleY="1"/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Border.RenderTransform>
                 <StackPanel Margin="20">
                     <TextBlock Text="Latest Incomes" 
-                       Style="{StaticResource SectionHeader}" 
-                       FontSize="40" 
-                       TextAlignment="Center"
-                       HorizontalAlignment="Center" 
-                       Margin="0,0,0,20"/>
-
+                                 Style="{StaticResource SectionHeader}" 
+                                 FontSize="40" 
+                                 TextAlignment="Center"
+                                  HorizontalAlignment="Center" 
+                                 Margin="0,0,0,20"/>
                     <DataGrid Style="{StaticResource NeonDataGridStyle}"
                               ItemsSource="{Binding LatestIncomes}"
                               AutoGenerateColumns="False"
-                              MaxHeight="275">
+                              Height="170" 
+                              ClipToBounds="False"
+                              SnapsToDevicePixels="True"
+                              VerticalScrollBarVisibility="Auto" Width="597">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Date" 
-                                                Binding="{Binding ReceivedDate, 
-                                                StringFormat=d}" 
+                                                Binding="{Binding ReceivedDate, StringFormat=d}" 
                                                 Width="90" />
 
                             <DataGridTextColumn Header="Source" 
                                                 Binding="{Binding IncomeSource.SourceName}" 
                                                  Width="*" />
                             <DataGridTextColumn Header="Amount" 
-                                                Binding="{Binding Amount, StringFormat='{}{0:F2}'}" 
+                                                Binding="{Binding Amount, StringFormat=\{0:F2\}}" 
                                                 Width="125">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="TextAlignment" Value="Right" />
+                                        <Setter Property="Margin" Value="0,0,5,0" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+
+                            <DataGridTemplateColumn Header="Actions" Width="175">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                            <Button Content="Update" 
+                                                    Style="{StaticResource DataGridActionButtonStyle}"
+                                                    Command="{Binding DataContext.UpdateIncomeComm, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" 
+                                                    CommandParameter="{Binding}"
+                                                    FontSize="10" Padding="4,1"/>
+
+                                            <Button Content="Remove" 
+                                                    Style="{StaticResource DataGridActionButtonStyle}"
+                                                    Command="{Binding DataContext.DeleteIncomeComm, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" 
+                                                    CommandParameter="{Binding}"
+                                                    FontSize="10" Padding="4,1"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </Border>
+
+
+            <Border
+                Grid.Column="4"
+                Grid.ColumnSpan="5" 
+                Height="325" 
+                VerticalAlignment="Top"
+                Margin="0,723,159,0" RenderTransformOrigin="0.5,0.5">
+                <Border.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleY="1"/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Border.RenderTransform>
+                <StackPanel Margin="20">
+                    <TextBlock Text="Latest Expenses" 
+                        Style="{StaticResource SectionHeader}" 
+                        FontSize="40" 
+                        TextAlignment="Center"
+                          HorizontalAlignment="Center" 
+                         Margin="0,0,0,20"/>
+                    <DataGrid Style="{StaticResource NeonDataGridStyle}"
+                             ItemsSource="{Binding LatestExpenses}"
+                              AutoGenerateColumns="False"
+                              Height="170" 
+                              ClipToBounds="False"
+                             SnapsToDevicePixels="True"
+                             VerticalScrollBarVisibility="Auto" Width="597">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Date" 
+                                    Binding="{Binding ExpenseDate, StringFormat=d}" 
+                                    Width="90" />
+
+                            <DataGridTextColumn Header="Category" 
+                                    Binding="{Binding Category.Name}" 
+                                     Width="*" />
+                            <DataGridTextColumn Header="Amount" 
+                                    Binding="{Binding Amount, StringFormat=\{0:F2\}}" 
+                                    Width="125">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="{x:Type TextBlock}">
+                                        <Setter Property="TextAlignment" Value="Right" />
+                                        <Setter Property="Margin" Value="0,0,5,0" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+
+                            <DataGridTemplateColumn Header="Actions" Width="175">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                            <Button Content="Update" 
+                                                    Style="{StaticResource DataGridActionButtonStyle}"
+                                                    Command="{Binding DataContext.UpdateExpenseComm, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" 
+                                                    CommandParameter="{Binding}"
+                                                    FontSize="10" Padding="4,1"/>
+
+                                            <Button Content="Remove" 
+                                                    Style="{StaticResource DataGridActionButtonStyle}"
+                                                     Command="{Binding DataContext.DeleteExpenseComm, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" 
+                                                     CommandParameter="{Binding}"
+                                                    FontSize="10" Padding="4,1"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </StackPanel>
+            </Border>
+
+
+
+
+
+
+
+
+
+
+
+
+            <!--//Latest expenses here-->
+            <!--<Border
+                Grid.Column="4" 
+                Grid.ColumnSpan="5" 
+                Margin="79,723,80,10"
+                RenderTransformOrigin="0.5,0.5">
+                <Border.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform ScaleY="1"/>
+                        <SkewTransform/>
+                        <RotateTransform/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Border.RenderTransform>
+                <StackPanel Margin="20,20,20,10">
+                    <TextBlock Text="Latest Expenses" 
+                               Style="{StaticResource SectionHeader}" 
+                               FontSize="40" 
+                               TextAlignment="Center"
+                               HorizontalAlignment="Center" 
+                               Margin="0,0,0,20"/>
+
+                    <DataGrid Style="{StaticResource NeonDataGridStyle}"
+                                ItemsSource="{Binding LatestExpenses}"
+                                AutoGenerateColumns="False"
+                                MaxHeight="275" Height="173"
+                                ClipToBounds="False"
+                                SnapsToDevicePixels="True"
+                                VerticalScrollBarVisibility="Auto" SelectionChanged="DataGrid_SelectionChanged">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Date" 
+                                Binding="{Binding ExpenseDate, 
+                                StringFormat=d}" 
+                                Width="90" />
+
+                            <DataGridTextColumn Header="Category" 
+                                Binding="{Binding Category.Name}" 
+                                 Width="*" />
+                            <DataGridTextColumn Header="Amount" 
+                                Binding="{Binding Amount, StringFormat='{}{0:F2}'}" 
+                                Width="125">
                                 <DataGridTextColumn.ElementStyle>
                                     <Style TargetType="TextBlock">
                                         <Setter Property="TextAlignment" Value="Right" />
@@ -437,13 +605,15 @@
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                             <Button Content="Update" 
                                                     Style="{StaticResource DataGridActionButtonStyle}"
-                                                    Command="{Binding DataContext.UpdateIncomeComm, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                                    Command="{Binding DataContext.UpdateExpenseComm, 
+                                                    RelativeSource={RelativeSource AncestorType=DataGrid}}" 
                                                     CommandParameter="{Binding}"
                                                     FontSize="10" Padding="4,1"/>
 
                                             <Button Content="Remove" 
                                                     Style="{StaticResource DataGridActionButtonStyle}"
-                                                    Command="{Binding DataContext.DeleteIncomeComm, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                                    Command="{Binding DataContext.DeleteExpenseComm, 
+                                                    RelativeSource={RelativeSource AncestorType=DataGrid}}" 
                                                     CommandParameter="{Binding}"
                                                     FontSize="10" Padding="4,1"/>
                                         </StackPanel>
@@ -453,55 +623,7 @@
                         </DataGrid.Columns>
                     </DataGrid>
                 </StackPanel>
-            </Border>
-            <!--//Latest expenses here-->
-            <Border
-                Grid.Column="4" Grid.ColumnSpan="5" Margin="79,741,80,0">
-                <StackPanel Margin="20">
-                    <TextBlock Text="Latest Expenses" 
-                               Style="{StaticResource SectionHeader}" 
-                               FontSize="40" 
-                               TextAlignment="Center"
-                               HorizontalAlignment="Center" 
-                               Margin="0,0,0,20"/>
-
-                    <DataGrid ItemsSource="{Binding LatestExpenses}" 
-                              AutoGenerateColumns="False" 
-                              Background="#CC000000" 
-                              RowBackground="Transparent" 
-                              Foreground="White"
-                              BorderBrush="#FF2D5A27"
-                              HeadersVisibility="Column"
-                              GridLinesVisibility="Horizontal"
-                              HorizontalGridLinesBrush="#33FFFFFF"
-                              CanUserAddRows="False">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Date" Binding="{Binding ExpenseDate, StringFormat=d}" Width="80" />
-                            <DataGridTextColumn Header="Source" Binding="{Binding Category.Name}" Width="*" />
-                            <DataGridTextColumn Header="Amount" Binding="{Binding Amount, StringFormat={}{0:C}}" Width="100" />
-                            <DataGridTextColumn Header="Recurring" Binding="{Binding IsRecurring}" Width="100" />
-                            <DataGridTextColumn Header="How often (M)" Binding="{Binding FrequencyInMonths}" Width="100" />
-
-                            <DataGridTemplateColumn Header="Actions" Width="150">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Button Content="Update" 
-                                                    Command="{Binding DataContext.UpdateExpenseComm, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
-                                                    CommandParameter="{Binding}"
-                                                    Background="#FF2D5A27" Foreground="White" Padding="5,2" Margin="2" BorderThickness="0"/>
-                                            <Button Content="Remove" 
-                                                    Command="{Binding DataContext.DeleteExpenseComm, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
-                                                    CommandParameter="{Binding}"
-                                                    Background="#FF8B0000" Foreground="White" Padding="5,2" Margin="2" BorderThickness="0"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </StackPanel>
-            </Border>
+            </Border>-->
             <!--//Year so far-->
             <Border Grid.Column="8"
                     Grid.ColumnSpan="4" Margin="109,469,0,0">
@@ -518,7 +640,7 @@
                                HorizontalAlignment="Center" 
                                VerticalAlignment="Top"
                                Margin="0,0,0,15">
-                               Total incomes so <LineBreak/> this year</TextBlock>
+                               Total incomes so <LineBreak/>This year</TextBlock>
 
                         <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                             <TextBlock Grid.Row="1" 
@@ -540,7 +662,7 @@
                                        TextAlignment="Center"
                                        VerticalAlignment="Center"
                                        Margin="0,0,0,0">
-                                       Estimated <LineBreak/>this year:</TextBlock>
+                                       Estimated<LineBreak/>This year:</TextBlock>
                             <TextBox Grid.Row="1" Width="168"
                                        Style="{StaticResource EntryBox}"
                                        Text="{Binding ProjectedSalary, 
