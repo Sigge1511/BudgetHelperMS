@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using BudgetHelperClassLibrary;
 using BudgetHelperClassLibrary.Models;
+using BudgetHelperMS.EditingWindows;
 
 namespace BudgetHelperMS
 {

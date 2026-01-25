@@ -92,6 +92,7 @@
                                 <Style TargetType="ScrollViewer">
                                     <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
                                     <Setter Property="Background" Value="{StaticResource MutedBrush}"/>
+                                    <Setter Property="BorderBrush" Value="{StaticResource MutedBrush}"/>
                                 </Style>
                             </ComboBox.Resources>
                         </ComboBox>
@@ -100,7 +101,7 @@
                     <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                         <TextBlock Style="{StaticResource SubHeader}" 
                                Text="Recieved *"
-                             Margin="0,20,0,0"/>
+                               Margin="0,20,0,0"/>
                         <DatePicker SelectedDate="{Binding SelectedDate}" 
                                 Foreground="White" 
                                 BorderBrush="{StaticResource NeonBrush}" 

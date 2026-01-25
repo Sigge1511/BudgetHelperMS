@@ -14,7 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace BudgetHelperMS
+namespace BudgetHelperMS.EditingWindows
 {
     /// <summary>
     /// Interaction logic for UpdateIncomeWnd.xaml
@@ -24,19 +24,19 @@ namespace BudgetHelperMS
         public UpdateIncomeWnd(Income income)
         {
             InitializeComponent();
-            this.DataContext = income;
+            DataContext = income;
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = true;
-            this.Close();
+            DialogResult = true;
+            Close();
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            this.DialogResult = false;
-            this.Close();
+            DialogResult = false;
+            Close();
         }
     }
 }
