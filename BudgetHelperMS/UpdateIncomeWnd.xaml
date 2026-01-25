@@ -1,0 +1,81 @@
+﻿<Window x:Class="BudgetHelperMS.UpdateIncomeWnd"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Edit Transaction" Height="358" Width="501"
+        Background="{StaticResource PanelJewelBrush3}" Foreground="White"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        FontSize="27"
+        FontFamily="pack://application:,,,/Resources/#IM FELL English SC">
+
+    <StackPanel Margin="5">
+        <TextBlock Text="Edit Amount:" 
+                   Margin="20,0,0,0" 
+                   Foreground="{StaticResource NeonBrush}"/>
+        <TextBox x:Name="AmountTextBox" 
+                 HorizontalAlignment="Left"
+                 Margin="20,0,0,5"
+                 Text="{Binding Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                 Style="{StaticResource ResourceKey=EntryBox}"
+                 Padding="0"/>
+
+        <TextBlock Text="Edit Source:" 
+                   Margin="20,10,0,0" 
+                   Foreground="{StaticResource NeonBrush}"/>
+        <ComboBox ItemsSource="{Binding IncomeSources, Mode=TwoWay}" 
+                  DisplayMemberPath="SourceName" 
+                  SelectedValuePath="Id"
+                  SelectedValue="{Binding SelectedSource}"
+                  Style="{StaticResource DarkComboBoxStyle}"
+                  Padding="5"
+                  Width="200"
+                  Height="30" 
+                  HorizontalAlignment="Left"
+                  Margin="20,10,0,5" >
+            <ComboBox.Resources>
+                <Style TargetType="ScrollViewer">
+                    <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+                    <Setter Property="Background" Value="{StaticResource MutedBrush}"/>
+                </Style>
+            </ComboBox.Resources>
+        </ComboBox>
+        <DatePicker SelectedDate="{Binding SelectedDate, Mode=TwoWay}" 
+                    Foreground="White" 
+                    BorderBrush="{StaticResource NeonBrush}" 
+                    Background="Transparent"
+                    CalendarStyle="{StaticResource DarkCalendarStyle}" 
+                    Width="200"
+                    Margin="20,10,0,5" 
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center" >
+            <DatePicker.Resources>
+        <Style TargetType="DatePickerTextBox">
+            <Setter Property="Background" Value="#11ffffff"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="5"/>
+        </Style>
+    </DatePicker.Resources>
+        </DatePicker>
+        <StackPanel Orientation="Horizontal" Width="350"
+                    HorizontalAlignment="Left"
+                   Margin="20,10,0,5" 
+>
+            <Button Content="Save" 
+                    Click="SaveButton_Click" 
+                    Style="{StaticResource ResourceKey=YesButton}"
+                    FontSize="20"                    
+                    Background="#2D5A27" 
+                    Foreground="White"
+                    Width="125"/>
+            <Button Content="Cancel" 
+                    Click="CancelButton_Click" 
+                    Style="{StaticResource ResourceKey=NoButton}"
+                    Margin="10" 
+                    FontSize="20"
+                    Background="#8B0000" 
+                    Foreground="White"
+                    Width="125"/>
+        </StackPanel>
+    </StackPanel>
+</Window>

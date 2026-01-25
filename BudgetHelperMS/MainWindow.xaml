@@ -48,8 +48,6 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-
-
             <!--* **** HÄR ÄR TOPPKOLUMNERNA-->
             <!--//Add incomes here-->
             <Border Grid.Row="0"  
@@ -88,8 +86,8 @@
                                   Width="200"
                                   Height="30" 
                                   VerticalAlignment="Center"
-                                  Margin="30,0,0,0"
-                                  SelectionChanged="ComboBox_SelectionChanged">
+                                  Margin="30,0,0,0" 
+                                  BorderBrush="{StaticResource MutedBrush}">
                             <ComboBox.Resources>
                                 <Style TargetType="ScrollViewer">
                                     <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
@@ -272,7 +270,6 @@
                             Command="{Binding AddNewCategoryComm}"/>
                 </StackPanel>
             </Border>
-
             <!--//Summary last month-->
             <Border Grid.Row="0" 
                     Grid.RowSpan="4"
@@ -391,9 +388,6 @@
 
                 </StackPanel>
             </Border>
-
-
-
             <!--*********   HÄR ÄR BOTTENKOLUMNERNA -->
             <!--//Latest incomes here-->
             <Border
@@ -466,8 +460,7 @@
                     </DataGrid>
                 </StackPanel>
             </Border>
-
-
+            <!--//Latest expenses here-->
             <Border
                 Grid.Column="4"
                 Grid.ColumnSpan="5" 
@@ -538,92 +531,6 @@
                     </DataGrid>
                 </StackPanel>
             </Border>
-
-
-
-
-
-
-
-
-
-
-
-
-            <!--//Latest expenses here-->
-            <!--<Border
-                Grid.Column="4" 
-                Grid.ColumnSpan="5" 
-                Margin="79,723,80,10"
-                RenderTransformOrigin="0.5,0.5">
-                <Border.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform ScaleY="1"/>
-                        <SkewTransform/>
-                        <RotateTransform/>
-                        <TranslateTransform/>
-                    </TransformGroup>
-                </Border.RenderTransform>
-                <StackPanel Margin="20,20,20,10">
-                    <TextBlock Text="Latest Expenses" 
-                               Style="{StaticResource SectionHeader}" 
-                               FontSize="40" 
-                               TextAlignment="Center"
-                               HorizontalAlignment="Center" 
-                               Margin="0,0,0,20"/>
-
-                    <DataGrid Style="{StaticResource NeonDataGridStyle}"
-                                ItemsSource="{Binding LatestExpenses}"
-                                AutoGenerateColumns="False"
-                                MaxHeight="275" Height="173"
-                                ClipToBounds="False"
-                                SnapsToDevicePixels="True"
-                                VerticalScrollBarVisibility="Auto" SelectionChanged="DataGrid_SelectionChanged">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Date" 
-                                Binding="{Binding ExpenseDate, 
-                                StringFormat=d}" 
-                                Width="90" />
-
-                            <DataGridTextColumn Header="Category" 
-                                Binding="{Binding Category.Name}" 
-                                 Width="*" />
-                            <DataGridTextColumn Header="Amount" 
-                                Binding="{Binding Amount, StringFormat='{}{0:F2}'}" 
-                                Width="125">
-                                <DataGridTextColumn.ElementStyle>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="TextAlignment" Value="Right" />
-                                        <Setter Property="Margin" Value="0,0,5,0" />
-                                    </Style>
-                                </DataGridTextColumn.ElementStyle>
-                            </DataGridTextColumn>
-
-                            <DataGridTemplateColumn Header="Actions" Width="175">
-                                <DataGridTemplateColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                            <Button Content="Update" 
-                                                    Style="{StaticResource DataGridActionButtonStyle}"
-                                                    Command="{Binding DataContext.UpdateExpenseComm, 
-                                                    RelativeSource={RelativeSource AncestorType=DataGrid}}" 
-                                                    CommandParameter="{Binding}"
-                                                    FontSize="10" Padding="4,1"/>
-
-                                            <Button Content="Remove" 
-                                                    Style="{StaticResource DataGridActionButtonStyle}"
-                                                    Command="{Binding DataContext.DeleteExpenseComm, 
-                                                    RelativeSource={RelativeSource AncestorType=DataGrid}}" 
-                                                    CommandParameter="{Binding}"
-                                                    FontSize="10" Padding="4,1"/>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellTemplate>
-                            </DataGridTemplateColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </StackPanel>
-            </Border>-->
             <!--//Year so far-->
             <Border Grid.Column="8"
                     Grid.ColumnSpan="4" Margin="109,469,0,0">

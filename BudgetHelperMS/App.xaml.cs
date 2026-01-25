@@ -1,4 +1,5 @@
-﻿using BudgetHelperClassLibrary.Data;
+﻿using BudgetHelperClassLibrary;
+using BudgetHelperClassLibrary.Data;
 using BudgetHelperClassLibrary.Repositories;
 using BudgetHelperClassLibrary.ViewModels;
 using Microsoft.EntityFrameworkCore;
@@ -63,6 +64,7 @@ namespace BudgetHelperMS
             // Register views / viewmodels
             serviceCollection.AddTransient<MainWindow>();
             serviceCollection.AddTransient<BudgetViewModel>();
+            serviceCollection.AddTransient<IWindowService, WindowService>(); //Generic to open new popups
 
             // Build root provider
             ServiceProvider = serviceCollection.BuildServiceProvider();

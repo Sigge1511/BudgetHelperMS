@@ -5,6 +5,7 @@ using BudgetHelperClassLibrary.Repositories;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using static System.Net.Mime.MediaTypeNames;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
@@ -233,29 +234,30 @@ namespace BudgetHelperClassLibrary.ViewModels
         public RelayCommand UpdateSickDaysComm { get; }
         public RelayCommand AddNewCategoryComm { get; }
 
+        private readonly IWindowService _windowService;
         private readonly IIncomeRepo _incomeRepo;
         private readonly IExpenseRepo _expenseRepo;
         private readonly ICategoryRepo _categoryRepo;
         private readonly IBudgetRepo _budgetRepo;
 
-        public BudgetViewModel(IIncomeRepo incomeRepo, IExpenseRepo expenseRepo,
-                               ICategoryRepo categoryRepo, IBudgetRepo budgetRepo)
+        public BudgetViewModel(IWindowService windowService, IIncomeRepo incomeRepo, 
+                               IExpenseRepo expenseRepo, ICategoryRepo categoryRepo, 
+                               IBudgetRepo budgetRepo)
         {
             AddIncomeComm = new RelayCommand(async () => await AddIncome(), CanAddIncome);            
-            UpdateIncomeComm = new RelayCommand(async () => await UpdateIncome(), CanUpdateExpense);
+            UpdateIncomeComm = new RelayCommand(async () => await UpdateIncome(), CanUpdateIncome);
             DeleteIncomeComm = new RelayCommand(async () => await DeleteIncome(), CanDeleteIncome);
 
             AddExpenseComm = new RelayCommand(async () => await AddExpense(), CanAddExpense);
-            UpdateExpenseComm = new RelayCommand(async () => await UpdateExpense(), CanUpdateIncome);
+            UpdateExpenseComm = new RelayCommand(async () => await UpdateExpense(), CanUpdateExpense);
             DeleteExpenseComm = new RelayCommand(async () => await DeleteExpense(), CanDeleteExpense);
-
 
             UpdateMonthSumComm = new RelayCommand(async () => await UpdateMonthSum());
             UpdateSickDaysComm = new RelayCommand(async () => await UpdateSickDays(), CanUpdateSickdays);
 
             AddNewCategoryComm = new RelayCommand(async () => await AddNewCategory(), CanAddNewCategory);
 
-
+            _windowService = windowService;
             _incomeRepo = incomeRepo;
             _expenseRepo = expenseRepo;
             _categoryRepo = categoryRepo;
@@ -342,8 +344,16 @@ namespace BudgetHelperClassLibrary.ViewModels
         }
         private async Task UpdateIncome()
         {
-            throw new NotImplementedException();
+            if (SelectedIncome == null) return;
+
+            // Calling on my new service to show popup
+            if (_windowService.ShowUpdateIncomeDialog(SelectedIncome) == true)
+            {
+                await _incomeRepo.UpdateIncomeAsync(SelectedIncome);
+                await LoadDataAsync(); 
+            }
         }
+
 
         private bool CanDeleteIncome()
         {
