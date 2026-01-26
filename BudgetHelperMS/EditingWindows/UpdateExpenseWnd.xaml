@@ -10,7 +10,7 @@
         WindowStartupLocation="CenterOwner"        
         ResizeMode="NoResize"
         FontSize="27"
-        FontFamily="pack://application:,,,/Resources/#IM FELL English SC" Width="622" Height="392">
+        FontFamily="pack://application:,,,/Resources/#IM FELL English SC" Width="622" Height="465">
 
     <StackPanel Margin="0,20,0,0">
         <StackPanel Orientation="Vertical">
@@ -26,7 +26,7 @@
                     <TextBox HorizontalAlignment="Left"
                                Margin="20,0,0,5"
                                Width="150"                               
-                               Text="{Binding Amount, 
+                               Text="{Binding SelectedExpense.Amount, 
                                       Mode=TwoWay}" 
                                FontSize="24"
                                Style="{StaticResource ResourceKey=EntryBox}"
@@ -39,23 +39,24 @@
                                Margin="20,0,0,5"
                                Width="150"
                                Style="{StaticResource ResourceKey=EntryBox}"
-                               Text="{Binding Name,Mode=TwoWay}" 
+                               Text="{Binding SelectedExpense.Name,Mode=TwoWay}" 
                                FontSize="24"
                                Padding="0"/>
                     <TextBlock Text="Category:" 
                                Margin="20,10,0,0" 
                                Foreground="{StaticResource MutedBrush}"/>
                     <ComboBox x:Name="CategoryComboBox" 
-                              SelectedValue="{Binding CategoryId, Mode=TwoWay}"
-                              SelectedValuePath="Id" 
+                              ItemsSource="{Binding Categories}"
+                              SelectedItem="{Binding SelectedExpense.Category, Mode=TwoWay}"
                               DisplayMemberPath="Name"
+                              Validation.ErrorTemplate="{x:Null}"
                               Style="{StaticResource DarkComboBoxStyle}"
                               Padding="5"
-                              Width="150"
+                              Width="200"
                               Height="30"   
                               HorizontalAlignment="Left"
                               BorderThickness="0"
-                              Margin="20,0,0,15" >
+                              Margin="20,10,0,15" >
                         <ComboBox.Resources>
                             <Style TargetType="ScrollViewer">
                                 <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
@@ -66,7 +67,7 @@
                     <TextBlock Text="Date:" 
                                Margin="20,10,0,0" 
                                Foreground="{StaticResource MutedBrush}"/>
-                    <DatePicker SelectedDate="{Binding ExpenseDate, Mode=TwoWay}" 
+                    <DatePicker SelectedDate="{Binding SelectedExpense.ExpenseDate, Mode=TwoWay}" 
                                 Foreground="White" 
                                 BorderBrush="{StaticResource NeonBrush}" 
                                 Background="Transparent"
@@ -83,13 +84,6 @@
                             </Style>
                         </DatePicker.Resources>
                     </DatePicker>
-                    <TextBlock HorizontalAlignment="Left"
-                               Margin="20,0,0,5"
-                               Width="200"
-                               Text="{Binding ReceivedDate.DayOfYear}" 
-                               FontSize="24"
-                               Padding="0"/>
-
                 </StackPanel>
                 <StackPanel Grid.Column="1"
                             HorizontalAlignment="Right" 
@@ -98,8 +92,9 @@
                                 Margin="0,0,0,0">
                         <TextBlock Margin="20,0,20,0" Text="Is Recurring:"
                                    Foreground="{StaticResource MutedBrush}"/>
-                        <CheckBox IsChecked="{Binding IsRecurring, Mode=TwoWay}"
-                                  Background="{StaticResource MutedBrush}"
+                        <CheckBox IsChecked="{Binding SelectedExpense.IsRecurring, Mode=TwoWay, 
+                                  TargetNullValue=''}"
+                                  Background="{StaticResource MutedBrush}"                                  
                                   BorderBrush="{StaticResource NeonBrush}" 
                                   VerticalAlignment="Center">
                             <CheckBox.LayoutTransform>
@@ -116,7 +111,7 @@
                              Width="150"
                              BorderThickness="0"
                              Background="{StaticResource PanelJewelBrush1}" 
-                             Text="{Binding FrequencyInMonths,Mode=TwoWay}" 
+                             Text="{Binding SelectedExpense.FrequencyInMonths,Mode=TwoWay}" 
                              FontSize="24"
                              Padding="0"/>
 

@@ -29,11 +29,15 @@ namespace BudgetHelperMS
         }
         public bool? ShowUpdateExpenseDialog(Expense expense, ObservableCollection<Category> categories)
         {
-            var win = new UpdateExpenseWnd(expense, categories)
+            var dialog = new UpdateExpenseWnd(expense, categories);
+
+            dialog.DataContext = new
             {
-                Owner = System.Windows.Application.Current.MainWindow
+                SelectedExpense = expense,
+                Categories = categories
             };
-            return win.ShowDialog();
+
+            return dialog.ShowDialog();
         }
 
         // Delete popups

@@ -284,15 +284,17 @@ namespace BudgetHelperClassLibrary.ViewModels
             //*******************************************************************
             var expenseList = await _expenseRepo.GetAllExpensesAsync();
             LatestExpenses.Clear();
-            var sortedExpenses = expenseList.OrderByDescending(x => x.ExpenseDate);
-            foreach (var e in sortedExpenses)  LatestExpenses.Add(e);
-            var latestExpensesList = expenseList.OrderByDescending(x => x.ExpenseDate);
+            foreach (var e in expenseList.OrderByDescending(x => x.ExpenseDate))
+            {
+                LatestExpenses.Add(e);
+            }
             //*******************************************************************          
             var incomesList = await _incomeRepo.GetAllIncomesAsync();
             LatestIncomes.Clear();
-            var sortedIncomes = incomesList.OrderByDescending(x => x.ReceivedDate);
-            foreach (var i in sortedIncomes) LatestIncomes.Add(i);
-            var latestIncomesList = incomesList.OrderByDescending(x => x.ReceivedDate);
+            foreach (var i in incomesList.OrderByDescending(x => x.ReceivedDate))
+            {
+                LatestIncomes.Add(i);
+            }
 
             //*******************************************************************          
 
@@ -424,14 +426,21 @@ namespace BudgetHelperClassLibrary.ViewModels
         private bool CanUpdateExpense() => true;
         private async Task UpdateExpense(object? parameter)
         {
-            if (SelectedExpense == null) return;
-
-            // Calling on my new service to show popup
-            if (_windowService.ShowUpdateExpenseDialog(SelectedExpense, Categories) == true)
+            try
             {
-                await _expenseRepo.UpdateExpenseAsync(SelectedExpense);
+                if (parameter is Expense expenseToUpdate)
+                {
+                    // Using object passed as parameter
+                    bool? result = _windowService.ShowUpdateExpenseDialog(expenseToUpdate, Categories);
+
+                    if (result == true)
+                    {                        
+                        await _expenseRepo.UpdateExpenseAsync(expenseToUpdate);
+                    }
+                }
                 await LoadDataAsync();
             }
+            catch (Exception ex) { Console.WriteLine($"Error updating income: {ex.Message}"); }
         }
 
         private bool CanDeleteExpense() => true;

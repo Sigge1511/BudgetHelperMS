@@ -518,13 +518,17 @@
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                             <Button Content="Update" 
                                                     Style="{StaticResource DataGridActionButtonStyle}"
-                                                    Command="{Binding DataContext.UpdateExpenseComm, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" 
+                                                    Command="{Binding DataContext.UpdateExpenseComm, 
+                                                                    RelativeSource={RelativeSource 
+                                                                    AncestorType={x:Type Window}}}" 
                                                     CommandParameter="{Binding}"
                                                     FontSize="10" Padding="4,1"/>
 
                                             <Button Content="Remove" 
                                                     Style="{StaticResource DataGridActionButtonStyle}"
-                                                     Command="{Binding DataContext.DeleteExpenseComm, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" 
+                                                     Command="{Binding DataContext.DeleteExpenseComm, 
+                                                                        RelativeSource={RelativeSource 
+                                                                        AncestorType={x:Type Window}}}" 
                                                      CommandParameter="{Binding}"
                                                     FontSize="10" Padding="4,1"/>
                                         </StackPanel>
