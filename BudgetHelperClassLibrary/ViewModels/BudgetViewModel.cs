@@ -27,8 +27,8 @@ namespace BudgetHelperClassLibrary.ViewModels
         Calculator calc = new Calculator();
 
         //*********** PROPS FOR INPUT  ************ 
-        private int? _selectedCategory;
-        public int? SelectedCategory
+        private Category? _selectedCategory;
+        public Category? SelectedCategory
         {
             get => _selectedCategory;
             set { _selectedCategory = value; OnPropertyChanged(); AddExpenseComm.RaiseCanExecuteChanged(); }
@@ -41,8 +41,8 @@ namespace BudgetHelperClassLibrary.ViewModels
             set { _selectedSource = value; OnPropertyChanged(); AddIncomeComm.RaiseCanExecuteChanged(); }
         }
 
-        private decimal _newIncomeAmount;
-        public decimal NewIncomeAmount
+        private decimal? _newIncomeAmount;
+        public decimal? NewIncomeAmount
         {
             get => _newIncomeAmount;
             set
@@ -317,7 +317,7 @@ namespace BudgetHelperClassLibrary.ViewModels
         {
             try
             {
-                decimal amount = NewIncomeAmount;
+                decimal amount = (decimal)NewIncomeAmount;
                 var newIncome = new Income
                 {
                     Amount = amount, // Här sparas det (ev. omräknade) beloppet
@@ -338,10 +338,7 @@ namespace BudgetHelperClassLibrary.ViewModels
             }
         }
 
-        private bool CanUpdateIncome()
-        {
-            return SelectedIncome != null;
-        }
+        private bool CanUpdateIncome() => true;
         private async Task UpdateIncome()
         {
             if (SelectedIncome == null) return;
@@ -355,19 +352,24 @@ namespace BudgetHelperClassLibrary.ViewModels
         }
 
 
-        private bool CanDeleteIncome()
-        {
-            return true;
-        }
+        private bool CanDeleteIncome() => true;
         private async Task DeleteIncome()
         {
-            throw new NotImplementedException();
+            if (SelectedIncome == null) return;
+
+            // Calling on my new service to show popup
+            if (_windowService.ShowDeleteIncomeDialog(SelectedIncome) == true)
+            {
+                await _incomeRepo.DeleteIncomeAsync(SelectedIncome);
+                await LoadDataAsync();
+            }
         }
         //*******************************************************************
         
         private bool CanAddExpense()
         {
             return  SelectedCategory != null && NewExpenseAmount.HasValue
+                    && NewExpenseAmount > 0
                     && !string.IsNullOrWhiteSpace(NewExpenseName);
         }
         private async Task AddExpense()
@@ -377,13 +379,25 @@ namespace BudgetHelperClassLibrary.ViewModels
                 var expense = new Expense
                 {
                     Amount = (decimal)NewExpenseAmount,
+                    Name = NewExpenseName,
                     ExpenseDate = SelectedDate,
                     IsRecurring = SelectedIsRecurring,
                     FrequencyInMonths = SelectedFrequencyInMonths,
-                    CategoryId = (int)SelectedCategory
+                    CategoryId = SelectedCategory.Id,
+                    Category=SelectedCategory
                 };
 
                 await _expenseRepo.AddExpenseAsync(expense);
+
+                //clear fields
+                NewExpenseAmount = null;
+                NewExpenseName = string.Empty;
+                SelectedDate = DateTime.Now;
+                SelectedCategory = null;
+                SelectedIsRecurring = false;
+                SelectedFrequencyInMonths = null;
+
+                await LoadDataAsync(); //Refresh data everywhere after adding
             }
             catch (Exception ex)
             {
@@ -392,10 +406,7 @@ namespace BudgetHelperClassLibrary.ViewModels
             }
         }
 
-        private bool CanUpdateExpense()
-        {
-            return SelectedExpense!=null;
-        }
+        private bool CanUpdateExpense() => true;
         private async Task UpdateExpense()
         {
             if (SelectedExpense == null) return;
@@ -408,13 +419,17 @@ namespace BudgetHelperClassLibrary.ViewModels
             }
         }
 
-        private bool CanDeleteExpense()
-        {
-            return true;
-        }
+        private bool CanDeleteExpense() => true;
         private async Task DeleteExpense()
         {
-            throw new NotImplementedException();
+            if (SelectedExpense == null) return;
+
+            // Calling on my new service to show popup
+            if (_windowService.ShowDeleteExpenseDialog(SelectedExpense) == true)
+            {
+                await _expenseRepo.DeleteExpenseAsync(SelectedExpense);
+                await LoadDataAsync();
+            }
         }
 
         //*******************************************************************

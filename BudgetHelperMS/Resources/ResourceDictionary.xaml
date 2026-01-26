@@ -51,10 +51,22 @@
             <Setter.Value>
                 <ControlTemplate TargetType="TextBox">
                     <Border x:Name="border" 
-                          Background="{TemplateBinding Background}" 
-                          BorderBrush="{TemplateBinding BorderBrush}" 
-                          BorderThickness="1"
-                          CornerRadius="5"/>
+                    Background="{TemplateBinding Background}" 
+                    BorderBrush="{TemplateBinding BorderBrush}" 
+                    BorderThickness="{TemplateBinding BorderThickness}"
+                    CornerRadius="5">
+                        <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource NeonBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsFocused" Value="true">
+                            <Setter TargetName="border" Property="BorderBrush" Value="{StaticResource NeonBrush}"/>
+                            <Setter TargetName="border" Property="BorderThickness" Value="2"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -103,9 +115,9 @@
     <ControlTemplate x:Key="NeonComboBoxButtonTemplate" TargetType="ToggleButton">
         <Border x:Name="Border" 
             Background="{StaticResource PanelJewelBrush1}" 
-            BorderBrush="{StaticResource NeonBrush}" 
+            BorderBrush="{StaticResource MutedBrush}" 
             BorderThickness="1" 
-            CornerRadius="2">
+            CornerRadius="5">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition />
@@ -160,21 +172,6 @@
         <Setter Property="ItemContainerStyle" Value="{StaticResource NeonComboBoxItemStyle}" />
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type TextBox}">
-                    <Grid>
-                        <Border CornerRadius="5,0,0,5"
-                            BorderThickness="1,1,0,1"
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{StaticResource MutedBrush}">
-                            <ScrollViewer x:Name="PART_ContentHost"/>
-                        </Border>
-                    </Grid>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-        
-        <Setter Property="Template">
-            <Setter.Value>
                 <ControlTemplate TargetType="ComboBox">
                     <Grid>
                         <ToggleButton Template="{StaticResource NeonComboBoxButtonTemplate}" 
@@ -185,11 +182,12 @@
                                   ClickMode="Press" />
 
                         <ContentPresenter Name="ContentSite" 
-                                      IsHitTestVisible="False" 
-                                      Content="{TemplateBinding SelectionBoxItem}"
-                                      ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" 
-                                      Margin="10,3,30,3" 
-                                      VerticalAlignment="Center" />
+                                          IsHitTestVisible="False" 
+                                          Content="{TemplateBinding SelectionBoxItem}"
+                                          ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}" 
+                                          ContentStringFormat="{TemplateBinding SelectionBoxItemStringFormat}"
+                                          Margin="10,3,30,3" 
+                                          VerticalAlignment="Center" /> 
 
                         <Popup Name="Popup" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" AllowsTransparency="True">
                             <Grid Name="DropDown" MinWidth="{TemplateBinding ActualWidth}" MaxHeight="{TemplateBinding MaxDropDownHeight}">

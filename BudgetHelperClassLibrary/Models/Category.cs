@@ -15,5 +15,9 @@ namespace BudgetHelperClassLibrary.Models
         public string Name { get; set; }
         public virtual ObservableCollection<Expense> ExpensesList { get; set; }
         public Category() { }
+        public override string ToString()
+        {
+            return Name; // Forcing to show cat name in combobox
+        }
     }
 }

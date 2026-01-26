@@ -67,8 +67,10 @@
                         <TextBlock Style="{StaticResource SubHeader}" 
                                    Text="Amount *"/>
                         <TextBox Text="{Binding NewIncomeAmount, 
-                                    UpdateSourceTrigger=LostFocus, 
-                                    StringFormat='{}{F2}'}"
+                                        UpdateSourceTrigger=LostFocus, 
+                                        StringFormat=\{0:F2\}, 
+                                        FallbackValue='',
+                                        Mode=TwoWay}"
                                  Style="{StaticResource EntryBox}"
                                  Margin="30,0,0,0"/>
                     </StackPanel>
@@ -158,7 +160,8 @@
                                     Text="Amount *"/>
                         <TextBox Text="{Binding NewExpenseAmount, 
                                         UpdateSourceTrigger=LostFocus, 
-                                        StringFormat='{}{0:F2}',
+                                        StringFormat=\{0:F2\}, 
+                                        TargetNullValue='',
                                         Mode=TwoWay}"
                              Style="{StaticResource EntryBox}"/>
                     </StackPanel>
@@ -179,16 +182,14 @@
                         <TextBlock Style="{StaticResource SubHeader}" 
                                Margin="0,20,0,0"
                                Text="Category *"/>
-                        <ComboBox ItemsSource="{Binding Categories}" 
-                              DisplayMemberPath="Name" 
-                              SelectedValuePath="Id"
-                              SelectedValue="{Binding SelectedCategory}"
-                              Style="{StaticResource DarkComboBoxStyle}"
-                              Padding="5"
-                              Width="200"
-                              Height="30" 
-                              Margin="30,25,0,15" 
-                              SelectionChanged="ComboBox_SelectionChanged">
+                        <ComboBox ItemsSource="{Binding Categories}"
+                                  SelectedItem="{Binding SelectedCategory}"
+                                  DisplayMemberPath="Name"
+                                  Style="{StaticResource DarkComboBoxStyle}"
+                                  Padding="5"
+                                  Width="200"
+                                  Height="30" 
+                                  Margin="30,25,0,15" >
                             <ComboBox.Resources>
                                 <Style TargetType="ScrollViewer">
                                     <Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
@@ -317,7 +318,7 @@
                             Total <LineBreak/> Balance:</TextBlock>
                         <TextBox   Style="{StaticResource EntryBox}"
                                    Text="{Binding NetAmountLastMonth, 
-                                          StringFormat='{}{F2}'}"/>
+                                          StringFormat=\{0:F2\}}"/>
                     </StackPanel>
                     <Button Content="UPDATE" 
                         Style="{StaticResource YesButton}" 
