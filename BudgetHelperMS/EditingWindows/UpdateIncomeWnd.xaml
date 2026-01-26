@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:models="clr-namespace:BudgetHelperClassLibrary.Models;assembly=BudgetHelperClassLibrary"
         mc:Ignorable="d" 
-        Height="340" Width="501"
+        Height="417" Width="501"
         d:DataContext="{d:DesignInstance Type=models:Income}"
         Background="{StaticResource PanelJewelBrush1}" 
         Foreground="White"
@@ -21,9 +21,8 @@
         <TextBox x:Name="AmountTextBox" 
                  HorizontalAlignment="Left"
                  Margin="20,0,0,5"
-                 Text="{Binding Amount, 
-                        Mode=TwoWay, 
-                        UpdateSourceTrigger=PropertyChanged}" 
+                 Text="{Binding SelectedIncome.Amount, 
+                 Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                  Style="{StaticResource ResourceKey=EntryBox}"
                  Padding="0" Width="200"/>
 
@@ -31,9 +30,10 @@
                    Margin="20,10,0,0" 
                    Foreground="{StaticResource MutedBrush}"/>
         <ComboBox x:Name="SourceComboBox"                 
-                  DisplayMemberPath="SourceName" 
-                  SelectedValuePath="Id"
-                  SelectedValue="{Binding IncomeSource, Mode=TwoWay}"
+                  ItemsSource="{Binding IncomeSources}"
+                  SelectedItem="{Binding SelectedIncome.Source, Mode=TwoWay}"
+                  DisplayMemberPath="SourceName"                  
+                  Validation.ErrorTemplate="{x:Null}"
                   Style="{StaticResource DarkComboBoxStyle}"
                   Padding="5"
                   Width="200"

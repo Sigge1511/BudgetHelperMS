@@ -80,9 +80,8 @@
                         <TextBlock Style="{StaticResource SubHeader}" 
                                    Text="From *"/>
                         <ComboBox ItemsSource="{Binding IncomeSources}" 
-                                  DisplayMemberPath="SourceName" 
-                                  SelectedValuePath="Id"
-                                  SelectedValue="{Binding SelectedSource}"
+                                  SelectedItem="{Binding SelectedSource}"
+                                  DisplayMemberPath="SourceName"
                                   Style="{StaticResource DarkComboBoxStyle}"
                                   Padding="5"
                                   Width="200"
@@ -98,6 +97,7 @@
                                 </Style>
                             </ComboBox.Resources>
                         </ComboBox>
+
                     </StackPanel>
 
                     <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
@@ -445,7 +445,9 @@
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                             <Button Content="Update" 
                                                     Style="{StaticResource DataGridActionButtonStyle}"
-                                                    Command="{Binding DataContext.UpdateIncomeComm, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}" 
+                                                    Command="{Binding DataContext.UpdateIncomeComm, 
+                                                             RelativeSource={RelativeSource 
+                                                             AncestorType={x:Type Window}}}" 
                                                     CommandParameter="{Binding}"
                                                     FontSize="10" Padding="4,1"/>
 

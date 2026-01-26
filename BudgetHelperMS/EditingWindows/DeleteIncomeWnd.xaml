@@ -21,6 +21,7 @@
                    Width="150"
                    Text="{Binding Amount}" 
                    FontSize="24"
+                   Foreground="{StaticResource NeonBrush}"
                    Padding="0"/>
 
         <TextBlock Text="Source:" 
@@ -31,6 +32,7 @@
                    Width="200"
                    Text="{Binding IncomeSource}" 
                    FontSize="24"
+                   Foreground="{StaticResource NeonBrush}"
                    Padding="0"/>
         <TextBlock Text="Date:" 
                    Margin="20,10,0,0" 
@@ -38,8 +40,10 @@
         <TextBlock HorizontalAlignment="Left"
                    Margin="20,0,0,5"
                    Width="200"
+                   Foreground="{StaticResource MutedBrush}"
                    Text="{Binding ReceivedDate, 
-                   StringFormat=\{yyyy-MM-dd\}}"                   FontSize="24"
+                   StringFormat=d}"                   
+                   FontSize="24"
                    Padding="0"/>
         <TextBlock Margin="20,40,0,0" 
                    Foreground="{StaticResource NeonBrush}">

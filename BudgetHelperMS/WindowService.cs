@@ -17,12 +17,15 @@ namespace BudgetHelperMS
         // Update popups
         public bool? ShowUpdateIncomeDialog(Income income, ObservableCollection<IncomeSource> sources)
         {
-            // Här har vi tillgång till fönstret eftersom vi är i huvudprojektet!
-            var win = new UpdateIncomeWnd(income, sources)
+            var dialog = new UpdateIncomeWnd(income, sources);
+
+            dialog.DataContext = new
             {
-                Owner = System.Windows.Application.Current.MainWindow
+                SelectedIncome = income,
+                IncomeSources = sources
             };
-            return win.ShowDialog();
+
+            return dialog.ShowDialog();
         }
         public bool? ShowUpdateExpenseDialog(Expense expense, ObservableCollection<Category> categories)
         {

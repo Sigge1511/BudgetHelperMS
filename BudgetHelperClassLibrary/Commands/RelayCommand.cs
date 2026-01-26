@@ -9,19 +9,20 @@ namespace BudgetHelperClassLibrary.Commands
 {
     public class RelayCommand : ICommand
     {
-        private readonly Action _executeCommand;
-        private readonly Func<bool>? _canExecuteCheck;
+        private readonly Action<object?> _execute;
+        private readonly Func<bool>? _canExecute;
         public event EventHandler? CanExecuteChanged;
 
-        public RelayCommand(Action executeCommand, Func<bool>? canExecuteCheck=null)
+        public RelayCommand(Action<object?> execute, Func<bool>? canExecute = null)
         {
-            _executeCommand = executeCommand;
-            _canExecuteCheck = canExecuteCheck;
+            _execute = execute;
+            _canExecute = canExecute;
         }
 
-        public bool CanExecute(object? parameter) => _canExecuteCheck?.Invoke() ?? true;
+        public bool CanExecute(object? parameter) => _canExecute?.Invoke() ?? true;
 
-        public void Execute(object? parameter)=>_executeCommand();
+        // Här skickar vi vidare parametern (Inkomsten/Utgiften) till din metod
+        public void Execute(object? parameter) => _execute(parameter);
 
         public void RaiseCanExecuteChanged() => CanExecuteChanged?.Invoke(this, EventArgs.Empty);
     }

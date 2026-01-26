@@ -34,8 +34,8 @@ namespace BudgetHelperClassLibrary.ViewModels
             set { _selectedCategory = value; OnPropertyChanged(); AddExpenseComm.RaiseCanExecuteChanged(); }
         }
 
-        private int? _selectedSource;
-        public int? SelectedSource
+        private IncomeSource? _selectedSource;
+        public IncomeSource? SelectedSource
         {
             get => _selectedSource;
             set { _selectedSource = value; OnPropertyChanged(); AddIncomeComm.RaiseCanExecuteChanged(); }
@@ -244,18 +244,18 @@ namespace BudgetHelperClassLibrary.ViewModels
                                IExpenseRepo expenseRepo, ICategoryRepo categoryRepo, 
                                IBudgetRepo budgetRepo)
         {
-            AddIncomeComm = new RelayCommand(async () => await AddIncome(), CanAddIncome);            
-            UpdateIncomeComm = new RelayCommand(async () => await UpdateIncome(), CanUpdateIncome);
-            DeleteIncomeComm = new RelayCommand(async () => await DeleteIncome(), CanDeleteIncome);
+            AddIncomeComm = new RelayCommand(async _ => await AddIncome(), () => CanAddIncome());
+            UpdateIncomeComm = new RelayCommand(async param => await UpdateIncome(param));
+            DeleteIncomeComm = new RelayCommand(async param => await DeleteIncome(param));
 
-            AddExpenseComm = new RelayCommand(async () => await AddExpense(), CanAddExpense);
-            UpdateExpenseComm = new RelayCommand(async () => await UpdateExpense(), CanUpdateExpense);
-            DeleteExpenseComm = new RelayCommand(async () => await DeleteExpense(), CanDeleteExpense);
+            AddExpenseComm = new RelayCommand(async _ => await AddExpense(), () => CanAddExpense());
+            UpdateExpenseComm = new RelayCommand(async param => await UpdateExpense(param));
+            DeleteExpenseComm = new RelayCommand(async param => await DeleteExpense(param));
 
-            UpdateMonthSumComm = new RelayCommand(async () => await UpdateMonthSum());
-            UpdateSickDaysComm = new RelayCommand(async () => await UpdateSickDays(), CanUpdateSickdays);
+            UpdateMonthSumComm = new RelayCommand(async _ => await UpdateMonthSum());
+            UpdateSickDaysComm = new RelayCommand(async _ => await UpdateSickDays(), CanUpdateSickdays);
 
-            AddNewCategoryComm = new RelayCommand(async () => await AddNewCategory(), CanAddNewCategory);
+            AddNewCategoryComm = new RelayCommand(async _ => await AddNewCategory(), CanAddNewCategory);
 
             _windowService = windowService;
             _incomeRepo = incomeRepo;
@@ -309,9 +309,10 @@ namespace BudgetHelperClassLibrary.ViewModels
         //***********   METODER   ********************************************************
         private bool CanAddIncome()
         {
-            // Kolla Belopp, Datum och Källa
-            return NewIncomeAmount > 0 && SelectedSource.HasValue && SelectedDate != default;
-            //NewIncomeAmount > 0 && SelectedCategory != null && SelectedSource != null;
+            // Check for valid data
+            return NewIncomeAmount > 0 
+                && SelectedSource!=null 
+                && SelectedSource.Id!=0;
         }
         private async Task AddIncome()
         {
@@ -322,15 +323,16 @@ namespace BudgetHelperClassLibrary.ViewModels
                 {
                     Amount = amount, // Här sparas det (ev. omräknade) beloppet
                     ReceivedDate = SelectedDate,
-                    IncomeSourceId = (int)SelectedSource
+                    IncomeSourceId = SelectedSource.Id,
+                    IncomeSource = SelectedSource
                 };
                 await _incomeRepo.AddIncomeAsync(newIncome);
 
-                NewIncomeAmount = 0;
-                SelectedSource = null;
-                SelectedDate = DateTime.Now; // Återställ allt igen
-                
-                await UpdateMonthSum(); // Uppdatera direkt i vyn
+                NewIncomeAmount = null;
+                SelectedSource = null;                
+                SelectedDate = DateTime.Now; // Reset everything
+
+                await LoadDataAsync(); //Refresh data everywhere after adding                                       
             }
             catch (Exception ex)
             {
@@ -338,31 +340,44 @@ namespace BudgetHelperClassLibrary.ViewModels
             }
         }
 
-        private bool CanUpdateIncome() => true;
-        private async Task UpdateIncome()
+        //private bool CanUpdateIncome() => true;
+        private async Task UpdateIncome(object? parameter)
         {
-            if (SelectedIncome == null) return;
-
-            // Calling on my new service to show popup
-            if (_windowService.ShowUpdateIncomeDialog(SelectedIncome, IncomeSources) == true)
+            try
             {
-                await _incomeRepo.UpdateIncomeAsync(SelectedIncome);
-                await LoadDataAsync(); 
+                if (parameter is Income incomeToUpdate)
+                {
+                    // Using income object passed as parameter
+                    bool? result = _windowService.ShowUpdateIncomeDialog(incomeToUpdate, IncomeSources);
+
+                    if (result == true)
+                    {
+                        await _incomeRepo.UpdateIncomeAsync(incomeToUpdate);
+                        await LoadDataAsync(); // Updating data in UI after update
+                    }
+                }
             }
+            catch (Exception ex) {Console.WriteLine($"Error updating income: {ex.Message}");}            
         }
 
-
         private bool CanDeleteIncome() => true;
-        private async Task DeleteIncome()
+        private async Task DeleteIncome(object? parameter)
         {
-            if (SelectedIncome == null) return;
-
-            // Calling on my new service to show popup
-            if (_windowService.ShowDeleteIncomeDialog(SelectedIncome) == true)
+            try
             {
-                await _incomeRepo.DeleteIncomeAsync(SelectedIncome);
-                await LoadDataAsync();
+                if (parameter is Income incomeToDelete)
+                {
+                    // Using income object passed as parameter
+                    bool? result = _windowService.ShowDeleteIncomeDialog(incomeToDelete);
+
+                    if (result == true)
+                    {
+                        await _incomeRepo.UpdateIncomeAsync(incomeToDelete);
+                        await LoadDataAsync(); // Updating data in UI after update
+                    }
+                }
             }
+            catch (Exception ex) { Console.WriteLine($"Error deleting income: {ex.Message}"); }            
         }
         //*******************************************************************
         
@@ -407,7 +422,7 @@ namespace BudgetHelperClassLibrary.ViewModels
         }
 
         private bool CanUpdateExpense() => true;
-        private async Task UpdateExpense()
+        private async Task UpdateExpense(object? parameter)
         {
             if (SelectedExpense == null) return;
 
@@ -420,7 +435,7 @@ namespace BudgetHelperClassLibrary.ViewModels
         }
 
         private bool CanDeleteExpense() => true;
-        private async Task DeleteExpense()
+        private async Task DeleteExpense(object? parameter)
         {
             if (SelectedExpense == null) return;
 
