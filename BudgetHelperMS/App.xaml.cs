@@ -20,7 +20,7 @@ namespace BudgetHelperMS
     public partial class App : Application
     {
         // Root service provider accessible throughout the app
-        public static IServiceProvider ServiceProvider { get; private set; }
+        public static IServiceProvider? ServiceProvider { get; private set; }
 
         public App() 
         {
@@ -36,7 +36,7 @@ namespace BudgetHelperMS
                 new FrameworkPropertyMetadata(
                     XmlLanguage.GetLanguage(culture.IetfLanguageTag)));
         }
-        public static IServiceScope AppScope { get; private set; }
+        public static IServiceScope? AppScope { get; private set; }
 
         protected override void OnStartup(StartupEventArgs e)
         {

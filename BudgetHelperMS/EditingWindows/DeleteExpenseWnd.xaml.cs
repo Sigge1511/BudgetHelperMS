@@ -29,7 +29,6 @@ namespace BudgetHelperMS.EditingWindows
             Close();
         }
 
-        // Körs när användaren klickar på "Cancel"
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = false;

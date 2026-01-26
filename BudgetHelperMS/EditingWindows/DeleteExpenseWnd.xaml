@@ -54,8 +54,8 @@
                     <TextBlock HorizontalAlignment="Left"
                                Margin="20,0,0,5"
                                Width="200"
-                               Text="{Binding ReceivedDate.DayOfYear}" 
-                               FontSize="24"
+                               Text="{Binding ExpenseDate, 
+                               StringFormat=\{yyyy-MM-dd\}}"                               FontSize="24"
                                Padding="0"/>
                     
                 </StackPanel>
@@ -86,7 +86,7 @@
 
                     <StackPanel Orientation="Horizontal" Width="350"
                                 HorizontalAlignment="Left"
-                                Margin="20,10,0,5" Height="70" 
+                                Margin="5,10,0,5" Height="70" 
 >
                         <Button Content="Delete" 
                                 Click="DeleteButton_Click" 

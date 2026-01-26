@@ -2,6 +2,7 @@
 using BudgetHelperClassLibrary.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,13 +22,14 @@ namespace BudgetHelperMS.EditingWindows
     /// </summary>
     public partial class UpdateIncomeWnd : Window
     {       
-        public UpdateIncomeWnd(Income income)
+        public UpdateIncomeWnd(Income income, ObservableCollection<IncomeSource> sources)
         {
             InitializeComponent();
             DataContext = income;
+            SourceComboBox.ItemsSource = sources;
         }
 
-        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        private void UpdateButton_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = true;
             Close();

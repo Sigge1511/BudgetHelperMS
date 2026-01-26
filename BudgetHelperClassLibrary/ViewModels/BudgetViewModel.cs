@@ -262,9 +262,7 @@ namespace BudgetHelperClassLibrary.ViewModels
             _expenseRepo = expenseRepo;
             _categoryRepo = categoryRepo;
             _budgetRepo = budgetRepo;
-        }
-
-        
+        }        
 
         public async Task LoadDataAsync()
         {
@@ -286,13 +284,15 @@ namespace BudgetHelperClassLibrary.ViewModels
             //*******************************************************************
             var expenseList = await _expenseRepo.GetAllExpensesAsync();
             LatestExpenses.Clear();
-            foreach (var e in expenseList) LatestExpenses.Add(e);
-            var latestExpensesList = expenseList.OrderByDescending(x => x.Id).Take(5);
+            var sortedExpenses = expenseList.OrderByDescending(x => x.ExpenseDate);
+            foreach (var e in sortedExpenses)  LatestExpenses.Add(e);
+            var latestExpensesList = expenseList.OrderByDescending(x => x.ExpenseDate);
             //*******************************************************************          
             var incomesList = await _incomeRepo.GetAllIncomesAsync();
             LatestIncomes.Clear();
-            foreach (var i in incomesList) LatestIncomes.Add(i);
-            var latestIncomesList = incomesList.OrderByDescending(x => x.Id).Take(5);
+            var sortedIncomes = incomesList.OrderByDescending(x => x.ReceivedDate);
+            foreach (var i in sortedIncomes) LatestIncomes.Add(i);
+            var latestIncomesList = incomesList.OrderByDescending(x => x.ReceivedDate);
 
             //*******************************************************************          
 
@@ -347,7 +347,7 @@ namespace BudgetHelperClassLibrary.ViewModels
             if (SelectedIncome == null) return;
 
             // Calling on my new service to show popup
-            if (_windowService.ShowUpdateIncomeDialog(SelectedIncome) == true)
+            if (_windowService.ShowUpdateIncomeDialog(SelectedIncome, IncomeSources) == true)
             {
                 await _incomeRepo.UpdateIncomeAsync(SelectedIncome);
                 await LoadDataAsync(); 
@@ -394,11 +394,18 @@ namespace BudgetHelperClassLibrary.ViewModels
 
         private bool CanUpdateExpense()
         {
-            return true;
+            return SelectedExpense!=null;
         }
         private async Task UpdateExpense()
         {
-            throw new NotImplementedException();
+            if (SelectedExpense == null) return;
+
+            // Calling on my new service to show popup
+            if (_windowService.ShowUpdateExpenseDialog(SelectedExpense, Categories) == true)
+            {
+                await _expenseRepo.UpdateExpenseAsync(SelectedExpense);
+                await LoadDataAsync();
+            }
         }
 
         private bool CanDeleteExpense()
