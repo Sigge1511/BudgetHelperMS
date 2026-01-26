@@ -372,7 +372,7 @@ namespace BudgetHelperClassLibrary.ViewModels
 
                     if (result == true)
                     {
-                        await _incomeRepo.UpdateIncomeAsync(incomeToDelete);
+                        await _incomeRepo.DeleteIncomeAsync(incomeToDelete);
                         await LoadDataAsync(); // Updating data in UI after update
                     }
                 }

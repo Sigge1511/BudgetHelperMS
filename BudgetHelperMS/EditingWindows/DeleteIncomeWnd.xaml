@@ -10,7 +10,7 @@
         WindowStartupLocation="CenterOwner"        
         ResizeMode="NoResize"
         FontSize="27"
-        FontFamily="pack://application:,,,/Resources/#IM FELL English SC" d:DesignHeight="485.96" Width="528">
+        FontFamily="pack://application:,,,/Resources/#IM FELL English SC" Width="528" Height="551">
 
     <StackPanel Margin="0,33,-102,3">
         <TextBlock Text="Amount:" 
@@ -40,7 +40,7 @@
         <TextBlock HorizontalAlignment="Left"
                    Margin="20,0,0,5"
                    Width="200"
-                   Foreground="{StaticResource MutedBrush}"
+                   Foreground="{StaticResource NeonBrush}"
                    Text="{Binding ReceivedDate, 
                    StringFormat=d}"                   
                    FontSize="24"
@@ -49,11 +49,11 @@
                    Foreground="{StaticResource NeonBrush}">
                    Are you sure you <LineBreak/> 
                    want to delete this?</TextBlock>
-        
+
         <StackPanel Orientation="Horizontal" Width="350"
                     HorizontalAlignment="Left"
                    Margin="20,10,0,5" Height="70" 
->            
+>
             <Button Content="Delete" 
                     Click="DeleteButton_Click" 
                     Margin="10" 
@@ -66,6 +66,6 @@
                     FontSize="20"
                     Width="125"/>
         </StackPanel>
-        
+
     </StackPanel>
 </Window>
