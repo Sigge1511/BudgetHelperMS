@@ -230,10 +230,11 @@
                 <Setter Property="Background" Value="#2D5A27"/>
             </Trigger>
             <Trigger Property="Content" Value="Remove">
-                <Setter Property="Background" Value="#8B0000"/>
+                <Setter Property="Background" Value="#551817"/>
             </Trigger>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Opacity" Value="0.8"/>
+                <Setter Property="Background" Value="DarkGray"/>
             </Trigger>
         </Style.Triggers>
     </Style>  

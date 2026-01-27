@@ -137,8 +137,9 @@
                                    Width="166"> 
                                    Yearly<LineBreak/>Salary:
                         </TextBlock>
-                        <TextBox   Style="{StaticResource EntryBox}"
-                                   Text="{Binding YearlySalary}"/>
+                        <TextBox Style="{StaticResource EntryBox}"
+                                 Text="{Binding YearlySalary, 
+                                        StringFormat='{}{0:F0}'}" />
                     </StackPanel>
                 </StackPanel>
             </Border>

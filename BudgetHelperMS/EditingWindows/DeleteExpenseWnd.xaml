@@ -26,6 +26,7 @@
                     <TextBlock HorizontalAlignment="Left"
                                Margin="20,0,0,5"
                                Width="150"
+                               Foreground="{StaticResource NeonBrush}"
                                Text="{Binding Amount}" 
                                FontSize="24"
                                Padding="0"/>
@@ -37,6 +38,7 @@
                                Margin="20,0,0,5"
                                Width="200"
                                Text="{Binding Name}" 
+                               Foreground="{StaticResource NeonBrush}"
                                FontSize="24"
                                Padding="0"/>
                     <TextBlock Text="Category:" 
@@ -45,6 +47,7 @@
                     <TextBlock HorizontalAlignment="Left"
                                Margin="20,0,0,5"
                                Width="200"
+                               Foreground="{StaticResource NeonBrush}"
                                Text="{Binding Category}" 
                                FontSize="24"
                                Padding="0"/>
@@ -54,8 +57,10 @@
                     <TextBlock HorizontalAlignment="Left"
                                Margin="20,0,0,5"
                                Width="200"
+                               Foreground="{StaticResource NeonBrush}"
                                Text="{Binding ExpenseDate, 
-                               StringFormat=\{yyyy-MM-dd\}}"                               FontSize="24"
+                               StringFormat=d}"                               
+                               FontSize="24"
                                Padding="0"/>
                     
                 </StackPanel>
@@ -69,6 +74,7 @@
                                   Width="200"
                                  Text="{Binding IsRecurring}" 
                                FontSize="24"
+                               Foreground="{StaticResource NeonBrush}"
                                Padding="0"/>
                     <TextBlock Text="How often (In Months):" 
                               Margin="20,10,0,0" 
@@ -78,7 +84,9 @@
                                 Width="200"
                                Text="{Binding FrequencyInMonths}" 
                                FontSize="24"
-                               Padding="0"/>
+                               Padding="0"
+                               Foreground="{StaticResource NeonBrush}"/>
+                    
                     <TextBlock Margin="20,30,0,0" 
                                 Foreground="{StaticResource NeonBrush}">
                                 Are you sure you <LineBreak/> 

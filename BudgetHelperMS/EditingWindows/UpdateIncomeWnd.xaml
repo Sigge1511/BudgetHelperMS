@@ -22,7 +22,7 @@
                  HorizontalAlignment="Left"
                  Margin="20,0,0,5"
                  Text="{Binding SelectedIncome.Amount, 
-                 Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                 Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
                  Style="{StaticResource ResourceKey=EntryBox}"
                  Padding="0" Width="200"/>
 
