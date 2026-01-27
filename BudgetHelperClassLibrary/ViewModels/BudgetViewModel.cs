@@ -5,6 +5,7 @@ using BudgetHelperClassLibrary.Repositories;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -201,22 +202,34 @@ namespace BudgetHelperClassLibrary.ViewModels
         public int SickDays
         {
             get => sickDays;
-            set { sickDays = value; OnPropertyChanged(); }
+            set { sickDays = value; OnPropertyChanged();
+                UpdateSickDaysComm?.RaiseCanExecuteChanged();
+            }
         }
-
-        private int careOfCatsDays;
-        public int CareOfCatsDays
-        {
-            get => careOfCatsDays;
-            set { careOfCatsDays = value; OnPropertyChanged(); }
-        }
-
         private int sickDaysCount;
         public int SickDaysCount
         {
             get => sickDaysCount;
             set { sickDaysCount = value; OnPropertyChanged(); }
         }
+
+
+
+        private int careOfCatsDays;
+        public int CareOfCatsDays
+        {
+            get => careOfCatsDays;
+            set { careOfCatsDays = value; OnPropertyChanged();
+                UpdateSickDaysComm?.RaiseCanExecuteChanged();
+            }
+        }
+        private int careOfCatsDaysCount;
+        public int CareOfCatsDaysCount
+        {
+            get => careOfCatsDaysCount;
+            set { careOfCatsDaysCount = value; OnPropertyChanged(); }
+        }
+
 
 
         // Listan som visar alla inkomster i UI:t (Denna behöver uppdateras manuellt)
@@ -253,7 +266,7 @@ namespace BudgetHelperClassLibrary.ViewModels
             DeleteExpenseComm = new RelayCommand(async param => await DeleteExpense(param));
 
             UpdateMonthSumComm = new RelayCommand(async _ => await UpdateMonthSum());
-            UpdateSickDaysComm = new RelayCommand(async _ => await UpdateSickDays(), CanUpdateSickdays);
+            UpdateSickDaysComm = new RelayCommand(ExecuteUpdateSickDays, CanUpdateSickDays);
 
             AddNewCategoryComm = new RelayCommand(async _ => await AddNewCategory(), CanAddNewCategory);
 
@@ -300,7 +313,6 @@ namespace BudgetHelperClassLibrary.ViewModels
 
             AvgIncomeLastThreeMonths = calc.CalculateAverage(incomesList);
             await UpdateMonthSum();
-            await UpdateSickDays();  
             await UpdateAverages();
             await UpdateYearStats();
             await GetIncomesThisYearAsync();
@@ -362,7 +374,7 @@ namespace BudgetHelperClassLibrary.ViewModels
             catch (Exception ex) {Console.WriteLine($"Error updating income: {ex.Message}");}            
         }
 
-        private bool CanDeleteIncome() => true;
+        //private bool CanDeleteIncome() => true;
         private async Task DeleteIncome(object? parameter)
         {
             try
@@ -423,7 +435,7 @@ namespace BudgetHelperClassLibrary.ViewModels
             }
         }
 
-        private bool CanUpdateExpense() => true;
+        //private bool CanUpdateExpense() => true;
         private async Task UpdateExpense(object? parameter)
         {
             try
@@ -443,17 +455,24 @@ namespace BudgetHelperClassLibrary.ViewModels
             catch (Exception ex) { Console.WriteLine($"Error updating income: {ex.Message}"); }
         }
 
-        private bool CanDeleteExpense() => true;
+        //private bool CanDeleteExpense() => true;
         private async Task DeleteExpense(object? parameter)
         {
-            if (SelectedExpense == null) return;
-
-            // Calling on my new service to show popup
-            if (_windowService.ShowDeleteExpenseDialog(SelectedExpense) == true)
+            try
             {
-                await _expenseRepo.DeleteExpenseAsync(SelectedExpense);
-                await LoadDataAsync();
+                if (parameter is Expense expenseToDelete)
+                {
+                    // Using income object passed as parameter
+                    bool? result = _windowService.ShowDeleteExpenseDialog(expenseToDelete);
+
+                    if (result == true)
+                    {
+                        await _expenseRepo.DeleteExpenseAsync(expenseToDelete);
+                        await LoadDataAsync(); // Updating data in UI after update
+                    }
+                }
             }
+            catch (Exception ex) { Console.WriteLine($"Error deleting income: {ex.Message}"); }
         }
 
         //*******************************************************************
@@ -479,8 +498,12 @@ namespace BudgetHelperClassLibrary.ViewModels
             TotalExpensesLastMonth = result.TotalExpense;
             NetAmountLastMonth = result.NetAmount;
 
-            var forecast = calc.CalculateNextMonthForecast(incomeList, expenseList, SickDays, CareOfCatsDays);
-
+            var forecast = calc.CalculateNextMonthForecast(
+                    incomeList,
+                    expenseList,
+                    SickDaysCount,
+                    CareOfCatsDaysCount);
+            
             NextMonthIn = forecast.ExpectedIn;
             NextMonthOut = forecast.ExpectedOut;
             NextMonthNet = forecast.Result;
@@ -508,21 +531,40 @@ namespace BudgetHelperClassLibrary.ViewModels
                 Debug.WriteLine($"Error: {ex.Message}");
             }
         }
-        
 
-        private bool CanUpdateSickdays()
+
+        private async void ExecuteUpdateSickDays(object? parameter)
         {
-            return SickDays != 0 || CareOfCatsDays != 0;
+            await UpdateSickDays();
+        }
+
+        private bool CanUpdateSickDays()
+        {
+            return SickDays > 0 || CareOfCatsDays > 0;
         }
         private async Task UpdateSickDays()
         {
-            var stats = await _incomeRepo.GetAbsenceForMonthAsync(DateTime.Now.Year, DateTime.Now.Month);
+            // Try saving input to database
+            await _incomeRepo.SaveOrUpdateAbsenceAsync(
+                            DateTime.Now.Year,
+                            DateTime.Now.Month,
+                            SickDays,
+                            CareOfCatsDays);
 
+            // 2. Hämta de uppdaterade siffrorna
+            var stats = await _incomeRepo.GetAbsenceForMonthAsync(DateTime.Now.Year, DateTime.Now.Month);
+            //And add to counter prop
             if (stats != null)
             {
                 SickDaysCount = stats.SickDays;
-                CareOfCatsDays = stats.VakDays;
             }
+
+            //Clean input fields
+            SickDays = 0;
+            CareOfCatsDays = 0;
+
+            // Update info to all calcs
+            await LoadDataAsync();
         }
         //***********************************************************
         //TOTALS

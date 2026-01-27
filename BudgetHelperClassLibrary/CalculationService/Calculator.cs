@@ -48,7 +48,7 @@ namespace BudgetHelperClassLibrary.CalculationService
         }
 
         public (decimal Deduction, decimal Compensation) SickCompCalc(decimal monthlyIncome, 
-                                                                      int daysAbsent, bool isVAK = false)
+                                                                      int daysAbsent, bool isVAK)
         {
             decimal yearlyIncome = monthlyIncome * 12;
             decimal basis = (isVAK && yearlyIncome > 410000m) ? 410000m / 12 : monthlyIncome;
@@ -102,38 +102,50 @@ namespace BudgetHelperClassLibrary.CalculationService
         public (decimal ExpectedIn, decimal ExpectedOut, decimal Result) CalculateNextMonthForecast(
                         List<Income> allIncomes,
                         List<Expense> allExpenses,
-                        int currentMonthSickDays,
-                        int currentMonthVakDays)
-                            {
-                                var recurringIds = new[] { 1, 6 }; //I.e salary and study loans
+                        int sickDays,  
+                        int vakDays)   
+        {
+            decimal avgSalary = allIncomes.Where(i => i.IncomeSourceId == 1)
+                                          .OrderByDescending(i => i.ReceivedDate)
+                                          .Select(i => i.Amount)                                          
+                                          .Take(3)
+                                          .DefaultIfEmpty(0)
+                                          .Average();
 
-                                var fixedIncomes = allIncomes
-                                    .Where(i => recurringIds.Contains(i.IncomeSourceId))
-                                    .GroupBy(i => i.IncomeSourceId)
-                                    .Select(g => g.OrderByDescending(i => i.ReceivedDate).First().Amount)
-                                    .Sum();
+            // Calc sick and VAK differently
+            var sick = SickCompCalc(avgSalary, sickDays, isVAK: false);
+            var vak = SickCompCalc(avgSalary, vakDays, isVAK: true);
 
-                                var fixedExpenses = allExpenses
-                                    .Where(e => e.IsRecurring)
-                                    .GroupBy(e => e.Name) // Gruppera så vi inte dubbelräknar gamla hyror
-                                    .Select(g => g.OrderByDescending(e => e.ExpenseDate).First().Amount)
-                                    .Sum();
-                        
-                                decimal avgSalary = allIncomes.Any() ? allIncomes.Average(i => i.Amount) : 0;
-                                decimal expectedComp = GetExpectedCompensationNextMonth(avgSalary, currentMonthSickDays, currentMonthVakDays);
+            decimal expectedComp = sick.Compensation + vak.Compensation;
 
-                                decimal totalIn = fixedIncomes + expectedComp;
-                                decimal netResult = totalIn - fixedExpenses;
+            var recurringIds = new[] { 1, 6 }; //I.e salary and study loans
 
-                                return (Math.Round(totalIn, 2), Math.Round(fixedExpenses, 2), Math.Round(netResult, 2));
-                            }
+            var fixedIncomes = allIncomes
+                .Where(i => recurringIds.Contains(i.IncomeSourceId))
+                .GroupBy(i => i.IncomeSourceId)
+                .Select(g => g.OrderByDescending(i => i.ReceivedDate).First().Amount)
+                .Sum();
+
+            var fixedExpenses = allExpenses
+                .Where(e => e.IsRecurring)
+                .GroupBy(e => e.Name) // Gruppera så vi inte dubbelräknar gamla hyror
+                .Select(g => g.OrderByDescending(e => e.ExpenseDate).First().Amount)
+                .Sum();
+
+            decimal totalIn = fixedIncomes + expectedComp;
+            decimal netResult = totalIn - fixedExpenses;
+
+            return (Math.Round(totalIn, 2), Math.Round(fixedExpenses, 2), Math.Round(netResult, 2));
+        }
         public decimal GetExpectedCompensationNextMonth(decimal avgMonthlyIncome, int sickDays, int vakDays)
         {
-            // Vi anropar din befintliga metod två gånger med olika isVAK-flaggor
+            // 1. Räkna ut sjukersättning på vanliga sjukdagar (isVAK: false)
             var sickResult = SickCompCalc(avgMonthlyIncome, sickDays, isVAK: false);
+
+            // 2. Räkna ut ersättning för katt-dagar (isVAK: true -> aktiverar maxtaket i din SickCompCalc)
             var vakResult = SickCompCalc(avgMonthlyIncome, vakDays, isVAK: true);
 
-            // Vi returnerar bara Compensation-delen eftersom Deduction redan är gjord på din lön
+            // 3. Slå ihop dem - detta är vad som kommer in extra på kontot nästa månad
             return sickResult.Compensation + vakResult.Compensation;
         }
 

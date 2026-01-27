@@ -23,7 +23,6 @@ namespace BudgetHelperClassLibrary.Repositories
                         .ToListAsync();
         }
 
-        //Denna behöver bli en lista över alla inkomstkällor senare
         public async Task<ObservableCollection<IncomeSource>?> GetAllIncomeSourcesAsync()
         {
             List<IncomeSource> sourceList = await _dbcntxt.IncomeSources.ToListAsync();
@@ -78,19 +77,19 @@ namespace BudgetHelperClassLibrary.Repositories
         }
         public async Task SaveOrUpdateAbsenceAsync(int year, int month, int sickDays, int vakDays)
         {
-            // 1. Kolla om det redan finns en post för denna månad [cite: 2025-09-29]
+            // 1. Kolla om det redan finns en post för denna månad
             var existing = await _dbcntxt.AbsenceDays
-                .FirstOrDefaultAsync(a => a.Year == year && a.Month == month);
+                                 .FirstOrDefaultAsync(a => a.Year == year && a.Month == month);
 
             if (existing != null)
             {
-                // 2. Uppdatera befintlig [cite: 2026-01-18]
-                existing.SickDays = sickDays;
-                existing.VakDays = vakDays;
+                // Add to current count
+                existing.SickDays += sickDays;
+                existing.VakDays += vakDays;
             }
             else
             {
-                // 3. Skapa ny om den inte fanns [cite: 2026-01-18]
+                // Create new post if needed
                 _dbcntxt.AbsenceDays.Add(new AbsenceDays
                 {
                     Year = year,
@@ -99,6 +98,7 @@ namespace BudgetHelperClassLibrary.Repositories
                     VakDays = vakDays
                 });
             }
+
             await _dbcntxt.SaveChangesAsync();
         }
     }
