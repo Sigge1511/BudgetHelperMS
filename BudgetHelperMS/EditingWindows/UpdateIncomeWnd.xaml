@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:models="clr-namespace:BudgetHelperClassLibrary.Models;assembly=BudgetHelperClassLibrary"
         mc:Ignorable="d" 
-        Height="417" Width="501"
+        Height="377" Width="501"
         d:DataContext="{d:DesignInstance Type=models:Income}"
         Background="{StaticResource PanelJewelBrush1}" 
         Foreground="White"
@@ -24,7 +24,7 @@
                  Text="{Binding SelectedIncome.Amount, 
                  Mode=TwoWay, UpdateSourceTrigger=LostFocus}"
                  Style="{StaticResource ResourceKey=EntryBox}"
-                 Padding="0" Width="200"/>
+                 Padding="0" Width="176"/>
 
         <TextBlock Text="Edit Source:" 
                    Margin="20,10,0,0" 
@@ -36,7 +36,7 @@
                   Validation.ErrorTemplate="{x:Null}"
                   Style="{StaticResource DarkComboBoxStyle}"
                   Padding="5"
-                  Width="200"
+                  Width="352"
                   Height="30" 
                   HorizontalAlignment="Left"
                   Margin="20,10,0,5" >
@@ -53,11 +53,10 @@
                     BorderBrush="{StaticResource NeonBrush}" 
                     Background="Transparent"
                     CalendarStyle="{StaticResource DarkCalendarStyle}" 
-                    Width="200"
+                    Width="245"
                     Height="50"
                     Margin="20,10,0,5" 
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Center" >
+                    HorizontalAlignment="Left" >
             <DatePicker.Resources>
                 <Style TargetType="DatePickerTextBox">
                     <Setter Property="Background" Value="#11ffffff"/>

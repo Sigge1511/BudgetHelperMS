@@ -10,7 +10,7 @@
         WindowStartupLocation="CenterOwner"        
         ResizeMode="NoResize"
         FontSize="27"
-        FontFamily="pack://application:,,,/Resources/#IM FELL English SC" Width="622" Height="465">
+        FontFamily="pack://application:,,,/Resources/#IM FELL English SC" Width="706" Height="465">
 
     <StackPanel Margin="0,20,0,0">
         <StackPanel Orientation="Vertical">
@@ -19,7 +19,7 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0" Margin="0,0,30,0">
+                <StackPanel Grid.Column="0" Margin="0,0,407,0" Grid.ColumnSpan="2">
                     <TextBlock Text="Amount:" Grid.Column="0" 
                                Margin="20,0,0,0" 
                                Foreground="{StaticResource MutedBrush}"/>
@@ -37,7 +37,7 @@
                                Foreground="{StaticResource MutedBrush}"/>
                     <TextBox HorizontalAlignment="Left"
                                Margin="20,0,0,5"
-                               Width="150"
+                               Width="186"
                                Style="{StaticResource ResourceKey=EntryBox}"
                                Text="{Binding SelectedExpense.Name,Mode=TwoWay}" 
                                FontSize="24"
@@ -52,7 +52,7 @@
                               Validation.ErrorTemplate="{x:Null}"
                               Style="{StaticResource DarkComboBoxStyle}"
                               Padding="5"
-                              Width="200"
+                              Width="255"
                               Height="30"   
                               HorizontalAlignment="Left"
                               BorderThickness="0"
@@ -72,9 +72,9 @@
                                 BorderBrush="{StaticResource NeonBrush}" 
                                 Background="Transparent"
                                 Margin="20,5,0,0"
-                                Width="200"
+                                Width="215"
                                 Height="50"
-                                CalendarStyle="{StaticResource DarkCalendarStyle}">
+                                CalendarStyle="{StaticResource DarkCalendarStyle}" RenderTransformOrigin="0.24,0.361">
                         <DatePicker.Resources>
                             <Style TargetType="DatePickerTextBox">
                                 <Setter Property="Background" Value="#11ffffff"/>

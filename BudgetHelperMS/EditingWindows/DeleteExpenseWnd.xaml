@@ -10,7 +10,7 @@
         WindowStartupLocation="CenterOwner"        
         ResizeMode="NoResize"
         FontSize="27"
-        FontFamily="pack://application:,,,/Resources/#IM FELL English SC" Width="717" Height="385">
+        FontFamily="pack://application:,,,/Resources/#IM FELL English SC" Width="717" Height="433">
 
     <StackPanel Margin="0,20,0,0">
         <StackPanel Orientation="Vertical">
@@ -25,7 +25,7 @@
                                Foreground="{StaticResource MutedBrush}"/>
                     <TextBlock HorizontalAlignment="Left"
                                Margin="20,0,0,5"
-                               Width="150"
+                               Width="190"
                                Foreground="{StaticResource NeonBrush}"
                                Text="{Binding Amount}" 
                                FontSize="24"
