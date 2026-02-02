@@ -335,7 +335,7 @@ namespace BudgetHelperClassLibrary.ViewModels
                 decimal amount = (decimal)NewIncomeAmount;
                 var newIncome = new Income
                 {
-                    Amount = amount, // Här sparas det (ev. omräknade) beloppet
+                    Amount = amount, 
                     ReceivedDate = SelectedDate,
                     IncomeSourceId = SelectedSource.Id,
                     IncomeSource = SelectedSource

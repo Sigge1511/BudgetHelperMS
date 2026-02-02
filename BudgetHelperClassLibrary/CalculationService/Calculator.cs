@@ -30,7 +30,7 @@ namespace BudgetHelperClassLibrary.CalculationService
                decimal TotalExpense, 
                decimal NetAmount) SumOfLastMonth(List<Income> incomes, List<Expense> expenses)
         {
-            var lastMonth = DateTime.Now.AddMonths(-1); //Sätter bestämd månad en gång först
+            var lastMonth = DateTime.Now.AddMonths(-1); //set a specific month first
             int targetMonth = lastMonth.Month;
             int targetYear = lastMonth.Year;
 
@@ -53,7 +53,7 @@ namespace BudgetHelperClassLibrary.CalculationService
             decimal yearlyIncome = monthlyIncome * 12;
             decimal basis = (isVAK && yearlyIncome > 410000m) ? 410000m / 12 : monthlyIncome;
 
-            decimal dailyRate = basis / 21m; // Standard arbetsdagar
+            decimal dailyRate = basis / 21m; // Standard workdays
             decimal deduction = dailyRate * daysAbsent;
             decimal compensation = deduction * 0.8m;
 
@@ -75,16 +75,16 @@ namespace BudgetHelperClassLibrary.CalculationService
             int monthsPassed = DateTime.Now.Month;
             int monthsRemaining = 12 - monthsPassed;
 
-            // 1. Vad har vi fått hittills i år?
+            // YEAR SO FAR
             decimal actualSoFar = incomesSoFar
                 .Where(i => i.ReceivedDate.Year == currentYear)
                 .Sum(i => i.Amount);
 
-            // 2. Vad förväntar vi oss framåt? (Baserat på snittlön)
+            // EXPECTED FORWARD, BASED ON SALARY
             decimal avgMonthly = incomesSoFar.Any() ? incomesSoFar.Average(i => i.Amount) : 0;
             decimal futureEstimate = avgMonthly * monthsRemaining;
 
-            // 3. Lägg till kompensationen som kommer "släpande" nästa månad
+            // ADDING COMP TO ESTIMATION
             return actualSoFar + futureEstimate + expectedCompNextMonth;
         }
 
@@ -139,13 +139,13 @@ namespace BudgetHelperClassLibrary.CalculationService
         }
         public decimal GetExpectedCompensationNextMonth(decimal avgMonthlyIncome, int sickDays, int vakDays)
         {
-            // 1. Räkna ut sjukersättning på vanliga sjukdagar (isVAK: false)
+            // NORMAL SICK LEAVE COMP
             var sickResult = SickCompCalc(avgMonthlyIncome, sickDays, isVAK: false);
 
-            // 2. Räkna ut ersättning för katt-dagar (isVAK: true -> aktiverar maxtaket i din SickCompCalc)
+            // CARE OF CAT COMPENSATION (VAB)
             var vakResult = SickCompCalc(avgMonthlyIncome, vakDays, isVAK: true);
 
-            // 3. Slå ihop dem - detta är vad som kommer in extra på kontot nästa månad
+            // COMBINE THEM
             return sickResult.Compensation + vakResult.Compensation;
         }
 
@@ -163,30 +163,8 @@ namespace BudgetHelperClassLibrary.CalculationService
                 })
                 .OrderByDescending(x => x.Total)
                 .Take(3)
-                // Här gör vi om det till en snygg rad för din punktlista!
                 .Select(x => $"{x.Name}: {x.Total:C}")
                 .ToList();
-
-
-
-
-
-            //public decimal CalculateActualSalaryYearly(List<Income> Salary)
-            //{
-            //    // Vi definierar vilka källor som räknas som "lön"
-            //    var salaryKeywords = new[] { "Salary", "Lön", "VAK", "Sjuk", "Care of Cat" };
-
-            //    var salaryIncomes = Salary
-            //        .Where(i => salaryKeywords.Any(key =>
-            //            i.IncomeSource.SourceName.Contains(key, StringComparison.OrdinalIgnoreCase)))
-            //        .ToList();
-
-            //    if (!salaryIncomes.Any()) return 0;
-
-            //    // Här räknar vi ut snittet på bara dessa inkomster
-            //    decimal yearlySalary = salaryIncomes.Average(i => i.Amount);
-            //    return yearlySalary * 12;
-            //}
         }
     }
 }

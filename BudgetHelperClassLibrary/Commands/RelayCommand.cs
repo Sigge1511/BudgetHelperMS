@@ -19,14 +19,6 @@ namespace BudgetHelperClassLibrary.Commands
             _canExecute = canExecute;
         }
 
-        //Backup ctor for problematic sickdays update
-        //public RelayCommand(Func<Task> updateSickDays, Func<bool>? canUpdateSickdays = null)
-        //{
-        //    if (updateSickDays == null) throw new ArgumentNullException(nameof(updateSickDays));
-        //    _execute = async _ => await updateSickDays().ConfigureAwait(false);
-        //    _canExecute = canUpdateSickdays;
-        //}
-
         public bool CanExecute(object? parameter) => _canExecute?.Invoke() ?? true;
 
         public void Execute(object? parameter) => _execute(parameter);

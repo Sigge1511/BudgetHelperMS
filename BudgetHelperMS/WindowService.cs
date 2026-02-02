@@ -10,8 +10,6 @@ using System.Threading.Tasks;
 
 namespace BudgetHelperMS
 {
-     // Eller var ditt interface bor
-
     public class WindowService : IWindowService
     {
         // Update popups

@@ -1,7 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Name="IM_FELL_English_SC">
 
     
-    <!--Färger och brushes KRÄVER namn för att sen kunna användas i tex MainWindow-->
+    <!--Colors and brushes requires names-->
     <SolidColorBrush x:Key="BgBrush" Color="#080B0A" />
     <SolidColorBrush x:Key="PanelJewelBrush1" Color="#0f130c" />
     <SolidColorBrush x:Key="PanelJewelBrush3" Color="#042715" />
@@ -9,7 +9,7 @@
     <SolidColorBrush x:Key="NeonBrush" Color="#5dc44f" />
     <SolidColorBrush x:Key="TextBrush" Color="#D1D9D6" />
 
-    <!--RÖKEN-->
+    <!--My smoke-->
     <ImageBrush x:Key="BgImageBrush" 
                 ImageSource="pack://application:,,,/Resources/bgsmoke.png"                
                 Stretch="UniformToFill" 
@@ -25,8 +25,7 @@
     <SolidColorBrush x:Key="MainText" Color="white"/>
     <SolidColorBrush x:Key="SecondaryText" Color="#86868B"/>
 
-    <!--Används för att sätta en standard för en 
-    viss innehållskomponent - tex en knapp eller en textbox-->
+    <!--Set standards for different elements, ie buttons etc-->
         
     <Style TargetType="Window">
         <Setter Property="Background" Value="{DynamicResource PrimaryBackground}"/>
@@ -261,7 +260,6 @@
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
     </Style>
 
-    <!--Innehållstyper-->
     <DataTemplate x:Key="Listing">
         <Border Padding="5" 
             Margin="0,2">
@@ -289,7 +287,7 @@
         </Border>
     </DataTemplate>
 
-    <!--För att styra specifika knappar mha Style-->
+    <!--Control specific buttons with Style-->
     <Style x:Key="YesButton" TargetType="Button">
         <Setter Property="Background" Value="{StaticResource PanelJewelBrush3}" />
         <Setter Property="Foreground" Value="{StaticResource NeonBrush}"/>

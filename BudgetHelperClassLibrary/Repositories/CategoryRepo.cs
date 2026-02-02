@@ -20,7 +20,6 @@ namespace BudgetHelperClassLibrary.Repositories
 
         public async Task<List<Category>> GetAllCategoriesAsync()
         {
-            // Här kan det vara smart att använda .Include om du vill ha med listorna direkt
             return await _dbcntxt.Categories.ToListAsync();
         }
 
@@ -36,17 +35,6 @@ namespace BudgetHelperClassLibrary.Repositories
             await _dbcntxt.SaveChangesAsync();
         }
 
-        //public async Task UpdateCategoryAsync(Category category)
-        //{
-        //    _dbcntxt.Categories.Update(category);
-        //    await _dbcntxt.SaveChangesAsync();
-        //}
-
-        //public async Task DeleteCategoryAsync(Category category)
-        //{
-        //    _dbcntxt.Categories.Remove(category);
-        //    await _dbcntxt.SaveChangesAsync();
-        //}
     }
 }
 

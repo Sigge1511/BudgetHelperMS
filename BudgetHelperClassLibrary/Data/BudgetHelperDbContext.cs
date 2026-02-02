@@ -39,5 +39,5 @@ namespace BudgetHelperClassLibrary.Data
         public DbSet<BudgetForPurchases> BudgetForPurchases { get; set; }
         public DbSet<AbsenceDays> AbsenceDays { get; set; }
 
-        }
+    }
 }

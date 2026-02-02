@@ -31,7 +31,7 @@
                 <DropShadowEffect Color="#A2D149" BlurRadius="10" ShadowDepth="0"/>
             </Rectangle.Effect>
         </Rectangle>
-        <!--****** HÄR BÖRJAR RESTEN AV FÖNSTRET-->
+        <!--****** MAIN CONTENT STARTS HERE-->
 
         <Grid Grid.Row="1" Margin="2">
             <Grid.ColumnDefinitions>
@@ -48,7 +48,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <!--* **** HÄR ÄR TOPPKOLUMNERNA-->
+            <!--* ****TOP COLUMNS-->
             <!--//Add incomes here-->
             <Border Grid.Row="0"  
                     Grid.RowSpan="4" 
@@ -391,7 +391,7 @@
 
                 </StackPanel>
             </Border>
-            <!--*********   HÄR ÄR BOTTENKOLUMNERNA -->
+            <!--*********  BOTTOM COLUMNS -->
             <!--//Latest incomes here-->
             <Border
                     Grid.Column="0"
