@@ -43,7 +43,7 @@ namespace BudgetHelperClassLibrary.Repositories
         }
         public async Task DeleteExpenseAsync(Expense expense)
         {
-            _dbcntxt.Expenses.Remove(expense);
+            _dbcntxt.Entry(expense).State = EntityState.Deleted; 
             await _dbcntxt.SaveChangesAsync();
         }
         public async Task UpdateExpenseAsync(Expense expense)

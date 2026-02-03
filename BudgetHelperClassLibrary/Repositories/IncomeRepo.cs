@@ -65,7 +65,7 @@ namespace BudgetHelperClassLibrary.Repositories
 
         public async Task DeleteIncomeAsync(Income income)
         {
-            _dbcntxt.Incomes.Remove(income);
+            _dbcntxt.Entry(income).State = EntityState.Deleted; 
             await _dbcntxt.SaveChangesAsync();
         }
 
