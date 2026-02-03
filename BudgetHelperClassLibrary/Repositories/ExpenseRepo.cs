@@ -48,7 +48,7 @@ namespace BudgetHelperClassLibrary.Repositories
         }
         public async Task UpdateExpenseAsync(Expense expense)
         {
-            _dbcntxt.Expenses.Update(expense);
+            _dbcntxt.Entry(expense).State = EntityState.Modified; 
             await _dbcntxt.SaveChangesAsync();
         }
 

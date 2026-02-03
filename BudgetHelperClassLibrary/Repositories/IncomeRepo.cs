@@ -59,7 +59,8 @@ namespace BudgetHelperClassLibrary.Repositories
 
         public async Task UpdateIncomeAsync(Income income)
         {
-            _dbcntxt.Incomes.Update(income);
+            income.IncomeSource = null;
+            _dbcntxt.Incomes.Update(income); 
             await _dbcntxt.SaveChangesAsync();
         }
 

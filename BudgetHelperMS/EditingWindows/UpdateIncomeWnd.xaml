@@ -31,7 +31,8 @@
                    Foreground="{StaticResource MutedBrush}"/>
         <ComboBox x:Name="SourceComboBox"                 
                   ItemsSource="{Binding IncomeSources}"
-                  SelectedItem="{Binding SelectedIncome.Source, Mode=TwoWay}"
+                  SelectedValue="{Binding SelectedIncome.IncomeSourceId, Mode=TwoWay}"
+                  SelectedValuePath="Id"
                   DisplayMemberPath="SourceName"                  
                   Validation.ErrorTemplate="{x:Null}"
                   Style="{StaticResource DarkComboBoxStyle}"
